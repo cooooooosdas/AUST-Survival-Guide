@@ -1,0 +1,14 @@
+import LinkBoard from "@/components/LinkBoard";
+import { groups } from "@/content/links/ai";
+
+export const metadata = { title: "AI 专区" };
+
+export default function AIPage() {
+  return (
+    <LinkBoard
+      title="AI 专区"
+      intro="AI 工具和使用方法。分对话型、编码型、绘图型几大类，会附短文记录心得。"
+      groups={groups}
+    />
+  );
+}
