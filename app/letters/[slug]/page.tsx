@@ -65,7 +65,7 @@ async function loadCommentsAndUser(slug: string) {
   }
   try {
     const supabase = await createClient();
-    const [{ data: comments }, { data: { user } }] = await Promise.all([
+    const [{ data: comments, error: commentsError }, { data: { user } }] = await Promise.all([
       supabase
         .from("comments_with_author")
         .select("*")
@@ -75,6 +75,9 @@ async function loadCommentsAndUser(slug: string) {
         .limit(200),
       supabase.auth.getUser(),
     ]);
+    if (commentsError) {
+      return { comments: [] as Comment[], userId: null as string | null, ready: false };
+    }
     return {
       comments: (comments ?? []) as Comment[],
       userId: user?.id ?? null,
