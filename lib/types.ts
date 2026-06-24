@@ -4,12 +4,14 @@ export type LinkItem = {
   description?: string;
   icon?: string;
   tag?: string;
+  tags?: string[];
 };
 
 export type LinkGroup = {
   id: string;
   title: string;
   items: LinkItem[];
+  icon?: string;
 };
 
 export type Profile = {

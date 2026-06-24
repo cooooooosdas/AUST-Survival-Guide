@@ -1,6 +1,8 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
+import Aside from "@/components/Aside";
+import Takeaways from "@/components/Takeaways";
 
 const components: MDXComponents = {
   h1: (props) => (
@@ -104,6 +106,8 @@ const components: MDXComponents = {
     <strong className="font-semibold text-primary" {...props} />
   ),
   em: (props) => <em className="text-text" {...props} />,
+  Aside,
+  Takeaways,
 };
 
 export function useMDXComponents(): MDXComponents {
