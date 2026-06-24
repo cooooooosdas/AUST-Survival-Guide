@@ -1,6 +1,6 @@
 export default function Footer() {
   return (
-    <footer className="mt-16 border-t border-border">
+    <footer className="mt-16 border-t border-border glass-strong rounded-t-xl">
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-muted md:flex-row md:items-center md:justify-between">
         <div>
           © {new Date().getFullYear()} 安徽理工大学生存指南 · 胡希 · 软工25-4

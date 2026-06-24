@@ -63,16 +63,16 @@ export default function Header({ user }: { user: HeaderUser }) {
   return (
     <header
       className={[
-        "sticky top-0 z-30 border-b transition-all duration-300",
+        "sticky top-0 z-30 rounded-b-xl border transition-all duration-300",
         scrolled
-          ? "border-border bg-bg/85 backdrop-blur-md shadow-[0_2px_20px_-12px_rgba(30,58,95,0.25)]"
-          : "border-transparent bg-bg/70 backdrop-blur-sm",
+          ? "border-border glass-strong shadow-glow"
+          : "border-transparent glass",
       ].join(" ")}
     >
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-6">
         <Link
           href="/"
-          className="text-primary font-semibold tracking-wide focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
+          className="bg-gradient-to-r from-primary to-accent bg-clip-text font-semibold tracking-wide text-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
         >
           安理大生存指南
         </Link>
@@ -149,7 +149,7 @@ export default function Header({ user }: { user: HeaderUser }) {
       <div
         id="mobile-nav"
         className={[
-          "md:hidden overflow-hidden border-t border-border bg-bg/95 backdrop-blur-md transition-[max-height,opacity] duration-300 ease-out",
+          "md:hidden overflow-hidden border-t border-border glass-strong transition-[max-height,opacity] duration-300 ease-out",
           open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
         ].join(" ")}
       >
@@ -165,10 +165,10 @@ export default function Header({ user }: { user: HeaderUser }) {
                   <Link
                     href={s.href}
                     className={[
-                      "block rounded-md px-3 py-2 text-sm transition-colors",
+                      "block rounded-lg px-3 py-2 text-sm transition-all duration-200",
                       active
-                        ? "bg-primary text-white"
-                        : "text-text hover:bg-bg-alt hover:text-primary",
+                        ? "bg-primary text-white shadow-md shadow-primary/20"
+                        : "text-text hover:bg-primary/10 hover:text-primary",
                     ].join(" ")}
                   >
                     {s.title}
@@ -189,10 +189,10 @@ export default function Header({ user }: { user: HeaderUser }) {
                   <Link
                     href={s.href}
                     className={[
-                      "block rounded-md px-3 py-2 text-sm transition-colors",
+                      "block rounded-lg px-3 py-2 text-sm transition-all duration-200",
                       active
-                        ? "bg-accent/30 text-primary"
-                        : "text-muted hover:bg-bg-alt hover:text-primary",
+                        ? "bg-accent/30 text-primary shadow-sm shadow-accent/20"
+                        : "text-muted hover:bg-accent/10 hover:text-primary",
                     ].join(" ")}
                   >
                     {s.title}
