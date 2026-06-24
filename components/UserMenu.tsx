@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { signOut } from "@/app/auth/actions";
+import Avatar from "@/components/Avatar";
 
 type Props = {
   user: {
     email: string | null;
     displayName: string | null;
+    avatarUrl: string | null;
   } | null;
 };
 
@@ -33,16 +35,28 @@ export default function UserMenu({ user }: Props) {
   const name = user.displayName || user.email?.split("@")[0] || "同学";
 
   return (
-    <form action={signOut} className="flex items-center gap-3 text-sm">
-      <span className="hidden text-muted sm:inline" title={user.email ?? ""}>
-        {name}
-      </span>
-      <button
-        type="submit"
-        className="rounded-md border border-border bg-bg px-3 py-1.5 text-text transition-colors hover:border-primary hover:text-primary"
+    <div className="flex items-center gap-3">
+      <Link
+        href="/profile"
+        className="flex items-center gap-2 text-sm text-muted transition-colors hover:text-primary"
+        title="个人设置"
       >
-        退出
-      </button>
-    </form>
+        <Avatar
+          src={user.avatarUrl}
+          name={user.displayName ?? undefined}
+          email={user.email ?? undefined}
+          size={28}
+        />
+        <span className="hidden sm:inline">{name}</span>
+      </Link>
+      <form action={signOut}>
+        <button
+          type="submit"
+          className="rounded-md border border-border bg-bg px-3 py-1.5 text-xs text-text transition-colors hover:border-primary hover:text-primary"
+        >
+          退出
+        </button>
+      </form>
+    </div>
   );
 }

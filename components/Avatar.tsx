@@ -11,7 +11,7 @@ type AvatarProps = {
   alt?: string;
 };
 
-export default function Avatar({ src, name, email, size = 36, className = "" }: AvatarProps) {
+export default function Avatar({ src, name, email, size = 36, className = "", alt }: AvatarProps) {
   const [broken, setBroken] = useState(false);
   const label = name || email?.split("@")[0] || "?";
   const initial = label.charAt(0).toUpperCase();

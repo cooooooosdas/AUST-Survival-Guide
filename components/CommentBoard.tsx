@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import Link from "next/link";
 import { postComment, deleteComment } from "@/app/comments/actions";
+import Avatar from "@/components/Avatar";
 import type { Comment, CommentTargetType } from "@/lib/types";
 
 type Props = {
@@ -140,28 +141,38 @@ export default function CommentBoard({
               key={c.id}
               className="rounded-md border border-border bg-bg px-4 py-3 transition-colors hover:border-primary/30"
             >
-              <div className="flex items-center justify-between gap-2 text-xs text-muted">
-                <span className="font-medium text-text">
-                  {c.display_name || "匿名同学"}
-                </span>
-                <span className="flex items-center gap-3">
-                  <time>{formatTime(c.created_at)}</time>
-                  {isMine && c.id > 0 && (
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(c.id)}
-                      disabled={pending}
-                      aria-label="删除这条留言"
-                      className="text-muted hover:text-red-600 disabled:opacity-50"
-                    >
-                      删除
-                    </button>
-                  )}
-                </span>
+              <div className="flex items-center gap-3">
+                <Avatar
+                  src={c.avatar_url}
+                  name={c.display_name}
+                  size={32}
+                  className="mt-0.5"
+                />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2 text-xs text-muted">
+                    <span className="truncate font-medium text-text">
+                      {c.display_name || "匿名同学"}
+                    </span>
+                    <span className="flex shrink-0 items-center gap-3">
+                      <time>{formatTime(c.created_at)}</time>
+                      {isMine && c.id > 0 && (
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(c.id)}
+                          disabled={pending}
+                          aria-label="删除这条留言"
+                          className="text-muted hover:text-red-600 disabled:opacity-50"
+                        >
+                          删除
+                        </button>
+                      )}
+                    </span>
+                  </div>
+                  <p className="mt-2 whitespace-pre-wrap text-sm text-text">
+                    {c.content}
+                  </p>
+                </div>
               </div>
-              <p className="mt-2 whitespace-pre-wrap text-sm text-text">
-                {c.content}
-              </p>
             </li>
           );
         })}
