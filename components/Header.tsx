@@ -9,6 +9,7 @@ import UserMenu from "@/components/UserMenu";
 type HeaderUser = {
   email: string | null;
   displayName: string | null;
+  avatarUrl: string | null;
 } | null;
 
 export default function Header({ user }: { user: HeaderUser }) {

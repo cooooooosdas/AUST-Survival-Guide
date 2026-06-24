@@ -86,9 +86,25 @@ async function loadUser() {
     } = await supabase.auth.getUser();
     if (!user) return null;
     const meta = (user.user_metadata ?? {}) as { name?: string };
+    let avatarUrl: string | null = null;
+    let displayName: string | null = meta.name ?? null;
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("display_name, avatar_url")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (profile) {
+        avatarUrl = profile.avatar_url ?? null;
+        if (!displayName) displayName = profile.display_name ?? null;
+      }
+    } catch {
+      // profile 查询失败时退回到 metadata
+    }
     return {
       email: user.email ?? null,
-      displayName: meta.name ?? null,
+      displayName,
+      avatarUrl,
     };
   } catch {
     return null;
