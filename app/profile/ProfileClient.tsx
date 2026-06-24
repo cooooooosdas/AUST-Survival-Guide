@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useRef, useState } from "react";
 import Avatar from "@/components/Avatar";
 import { updateProfile } from "./actions";
 
@@ -14,7 +14,6 @@ const PRESET_SEEDS = [
   "Felix", "Aneka", "Zack", "Luna", "Leo",
   "Mimi", "Rocky", "Shadow", "Snow", "Pudding",
 ];
-
 const DICEBEAR_BASE = "https://api.dicebear.com/9.x/notionists/svg";
 
 export default function ProfileClient({ initialAvatarUrl, initialDisplayName, userEmail }: Props) {
@@ -24,12 +23,14 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
 
-  const dicebearUrl = useMemo(() => {
+  const dicebearUrl = (() => {
     const s = seed.trim();
-    if (!s) return null;
-    return `${DICEBEAR_BASE}?seed=${encodeURIComponent(s)}`;
-  }, [seed]);
+    return s ? `${DICEBEAR_BASE}?seed=${encodeURIComponent(s)}` : null;
+  })();
 
   async function handleSave() {
     setSaving(true);
@@ -41,6 +42,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
         avatar_url: avatarUrl,
       });
       setSaved(true);
+      setLocalPreview(null);
       setTimeout(() => setSaved(false), 2500);
     } catch (e) {
       setError(e instanceof Error ? e.message : "保存失败");
@@ -65,12 +67,55 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
     if (v) setSeed("");
   };
 
+  async function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setError(null);
+
+    // 类型/大小再校验一次（服务端也校验，双重保险）
+    const allowed = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    if (!allowed.includes(file.type)) {
+      setError("仅支持 JPG / PNG / WebP / GIF");
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setError(`文件 ${(file.size / 1024).toFixed(0)} KB，超过 2 MB 限制`);
+      return;
+    }
+
+    // 本地即时预览
+    const objectUrl = URL.createObjectURL(file);
+    setLocalPreview(objectUrl);
+
+    // 上传
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      if (avatarUrl) fd.append("old_url", avatarUrl);
+
+      const res = await fetch("/api/avatar/upload", { method: "POST", body: fd });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "上传失败");
+
+      setAvatarUrl(json.url);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "上传失败");
+      setLocalPreview(null);
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  }
+
+  const displaySrc = localPreview ?? avatarUrl;
+
   return (
     <div className="space-y-8">
-      {/* 当前头像 */}
+      {/* 当前头像预览 */}
       <div className="flex items-center gap-5">
         <Avatar
-          src={avatarUrl}
+          src={displaySrc}
           name={displayName || undefined}
           email={userEmail}
           size={80}
@@ -83,10 +128,40 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
         </div>
       </div>
 
+      {/* 本地上传 */}
+      <section className="space-y-2">
+        <p className="text-sm font-medium text-text">本地上传</p>
+        <div className="flex items-center gap-4">
+          <label className="cursor-pointer rounded-md border border-dashed border-border bg-bg-alt px-4 py-2.5 text-sm text-muted transition-colors hover:border-accent hover:text-accent">
+            {uploading ? "上传中…" : "选择文件"}
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="hidden"
+              onChange={onFileChange}
+              disabled={uploading}
+            />
+          </label>
+          {localPreview && !uploading && (
+            <img
+              src={localPreview}
+              alt="上传预览"
+              width={40}
+              height={40}
+              className="rounded-full object-cover"
+            />
+          )}
+        </div>
+        <p className="text-xs text-muted">
+          支持 JPG / PNG / WebP / GIF，最大 2 MB。选完自动上传。
+        </p>
+      </section>
+
       {/* 头像地址 */}
       <section className="space-y-2">
         <label htmlFor="avatar-url" className="text-sm font-medium text-text">
-          头像地址
+          或粘贴头像链接
         </label>
         <input
           id="avatar-url"
@@ -97,7 +172,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
           className="w-full rounded-md border border-border bg-bg px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
         <p className="text-xs text-muted">
-          粘贴任意图片链接。留空则显示彩色首字母头像。
+          留空则显示彩色首字母头像。本地上传和粘贴链接二选一即可。
         </p>
       </section>
 
@@ -177,7 +252,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
         <button
           type="button"
           onClick={handleSave}
-          disabled={saving}
+          disabled={saving || uploading}
           className="rounded-md bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
         >
           {saving ? "保存中…" : saved ? "已保存 ✓" : "保存"}
