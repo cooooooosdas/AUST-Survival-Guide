@@ -4,6 +4,9 @@ import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CursorGlow from "@/components/CursorGlow";
+import ClickRipple from "@/components/ClickRipple";
+import StarField from "@/components/StarField";
 import { createClient } from "@/lib/supabase/server";
 import { SITE, siteUrl } from "@/lib/site";
 
@@ -115,6 +118,9 @@ export default async function RootLayout({
         </main>
         <Footer />
         <Analytics />
+        <StarField count={12} />
+        <CursorGlow />
+        <ClickRipple />
       </body>
     </html>
   );
