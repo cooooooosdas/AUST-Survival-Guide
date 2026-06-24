@@ -1,12 +1,23 @@
 import Link from "next/link";
-import { LETTERS } from "@/lib/letters";
+import { LETTERS, readingTimeMinutes } from "@/lib/letters";
 import ScrollReveal from "@/components/ScrollReveal";
+import fs from "node:fs";
+import path from "node:path";
 
 export const metadata = { title: "学长来信" };
 
 function formatDate(iso: string) {
   const d = new Date(iso);
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function letterReadingTime(slug: string): number {
+  try {
+    const text = fs.readFileSync(path.join(process.cwd(), "content", "letters", `${slug}.mdx`), "utf8");
+    return readingTimeMinutes(text);
+  } catch {
+    return 5;
+  }
 }
 
 export default function LettersIndexPage() {
@@ -32,10 +43,13 @@ export default function LettersIndexPage() {
             <li>
               <Link
                 href={`/letters/${letter.slug}`}
-                className="group block rounded-lg border border-border bg-bg px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-[0_8px_24px_-12px_rgba(30,58,95,0.25)]"
+                className="group block rounded-xl border border-border bg-surface p-6 backdrop-blur-md backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10"
               >
-                <div className="flex items-baseline justify-between gap-4 text-xs text-muted">
+                <div className="flex items-center gap-3 text-xs text-muted">
                   <time>{formatDate(letter.date)}</time>
+                  <span>·</span>
+                  <span>约 {letterReadingTime(letter.slug)} 分钟</span>
+                  <span>·</span>
                   <span>{letter.author}</span>
                 </div>
                 <h2 className="mt-2 text-xl font-semibold text-primary transition-colors group-hover:text-primary-hover">

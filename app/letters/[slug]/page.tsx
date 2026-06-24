@@ -151,7 +151,7 @@ export default async function LetterPage({
         )}
       </header>
 
-      <div className="mt-2">
+      <div className="mt-8 glass-card p-6 md:p-10">
         <Letter />
       </div>
 
