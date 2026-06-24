@@ -8,6 +8,9 @@ import { useEffect, useRef, useState } from "react";
 /**
  * 侧边工具箱菜单 - 二次元风格
  * 底部带滑动选中色块，平滑跟随当前激活项
+ *
+ * 注：外层 <aside> 由布局组件控制（sticky + overflow-auto），
+ *     SidebarInfoPanel 与本组件平级放在同一容器内。
  */
 export default function SectionSidebar() {
   const pathname = usePathname();
@@ -91,7 +94,7 @@ export default function SectionSidebar() {
   }, [activeIndex]);
 
   return (
-    <aside className="md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-auto">
+    <>
       {/* 板块标签 */}
       <div className="mb-3 text-xs font-medium tracking-widest text-muted uppercase">
         资源板块
@@ -122,6 +125,6 @@ export default function SectionSidebar() {
           );
         })}
       </div>
-    </aside>
+    </>
   );
 }
