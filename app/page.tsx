@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SECTIONS } from "@/lib/sections";
 import HeroDecoration from "@/components/HeroDecoration";
 import ScrollReveal from "@/components/ScrollReveal";
+import SidebarInfoPanel from "@/components/SidebarInfoPanel";
 
 export default function HomePage() {
   return (
@@ -41,6 +42,13 @@ export default function HomePage() {
             <HeroDecoration />
           </div>
         </div>
+      </section>
+
+      {/* 站点信息面板（主页独立区块） */}
+      <section className="py-8 md:py-10">
+        <ScrollReveal>
+          <SidebarInfoPanel />
+        </ScrollReveal>
       </section>
 
       {/* 入口卡片 */}
