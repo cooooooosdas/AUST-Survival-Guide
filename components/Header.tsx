@@ -110,6 +110,7 @@ export default function Header({ user }: { user: HeaderUser }) {
         {/* 右侧工具区 */}
         <div className="ml-auto flex items-center gap-1">
           <div className="hidden md:flex items-center gap-0.5">
+            <TagsLink />
             <SearchLink />
             <BoardLink />
             <RssLink />
@@ -246,6 +247,22 @@ function SearchLink() {
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8" />
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </Link>
+  );
+}
+
+function TagsLink() {
+  return (
+    <Link
+      href="/tags"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      aria-label="标签云"
+      title="标签云"
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+        <line x1="7" y1="7" x2="7.01" y2="7" />
       </svg>
     </Link>
   );
