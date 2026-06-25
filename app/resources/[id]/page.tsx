@@ -1,4 +1,3 @@
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import ViewTracker from "@/components/ViewTracker";
 import { Suspense } from "react";
@@ -50,7 +49,32 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 export default async function ResourceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const resource = await getResource(id);
-  if (!resource) notFound();
+
+  if (!resource) {
+    return (
+      <div className="mx-auto max-w-2xl px-6 py-16 text-center">
+        <p className="text-6xl mb-4">🔍</p>
+        <h1 className="text-xl font-semibold text-primary">找不到这个资源</h1>
+        <p className="mt-3 text-sm text-muted leading-relaxed">
+          资源可能已被删除、下架，或链接有误。你可以返回列表看看其他文件。
+        </p>
+        <div className="mt-6 flex items-center justify-center gap-3">
+          <button
+            onClick={() => window.history.back()}
+            className="rounded-lg border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-primary hover:text-primary"
+          >
+            返回上一页
+          </button>
+          <Link
+            href="/resources"
+            className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
+          >
+            浏览资源列表
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   const downloadUrl = await getDownloadUrl(resource.storage_path);
   const isPDF = resource.file_type === "application/pdf" || resource.file_name.endsWith(".pdf");
