@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const metadata = { title: "关于我" };
 
 export default function AboutPage() {
@@ -35,6 +37,33 @@ export default function AboutPage() {
             <span>（待补充）</span>
           </li>
         </ul>
+      </div>
+
+      {/* 更多 */}
+      <div className="mt-10 border-t border-border pt-8">
+        <h2 className="text-base font-medium text-primary mb-4">更多</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <Link
+            href="/friends"
+            className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
+          >
+            <span className="text-2xl">🔗</span>
+            <div>
+              <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">友链交换</p>
+              <p className="text-xs text-muted mt-0.5">与学长博客、技术站点交换友情链接</p>
+            </div>
+          </Link>
+          <Link
+            href="/checkin"
+            className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
+          >
+            <span className="text-2xl">📝</span>
+            <div>
+              <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">学习打卡</p>
+              <p className="text-xs text-muted mt-0.5">每日任务打卡，养成持续学习习惯</p>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   );

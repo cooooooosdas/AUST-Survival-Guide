@@ -19,8 +19,6 @@ export const SECTIONS: Section[] = [
   { slug: "profile", title: "个人设置", href: "/profile", description: "头像与昵称", group: "extra" },
   { slug: "tags", title: "标签云", href: "/tags", description: "按标签浏览内容", group: "extra" },
   { slug: "changelog", title: "站点动态", href: "/changelog", description: "平台更新记录", group: "extra" },
-  { slug: "friends", title: "友链交换", href: "/friends", description: "友情链接申请与展示", group: "extra" },
-  { slug: "checkin", title: "学习打卡", href: "/checkin", description: "每日任务打卡 · 学习激励", group: "extra" },
   { slug: "about", title: "关于我", href: "/about", description: "胡希 · 软工25-4", group: "extra" },
 ];
 
