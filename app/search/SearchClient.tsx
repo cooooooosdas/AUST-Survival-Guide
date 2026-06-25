@@ -120,9 +120,11 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
       )}
 
       {/* 热门搜索 */}
-      {hotSearches.length > 0 && !initialQ && (
+      {hotSearches.length > 0 && (
         <div className="mt-5">
-          <p className="text-xs text-muted uppercase tracking-widest mb-2">热门搜索</p>
+          <p className="text-xs text-muted uppercase tracking-widest mb-2">
+            {results.length === 0 && initialQ ? "试试这些热门搜索" : "热门搜索"}
+          </p>
           <div className="flex flex-wrap gap-2">
             {hotSearches.slice(0, 10).map((h) => (
               <button
