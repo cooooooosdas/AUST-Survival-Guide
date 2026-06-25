@@ -1,12 +1,13 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import dynamic from "next/dynamic";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CursorGlow from "@/components/CursorGlow";
-import ClickRipple from "@/components/ClickRipple";
-import StarField from "@/components/StarField";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import AIChat from "@/components/AIChat";
+import Effects from "@/components/Effects";
 import { createClient } from "@/lib/supabase/server";
 import { SITE, siteUrl } from "@/lib/site";
 
@@ -115,13 +116,37 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const user = await loadUser();
+  const sbUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
   return (
     <html
       lang="zh-CN"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      {/* 预连接外部域名，加速资源加载 */}
+      {sbUrl && (
+        <>
+          <link rel="preconnect" href={sbUrl} crossOrigin="anonymous" />
+          <link rel="preconnect" href={`${sbUrl}/storage/v1`} crossOrigin="anonymous" />
+        </>
+      )}
+      {/* 防止深色模式闪烁：在首屏渲染前读取 localStorage */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              try {
+                var t = localStorage.getItem('theme');
+                if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                  document.documentElement.classList.add('dark');
+                }
+              } catch(e) {}
+            })();
+          `,
+        }}
+      />
       <body className="min-h-full flex flex-col bg-bg text-text">
+        <ThemeProvider>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-white"
@@ -134,9 +159,9 @@ export default async function RootLayout({
         </main>
         <Footer />
         <Analytics />
-        <StarField count={12} />
-        <CursorGlow />
-        <ClickRipple />
+        <Effects />
+        <AIChat />
+        </ThemeProvider>
       </body>
     </html>
   );

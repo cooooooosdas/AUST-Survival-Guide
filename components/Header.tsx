@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
 import UserMenu from "@/components/UserMenu";
+import { useTheme } from "@/components/ThemeProvider";
 
 type HeaderUser = {
   email: string | null;
@@ -105,6 +106,32 @@ export default function Header({ user }: { user: HeaderUser }) {
           ))}
         </nav>
 
+        <Link
+          href="/search"
+          className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          aria-label="搜索"
+          title="搜索"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </Link>
+        <Link
+          href="/feed.xml"
+          target="_blank"
+          rel="alternate"
+          className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          aria-label="RSS 订阅"
+          title="RSS 订阅"
+        >
+          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 11a9 9 0 0 1 9 9" />
+            <path d="M4 4a16 16 0 0 1 16 16" />
+            <circle cx="5" cy="19" r="1" />
+          </svg>
+        </Link>
+        <ThemeToggle />
         <div className="ml-auto flex items-center gap-2">
           <div className="hidden md:block">
             <UserMenu user={user} />
@@ -201,7 +228,20 @@ export default function Header({ user }: { user: HeaderUser }) {
                 </li>
               );
             })}
+            <li>
+              <Link
+                href="/search"
+                className="block rounded-lg px-3 py-2 text-sm text-muted transition-all duration-200 hover:bg-accent/10 hover:text-primary"
+              >
+                搜索
+              </Link>
+            </li>
           </ul>
+
+          {/* 移动端主题切换 */}
+          <div className="mt-5 border-t border-border pt-4">
+            <MobileThemeToggle />
+          </div>
 
           <div className="mt-6 border-t border-border pt-4">
             <UserMenu user={user} />
@@ -209,5 +249,76 @@ export default function Header({ user }: { user: HeaderUser }) {
         </nav>
       </div>
     </header>
+  );
+}
+
+function ThemeToggle() {
+  const { theme, toggle } = useTheme();
+  const isDark = theme === "dark";
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
+      title={isDark ? "切换到浅色模式" : "切换到深色模式"}
+      className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+    >
+      {isDark ? (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="5" />
+          <line x1="12" y1="1" x2="12" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="23" />
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+          <line x1="1" y1="12" x2="3" y2="12" />
+          <line x1="21" y1="12" x2="23" y2="12" />
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      )}
+    </button>
+  );
+}
+
+function MobileThemeToggle() {
+  const { theme, toggle } = useTheme();
+  const isDark = theme === "dark";
+
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
+      className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-text transition-all duration-200 hover:bg-primary/10 hover:text-primary active:scale-[0.98]"
+    >
+      {isDark ? (
+        <>
+          <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="5" />
+            <line x1="12" y1="1" x2="12" y2="3" />
+            <line x1="12" y1="21" x2="12" y2="23" />
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+            <line x1="1" y1="12" x2="3" y2="12" />
+            <line x1="21" y1="12" x2="23" y2="12" />
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+          </svg>
+          <span>切换到浅色模式</span>
+        </>
+      ) : (
+        <>
+          <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <span>切换到深色模式</span>
+        </>
+      )}
+    </button>
   );
 }

@@ -12,9 +12,15 @@ export const SECTIONS: Section[] = [
   { slug: "learn", title: "学习资源", href: "/learn", description: "B 站精选课程与教学文档", group: "main" },
   { slug: "software", title: "软件资源", href: "/software", description: "计算机学生常用软件", group: "main" },
   { slug: "ai", title: "AI 专区", href: "/ai", description: "AI 工具与使用方法", group: "main" },
+  { slug: "resources", title: "资源下载", href: "/resources", description: "笔记、课件、软件包", group: "main" },
   { slug: "letters", title: "学长来信", href: "/letters", description: "长文随笔 · 写给即将到来的你", group: "extra" },
+  { slug: "projects", title: "项目展示", href: "/projects", description: "网站作品 · AI 应用 · 课程大作业", group: "extra" },
   { slug: "board", title: "留言区", href: "/board", description: "登录后留言、提问、吐槽", group: "extra" },
   { slug: "profile", title: "个人设置", href: "/profile", description: "头像与昵称", group: "extra" },
+  { slug: "tags", title: "标签云", href: "/tags", description: "按标签浏览内容", group: "extra" },
+  { slug: "changelog", title: "站点动态", href: "/changelog", description: "平台更新记录", group: "extra" },
+  { slug: "friends", title: "友链交换", href: "/friends", description: "友情链接申请与展示", group: "extra" },
+  { slug: "checkin", title: "学习打卡", href: "/checkin", description: "每日任务打卡 · 学习激励", group: "extra" },
   { slug: "about", title: "关于我", href: "/about", description: "胡希 · 软工25-4", group: "extra" },
 ];
 

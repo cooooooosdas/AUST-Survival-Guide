@@ -96,10 +96,56 @@
    ============================================================ */
 
 /* ---------- 根元素：浅蓝白渐变背景 ---------- */
+/* ---------- 移动端优化 ---------- */
 html {
   background-color: var(--color-bg);
   color: var(--color-text);
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 确保所有交互元素在移动端有足够的点击区域 */
+@media (max-width: 768px) {
+  button, a, [role="button"], input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* 代码块在移动端横向滚动 */
+  pre {
+    font-size: 0.85rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  code {
+    font-size: 0.85em;
+  }
+
+  /* 移动端标题字号限制，避免过大 */
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+}
+
+/* 触控设备上的反馈效果 */
+@media (hover: hover) {
+  button:active,
+  a:active,
+  [role="button"]:active {
+    transform: scale(0.97);
+  }
+}
+
+/* 纯触控设备取消 hover 上浮效果 */
+@media (hover: none) {
+  .glass-card:hover {
+    transform: none;
+  }
+  .glass-card:active {
+    transform: scale(0.99);
+  }
 }
 
 html:focus-within {
@@ -222,6 +268,33 @@ select:focus-visible {
   }
 }
 
+/* ---------- 高对比度模式 ---------- */
+@media (prefers-contrast: more) {
+  :root {
+    --color-border: rgba(0, 0, 0, 0.4);
+    --color-border-hover: rgba(0, 0, 0, 0.6);
+  }
+
+  .dark {
+    --color-border: rgba(255, 255, 255, 0.4);
+    --color-border-hover: rgba(255, 255, 255, 0.6);
+  }
+
+  button, a, [role="button"], input, select, textarea {
+    border-width: 2px;
+  }
+
+  .glass, .glass-strong, .glass-card {
+    border-width: 2px;
+  }
+}
+
+@media (prefers-contrast: less) {
+  .glass, .glass-strong, .glass-card {
+    border-color: transparent;
+  }
+}
+
 /* ============================================================
    二次元风格渐变
    ============================================================ */
@@ -248,4 +321,61 @@ select:focus-visible {
     rgba(123,140,222,0.05) 0%,
     transparent 100%
   );
+}
+
+/* ============================================================
+   深色模式
+   ============================================================ */
+.dark {
+  --color-primary: #9BA8F0;
+  --color-primary-hover: #8B97DF;
+  --color-primary-light: #2A2D4A;
+  --color-primary-ghost: rgba(155, 168, 240, 0.15);
+  --color-primary-ring: rgba(155, 168, 240, 0.4);
+
+  --color-secondary: #FFB8C8;
+  --color-secondary-hover: #FFA7B8;
+  --color-secondary-light: #3A2530;
+  --color-secondary-ghost: rgba(255, 184, 200, 0.15);
+
+  --color-accent: #5DC4A8;
+  --color-accent-hover: #4DB498;
+  --color-accent-light: #1A3A30;
+
+  --color-bg: #1A1C2A;
+  --color-bg-alt: #21232F;
+  --color-surface: rgba(40, 42, 58, 0.85);
+
+  --color-text: #E2E4F0;
+  --color-text-secondary: #B0B4C8;
+  --color-muted: #7B7F94;
+
+  --color-border: rgba(155, 168, 240, 0.15);
+  --color-border-hover: rgba(155, 168, 240, 0.3);
+  --color-border-warm: rgba(255, 158, 181, 0.25);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(155, 168, 240, 0.15);
+}
+
+.dark html {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+}
+
+.dark code,
+.dark pre {
+  background-color: var(--color-bg-alt) !important;
+}
+
+.dark blockquote {
+  background-color: var(--color-bg-alt) !important;
+}
+
+.dark ::selection {
+  background-color: var(--color-accent);
+  color: var(--color-bg);
 }

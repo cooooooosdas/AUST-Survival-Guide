@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MAIN_SECTIONS } from "@/lib/sections";
+import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -118,6 +118,24 @@ export default function SectionSidebar() {
                 active
                   ? "text-primary font-medium"
                   : "text-text hover:bg-primary-ghost hover:text-primary",
+              ].join(" ")}
+            >
+              {s.title}
+            </Link>
+          );
+        })}
+        {EXTRA_SECTIONS.filter((s) => s.slug === "tags" || s.slug === "changelog").map((s, i) => {
+          const active = pathname === s.href || pathname?.startsWith(s.href + "/");
+          return (
+            <Link
+              key={s.slug}
+              href={s.href}
+              aria-current={active ? "page" : undefined}
+              className={[
+                "relative z-10 rounded-lg px-3 py-2 text-sm transition-colors duration-200 whitespace-nowrap",
+                active
+                  ? "text-primary font-medium"
+                  : "text-muted hover:bg-bg-alt hover:text-primary",
               ].join(" ")}
             >
               {s.title}

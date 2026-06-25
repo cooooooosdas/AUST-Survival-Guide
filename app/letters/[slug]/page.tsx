@@ -3,6 +3,12 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { LETTERS, getLetter, readingTimeMinutes } from "@/lib/letters";
 import CommentBoard from "@/components/CommentBoard";
+import LikeButton from "@/components/LikeButton";
+import FavoriteButton from "@/components/FavoriteButton";
+import ReadingProgress from "@/components/ReadingProgress";
+import LetterToc from "@/components/LetterToc";
+import ViewTracker from "@/components/ViewTracker";
+import ShareButton from "@/components/ShareButton";
 import { createClient } from "@/lib/supabase/server";
 import type { Comment } from "@/lib/types";
 import { siteUrl, SITE } from "@/lib/site";
@@ -48,6 +54,23 @@ export async function generateMetadata({
 function formatDate(iso: string) {
   const d = new Date(iso);
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function extractHeadings(text: string): { id: string; text: string; level: 2 | 3 }[] {
+  const lines = text.split("\n");
+  const out: { id: string; text: string; level: 2 | 3 }[] = [];
+  for (const line of lines) {
+    const m = line.match(/^(#{2,3})\s+(.+)/);
+    if (!m) continue;
+    const level = m[1].length === 2 ? 2 : 3;
+    const textRaw = m[2].replace(/[`*_#]+/g, "").trim();
+    const id = textRaw
+      .toLowerCase()
+      .replace(/[^一-鿿\w]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+    if (textRaw && id) out.push({ id, text: textRaw, level });
+  }
+  return out;
 }
 
 function rawFileText(slug: string) {
@@ -115,8 +138,47 @@ export default async function LetterPage({
     keywords: letter.tags?.join(", "),
   };
 
+  const rawText = rawFileText(slug);
+  const headings = extractHeadings(rawText);
+
+  // 加载点赞数据
+  let likeCount = 0;
+  let userLiked = false;
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    try {
+      const supabase = await createClient();
+      const [
+        { count: lc },
+        { data: myLike },
+      ] = await Promise.all([
+        supabase
+          .from("likes")
+          .select("*", { count: "exact", head: true })
+          .eq("target_type", "letter")
+          .eq("target_id", slug),
+        userId
+          ? supabase
+              .from("likes")
+              .select("id")
+              .eq("target_type", "letter")
+              .eq("target_id", slug)
+              .eq("user_id", userId)
+              .maybeSingle()
+          : Promise.resolve({ data: null }),
+      ]);
+      likeCount = lc ?? 0;
+      userLiked = !!myLike?.id;
+    } catch {
+      // 点赞查询失败不影响页面
+    }
+  }
+
   return (
-    <article className="mx-auto max-w-2xl px-6 py-16">
+    <>
+      <ReadingProgress />
+      <LetterToc headings={headings} />
+      <ViewTracker targetType="letter" targetId={slug} />
+      <article className="mx-auto max-w-2xl px-6 py-16">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -149,6 +211,25 @@ export default async function LetterPage({
             ))}
           </div>
         )}
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <LikeButton
+            targetType="letter"
+            targetId={slug}
+            initialLiked={userLiked}
+            initialCount={likeCount}
+          />
+          <FavoriteButton
+            targetType="letter"
+            targetId={slug}
+            initialFavorited={false}
+          />
+          <ShareButton
+            targetType="letter"
+            targetId={slug}
+            title={letter.title}
+            excerpt={letter.excerpt}
+          />
+        </div>
       </header>
 
       <div className="mt-8 glass-card p-6 md:p-10">
@@ -178,5 +259,6 @@ export default async function LetterPage({
         </div>
       </section>
     </article>
+    </>
   );
 }

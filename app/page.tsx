@@ -3,6 +3,7 @@ import { SECTIONS } from "@/lib/sections";
 import HeroDecoration from "@/components/HeroDecoration";
 import ScrollReveal from "@/components/ScrollReveal";
 import SidebarInfoPanel from "@/components/SidebarInfoPanel";
+import Leaderboard from "@/components/Leaderboard";
 
 export default function HomePage() {
   return (
@@ -50,6 +51,9 @@ export default function HomePage() {
           <SidebarInfoPanel />
         </ScrollReveal>
       </section>
+
+      {/* 热门推荐 */}
+      <Leaderboard />
 
       {/* 入口卡片 */}
       <section className="py-12 md:py-16">
