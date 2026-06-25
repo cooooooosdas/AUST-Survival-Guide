@@ -60,7 +60,6 @@ export default function LinkBoard({
                   <LinkCard
                     item={item}
                     sectionSlug={sectionSlug}
-                    groupIcon={g.icon}
                   />
                 </li>
               ))}

@@ -10,7 +10,6 @@ import {
 type Props = {
   item: LinkItem;
   sectionSlug?: string;
-  groupIcon?: string;
 };
 
 const TAG_STYLE: Record<string, string> = {
@@ -28,18 +27,30 @@ function tagStyle(tag: string): string {
   return TAG_STYLE[tag] ?? "bg-[#F1F5F9] text-[#475569]";
 }
 
-function renderItemIcon(icon?: string) {
-  if (!icon) return null;
-  return (
-    <div
-      className="hidden sm:flex h-7 w-7 shrink-0 items-center justify-center"
-      aria-hidden="true"
-      dangerouslySetInnerHTML={{ __html: icon }}
-    />
-  );
+function renderItemIcon(url?: string) {
+  if (!url) return null;
+  try {
+    const host = new URL(url).hostname;
+    const favicon = `https://www.google.com/s2/favicons?domain=${host}&sz=64`;
+    return (
+      <img
+        src={favicon}
+        alt=""
+        width={28}
+        height={28}
+        loading="lazy"
+        className="hidden sm:block h-7 w-7 shrink-0 rounded-md object-cover"
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = "none";
+        }}
+      />
+    );
+  } catch {
+    return null;
+  }
 }
 
-export default function LinkCard({ item, sectionSlug, groupIcon }: Props) {
+export default function LinkCard({ item, sectionSlug }: Props) {
   const [copied, setCopied] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const [note, setNote] = useState("");
@@ -144,7 +155,7 @@ export default function LinkCard({ item, sectionSlug, groupIcon }: Props) {
           !item.url ? "opacity-60 pointer-events-none" : "",
         ].join(" ")}
       >
-        {renderItemIcon(groupIcon)}
+        {renderItemIcon(item.url)}
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-medium text-text group-hover:text-primary truncate">
