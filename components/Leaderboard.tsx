@@ -61,7 +61,6 @@ export default function Leaderboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {CATEGORIES.map((cat) => {
           const items = data[cat.key] ?? [];
-          if (items.length === 0) return null;
 
           return (
             <div key={cat.key}>
@@ -70,25 +69,31 @@ export default function Leaderboard() {
                   {cat.icon} {cat.label}
                 </span>
               </h3>
-              <div className="space-y-2">
-                {items.slice(0, 5).map((item, i) => {
-                  const resolved = resolveItem(item);
-                  if (!resolved) return null;
-                  return (
-                    <Link
-                      key={item.target_id}
-                      href={resolved.href}
-                      className="flex items-center gap-3 rounded-lg border border-border bg-bg-alt px-4 py-3 transition-colors hover:border-primary/20"
-                    >
-                      <span className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-accent/20 text-xs font-medium text-primary">
-                        {i + 1}
-                      </span>
-                      <span className="flex-1 text-sm text-text truncate">{resolved.title}</span>
-                      <span className="shrink-0 text-xs text-muted">👁 {item.total_views}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+              {items.length === 0 ? (
+                <p className="text-sm text-muted rounded-lg border border-border bg-bg-alt px-4 py-6 text-center">
+                  暂无数据，浏览后这里会显示热门内容
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {items.slice(0, 5).map((item, i) => {
+                    const resolved = resolveItem(item);
+                    if (!resolved) return null;
+                    return (
+                      <Link
+                        key={item.target_id}
+                        href={resolved.href}
+                        className="flex items-center gap-3 rounded-lg border border-border bg-bg-alt px-4 py-3 transition-colors hover:border-primary/20"
+                      >
+                        <span className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-accent/20 text-xs font-medium text-primary">
+                          {i + 1}
+                        </span>
+                        <span className="flex-1 text-sm text-text truncate">{resolved.title}</span>
+                        <span className="shrink-0 text-xs text-muted">👁 {item.total_views}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           );
         })}
