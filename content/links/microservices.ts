@@ -2,6 +2,11 @@ import type { LinkGroup } from "@/lib/types";
 
 // 校内入口的真实 URL 各校区会变。这里给的是「最常用的官方根」，
 // 实际能不能跳进对应模块以你登录后看到的为准。如果链接不对，请到留言区反馈。
+//
+// icon 字段：优先使用安徽理工大学官网 favicon 作为校内服务图标，
+// 外网数据库（知网、万方、Web of Science）保持原 favicon。
+const AUST_ICON = "https://www.google.com/s2/favicons?domain=aust.edu.cn&sz=64";
+
 export const groups: LinkGroup[] = [
   {
     id: "official-portal",
@@ -12,24 +17,28 @@ export const groups: LinkGroup[] = [
         url: "https://www.aust.edu.cn/",
         description: "学校主页",
         tag: "官方",
+        icon: AUST_ICON,
       },
       {
         title: "教务处",
         url: "https://jwc.aust.edu.cn/",
         description: "教学通知 / 校历 / 教学日历",
         tag: "官方",
+        icon: AUST_ICON,
       },
       {
         title: "图书馆",
         url: "https://lib.aust.edu.cn/",
         description: "查书 / 自习室预约 / 数据库入口",
         tag: "官方",
+        icon: AUST_ICON,
       },
       {
         title: "学工处",
         url: "https://xgc.aust.edu.cn/",
         description: "奖助学金 / 学生事务",
         tag: "官方",
+        icon: AUST_ICON,
       },
     ],
   },
@@ -42,23 +51,27 @@ export const groups: LinkGroup[] = [
         url: "https://jw.aust.edu.cn/",
         description: "选课 / 课表 / 成绩单",
         tag: "需校园网",
+        icon: AUST_ICON,
       },
       {
         title: "智慧校园 / 一站式服务",
         url: "https://i.aust.edu.cn/",
         description: "登录后能看到大部分校内办事入口",
         tag: "需校园网",
+        icon: AUST_ICON,
       },
       {
         title: "校园 VPN（远程访问）",
         url: "https://vpn.aust.edu.cn/",
         description: "在校外想访问校内系统先连 VPN",
         tag: "校外用",
+        icon: AUST_ICON,
       },
       {
         title: "校园网账号自服务",
         url: "https://drcom.aust.edu.cn/",
         description: "查流量 / 改密码 / 缴费",
+        icon: AUST_ICON,
       },
     ],
   },
@@ -94,11 +107,13 @@ export const groups: LinkGroup[] = [
         title: "校园卡 / 一卡通",
         url: "https://ykt.aust.edu.cn/",
         description: "余额查询 / 挂失 / 充值",
+        icon: AUST_ICON,
       },
       {
         title: "宿舍报修 / 后勤",
         url: "https://hqzx.aust.edu.cn/",
         description: "灯坏、马桶堵、空调坏报这里",
+        icon: AUST_ICON,
       },
     ],
   },

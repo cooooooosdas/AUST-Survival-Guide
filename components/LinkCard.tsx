@@ -27,7 +27,22 @@ function tagStyle(tag: string): string {
   return TAG_STYLE[tag] ?? "bg-[#F1F5F9] text-[#475569]";
 }
 
-function renderItemIcon(url?: string) {
+function renderItemIcon(url?: string, customIcon?: string) {
+  if (customIcon) {
+    return (
+      <img
+        src={customIcon}
+        alt=""
+        width={28}
+        height={28}
+        loading="lazy"
+        className="hidden sm:block h-7 w-7 shrink-0 rounded-md object-cover"
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = "none";
+        }}
+      />
+    );
+  }
   if (!url) return null;
   try {
     const host = new URL(url).hostname;
@@ -155,7 +170,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
           !item.url ? "opacity-60 pointer-events-none" : "",
         ].join(" ")}
       >
-        {renderItemIcon(item.url)}
+        {renderItemIcon(item.url, item.icon)}
         <div className="flex min-w-0 flex-1 flex-col gap-1">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-medium text-text group-hover:text-primary truncate">
