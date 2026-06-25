@@ -1,20 +1,10 @@
 import type { LinkGroup } from "@/lib/types";
 
-export const icon: Record<string, string> = {
-  tools: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#1B4332"/><path d="M32 18 L46 26 L46 42 L32 50 L18 42 L18 26 Z" fill="none" stroke="#FFD166" stroke-width="2.5"/><circle cx="32" cy="34" r="5" fill="#FFD166"/></svg>`,
-  ruanjianqu: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#1B4332"/><rect x="16" y="14" width="32" height="24" rx="3" fill="none" stroke="#52B788" stroke-width="2.5"/><path d="M26 26 L28 30 L34 22" fill="none" stroke="#FFD166" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 42 L48 42" stroke="#52B788" stroke-width="2.5"/></svg>`,
-  ziyuan: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#1B4332"/><path d="M32 16 L46 28 L46 46 L18 46 L18 28 Z" fill="none" stroke="#40916C" stroke-width="2.5"/><path d="M32 22 L32 40 M24 28 L40 28" stroke="#FFD166" stroke-width="2" stroke-linecap="round"/></svg>`,
-  aiqu: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#1B4332"/><circle cx="24" cy="28" r="7" fill="none" stroke="#52B788" stroke-width="2.5"/><circle cx="40" cy="28" r="7" fill="none" stroke="#FFD166" stroke-width="2.5"/><path d="M28 42 C28 38 36 38 36 42" fill="none" stroke="#40916C" stroke-width="2.5" stroke-linecap="round"/></svg>`,
-  zhishi: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#1B4332"/><path d="M32 16 L50 46 H14 Z" fill="none" stroke="#52B788" stroke-width="2.5"/><line x1="32" y1="30" x2="32" y2="40" stroke="#FFD166" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="44" r="1.5" fill="#FFD166"/></svg>`,
-  ilovemycomputer: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><rect width="64" height="64" rx="12" fill="#1B4332"/><rect x="14" y="16" width="36" height="26" rx="3" fill="none" stroke="#40916C" stroke-width="2.5"/><path d="M22 50 L42 50 L42 54 L22 54 Z" fill="none" stroke="#52B788" stroke-width="2"/><line x1="32" y1="38" x2="32" y2="46" stroke="#FFD166" stroke-width="2"/></svg>`,
-};
-
 export const groups: LinkGroup[] = [
   // ===== 工具类（源自 30aitool.com/tools）=====
   {
     id: "30-tools-media",
     title: "媒体处理",
-    icon: icon.tools,
     items: [
       { title: "视频转音频", url: "https://www.freeconvert.com/zh/convert/video-to-mp3", description: "MP4 视频一键转 MP3 格式，免费在线处理", tag: "免费", tags: ["媒体","在线"] },
       { title: "视频压缩", url: "https://tools.rotato.app/compress", description: "视频压缩减小体积，画质损失极小", tag: "免费", tags: ["媒体","在线"] },
@@ -34,7 +24,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-tools-image",
     title: "图片处理",
-    icon: icon.tools,
     items: [
       { title: "去照片水印", url: "https://www.apeaksoft.com/watermark-remover/editor/", description: "AI 智能去除图片水印和多余元素", tag: "AI", tags: ["图片","在线"] },
       { title: "抠图免费网站", url: "https://zh.bgsub.com/webapp/", description: "自动去除图片背景，通用性强免费", tag: "免费", tags: ["抠图","在线"] },
@@ -53,7 +42,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-tools-doc",
     title: "文档 / 写作 / 图表",
-    icon: icon.tools,
     items: [
       { title: "Markdown 卡片", url: "https://md2card.com/zh", description: "Markdown 转图文卡片，知识分享", tag: "免费", tags: ["Markdown","在线"] },
       { title: "Markdown 编辑工具", url: "https://markdown.lovejade.cn/", description: "在线 Markdown 编辑器，实时预览", tag: "免费", tags: ["Markdown","在线"] },
@@ -68,7 +56,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-tools-other",
     title: "其他工具",
-    icon: icon.tools,
     items: [
       { title: "文件传输", url: "https://www.airportal.cn/", description: "AirPortal 不限速传文件到任意设备", tag: "免费", tags: ["传输","在线"] },
       { title: "视频下载插件 AIX", url: "https://aixdownloader.com/zh", description: "浏览器插件嗅探下载网页视频音频", tag: "免费", tags: ["下载","浏览器"] },
@@ -78,7 +65,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-soft-dev",
     title: "开发工具",
-    icon: icon.ruanjianqu,
     items: [
       { title: "Quick Look", url: "https://github.com/QL-Win/QuickLook", description: "按空格键预览任意文件，macOS 风格", tag: "开源", tags: ["效率","本地"] },
       { title: "Quicker", url: "https://getquicker.net/", description: "快捷面板效率神器，自定义动作秒启动", tag: "免费", tags: ["效率","本地"] },
@@ -93,7 +79,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-soft-system",
     title: "系统维护",
-    icon: icon.ruanjianqu,
     items: [
       { title: "卸载工具 HiBit Uninstaller", url: "https://www.hibitsoft.ir/", description: "彻底卸载软件并清理注册表残留项", tag: "免费", tags: ["卸载","本地"] },
       { title: "卸载工具 IObit Uninstaller", url: "https://www.iobit.com/", description: "批量卸载软件，强制删除顽固残留", tag: "免费", tags: ["卸载","本地"] },
@@ -110,7 +95,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-soft-game",
     title: "游戏相关",
-    icon: icon.ruanjianqu,
     items: [
       { title: "Steam++（ Watt Toolkit）", url: "https://steampp.net/", description: "Steam 加速+游戏工具箱，开源免费", tag: "开源", tags: ["游戏","加速"] },
       { title: "图吧工具箱", url: "https://www.tbtool.cn/", description: "硬件检测烤机驱动管理，装机必备", tag: "免费", tags: ["硬件","检测"] },
@@ -121,7 +105,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-res-img",
     title: "图片 / 设计素材",
-    icon: icon.ziyuan,
     items: [
       { title: "免版权图库 Pixabay", url: "https://pixabay.com/", description: "免费高清图片素材库，可商用无版权", tag: "免费", tags: ["图片","商用"] },
       { title: "免扣图 PNG", url: "https://miankoutupian.com/", description: "透明背景 PNG 素材，免费下载使用", tag: "免费", tags: ["PNG","设计"] },
@@ -138,7 +121,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-res-media",
     title: "音视频素材",
-    icon: icon.ziyuan,
     items: [
       { title: "音效素材 BBC Sound Effects", url: "https://sound-effects.bbcrewind.co.uk/", description: "BBC 免费音效库，可商用无版权", tag: "免费", tags: ["音效","素材"] },
       { title: "白噪音", url: "https://asoftmurmur.com/", description: "专注助眠白噪音，网页打开即用", tag: "免费", tags: ["白噪音","专注"] },
@@ -149,7 +131,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-res-learn",
     title: "学习 / 办公素材",
-    icon: icon.ziyuan,
     items: [
       { title: "简历模板 Canva", url: "https://www.canva.cn/", description: "在线编辑简历模板，中文友好免费", tag: "免费", tags: ["简历","模板"] },
       { title: "PPT 模板", url: "https://justfreeslide.com/", description: "免费高级 PPT 模板，免登录直接下载", tag: "免费", tags: ["PPT","模板"] },
@@ -161,7 +142,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-ai-tools",
     title: "AI 工具集",
-    icon: icon.aiqu,
     items: [
       { title: "AI 提示词合集", url: "https://www.aishort.top/", description: "精选 AI 提示词合集，复制即用", tag: "免费", tags: ["提示词","AI"] },
       { title: "AI 提示词排行榜", url: "https://promptup.net/scoreboard", description: "社区评分热门提示词，每日持续更新", tag: "免费", tags: ["提示词","AI"] },
@@ -174,7 +154,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-know-info",
     title: "优质信息源",
-    icon: icon.zhishi,
     items: [
       { title: "AI 每日信息源", url: "https://www.bestblogs.dev/", description: "精选 AI 优质内容每日更新，必看", tag: "免费", tags: ["AI","资讯"] },
       { title: "阮一峰的网络日志", url: "https://www.ruanyifeng.com/", description: "科技周刊每周五更新，互联网必读", tag: "免费", tags: ["博客","科技"] },
@@ -188,7 +167,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-know-life",
     title: "生活实用指南",
-    icon: icon.zhishi,
     items: [
       { title: "实用指南手册", url: "https://cook.yunyoujun.cn/", description: "租房医保做饭等实用生活指南手册", tag: "免费", tags: ["生活","指南"] },
       { title: "创业失败案例库", url: "https://www.failory.com/", description: "全球创业失败案例分析，避坑必读", tag: "免费", tags: ["创业","案例"] },
@@ -200,7 +178,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-pc-lesson",
     title: "电脑课 · 系统维护",
-    icon: icon.ilovemycomputer,
     items: [
       { title: "【第一课】卸载软件科普", url: "https://www.hibitsoft.ir/", description: "流氓软件清理+正确卸载方法科普", tag: "教程", tags: ["卸载","系统"] },
       { title: "【第二课】浏览器插件&小技巧", url: "https://microsoftedge.microsoft.com/addons/", description: "Edge 插件推荐，浏览器效率翻倍", tag: "教程", tags: ["浏览器","效率"] },
@@ -214,7 +191,6 @@ export const groups: LinkGroup[] = [
   {
     id: "30-pc-tips",
     title: "电脑实用技巧",
-    icon: icon.ilovemycomputer,
     items: [
       { title: "C盘清理指南", url: "https://www.huorong.cn/", description: "火绒安全+C盘瘦身完整清理指南", tag: "教程", tags: ["C盘","清理"] },
       { title: "C盘软件迁移", url: "https://github.com/", description: "把 C 盘软件迁移到其他盘教程", tag: "教程", tags: ["C盘","迁移"] },
