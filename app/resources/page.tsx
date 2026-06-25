@@ -59,11 +59,24 @@ export default async function ResourcesPage({
   }
 
   const { data: resources, error } = await q;
-  if (error) {
+
+  // 未配置 Supabase 或查询失败时展示友好提示
+  const isNotConfigured = !process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+  if (error || isNotConfigured) {
     return (
       <div className="mx-auto max-w-4xl px-6 py-16">
         <h1 className="text-2xl md:text-3xl font-semibold text-primary">资源下载</h1>
-        <p className="mt-2 text-sm text-red-600">加载失败：{error.message}</p>
+        <p className="mt-2 text-sm text-muted">
+          正在补充中，敬请期待。
+        </p>
+        <div className="mt-10 rounded-xl border border-dashed border-border bg-bg-alt p-10 text-center">
+          <p className="text-5xl mb-3">📦</p>
+          <p className="text-sm text-muted">资源库正在建设中</p>
+          <p className="mt-2 text-xs text-muted/70">
+            高数笔记、课件、软件安装包等学习资料即将上线。
+          </p>
+        </div>
       </div>
     );
   }

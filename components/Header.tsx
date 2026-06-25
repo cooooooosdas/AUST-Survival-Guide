@@ -111,6 +111,7 @@ export default function Header({ user }: { user: HeaderUser }) {
         <div className="ml-auto flex items-center gap-1">
           <div className="hidden md:flex items-center gap-0.5">
             <SearchLink />
+            <BoardLink />
             <RssLink />
             <ThemeToggle />
           </div>
@@ -245,6 +246,21 @@ function SearchLink() {
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="11" cy="11" r="8" />
         <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </Link>
+  );
+}
+
+function BoardLink() {
+  return (
+    <Link
+      href="/board"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      aria-label="留言区"
+      title="留言区"
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
       </svg>
     </Link>
   );

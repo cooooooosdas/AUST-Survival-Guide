@@ -52,8 +52,12 @@ export default async function BoardPage() {
             currentUserId={userId}
           />
         ) : (
-          <div className="rounded-md border border-dashed border-border bg-bg-alt p-8 text-center text-sm text-muted">
-            后端尚未配置：等 Supabase 接好后这里就会出现留言。
+          <div className="rounded-xl border border-dashed border-border bg-bg-alt p-10 text-center">
+            <p className="text-4xl mb-3">💬</p>
+            <p className="text-sm font-medium text-text">留言区正在准备中</p>
+            <p className="mt-2 text-xs text-muted">
+              等 Supabase 配置好后，这里就会开放留言功能。
+            </p>
           </div>
         )}
       </div>
