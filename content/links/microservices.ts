@@ -5,7 +5,7 @@ import type { LinkGroup } from "@/lib/types";
 //
 // icon 字段：优先使用安徽理工大学官网 favicon 作为校内服务图标，
 // 外网数据库（知网、万方、Web of Science）保持原 favicon。
-const AUST_ICON = "https://www.google.com/s2/favicons?domain=aust.edu.cn&sz=64";
+const AUST_ICON = "https://www.aust.edu.cn/images/logo_03.png";
 
 export const groups: LinkGroup[] = [
   {
