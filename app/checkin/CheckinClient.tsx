@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type Task = {
   id: number;
@@ -213,6 +214,31 @@ export default function CheckinClient() {
       <section>
         <h2 className="text-lg font-medium text-text mb-4">最近 14 天</h2>
         <Heatmap dates={recentDates} records={records} />
+      </section>
+
+      {/* 刷题练习入口 */}
+      <section className="mt-10">
+        <div className="rounded-xl border border-border bg-gradient-to-br from-primary/5 to-accent/5 p-6">
+          <div className="flex items-start gap-4">
+            <span className="text-3xl">📝</span>
+            <div className="flex-1">
+              <h2 className="text-base font-medium text-primary">刷题练习</h2>
+              <p className="mt-1 text-xs text-muted leading-relaxed">
+                选择题 + 编程题，支持简单 / 中等 / 困难三档难度，随机出题。
+              </p>
+              <Link
+                href="/checkin/practice"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover active:scale-[0.98]"
+              >
+                开始刷题
+                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="12 5 19 12 12 19" />
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </div>
       </section>
     </div>
   );
