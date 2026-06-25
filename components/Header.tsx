@@ -52,10 +52,10 @@ export default function Header({ user }: { user: HeaderUser }) {
 
   const linkClass = (active: boolean, muted = false) =>
     [
-      "relative px-1 py-1 transition-colors duration-200",
+      "relative px-1 py-1 transition-colors duration-200 whitespace-nowrap",
       muted ? "text-muted" : "text-text",
       active ? "text-primary" : "hover:text-primary",
-      "after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[2px] after:bg-accent after:transition-transform after:duration-300 after:origin-left",
+      "after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[1.5px] after:bg-accent after:transition-transform after:duration-300 after:origin-left",
       active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
     ].join(" ");
 
@@ -71,17 +71,18 @@ export default function Header({ user }: { user: HeaderUser }) {
           : "border-transparent glass",
       ].join(" ")}
     >
-      <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-6">
+      <div className="mx-auto flex h-14 items-center gap-3 px-4 md:px-6">
+        {/* 左侧：标题 + 导航 */}
         <Link
           href="/"
-          className="bg-gradient-to-r from-primary to-accent bg-clip-text font-semibold tracking-wide text-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
+          className="shrink-0 bg-gradient-to-r from-primary to-accent bg-clip-text font-semibold tracking-wide text-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
         >
           安理大生存指南
         </Link>
 
         <nav
           aria-label="主导航"
-          className="hidden md:flex items-center gap-5 text-sm"
+          className="hidden lg:flex items-center gap-3 text-xs"
         >
           {MAIN_SECTIONS.map((s) => (
             <Link
@@ -93,7 +94,7 @@ export default function Header({ user }: { user: HeaderUser }) {
               {s.title}
             </Link>
           ))}
-          <span className="h-4 w-px bg-border" />
+          <span className="h-3.5 w-px shrink-0 bg-border" />
           {EXTRA_SECTIONS.map((s) => (
             <Link
               key={s.slug}
@@ -106,33 +107,14 @@ export default function Header({ user }: { user: HeaderUser }) {
           ))}
         </nav>
 
-        <Link
-          href="/search"
-          className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-          aria-label="搜索"
-          title="搜索"
-        >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-        </Link>
-        <Link
-          href="/feed.xml"
-          target="_blank"
-          rel="alternate"
-          className="hidden md:inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-          aria-label="RSS 订阅"
-          title="RSS 订阅"
-        >
-          <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M4 11a9 9 0 0 1 9 9" />
-            <path d="M4 4a16 16 0 0 1 16 16" />
-            <circle cx="5" cy="19" r="1" />
-          </svg>
-        </Link>
-        <ThemeToggle />
-        <div className="ml-auto flex items-center gap-2">
+        {/* 右侧工具区 */}
+        <div className="ml-auto flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-0.5">
+            <SearchLink />
+            <RssLink />
+            <ThemeToggle />
+          </div>
+          <span className="hidden md:block h-4 w-px bg-border mx-1" />
           <div className="hidden md:block">
             <UserMenu user={user} />
           </div>
@@ -252,6 +234,41 @@ export default function Header({ user }: { user: HeaderUser }) {
   );
 }
 
+function SearchLink() {
+  return (
+    <Link
+      href="/search"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      aria-label="搜索"
+      title="搜索"
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+      </svg>
+    </Link>
+  );
+}
+
+function RssLink() {
+  return (
+    <Link
+      href="/feed.xml"
+      target="_blank"
+      rel="alternate"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      aria-label="RSS 订阅"
+      title="RSS 订阅"
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </svg>
+    </Link>
+  );
+}
+
 function ThemeToggle() {
   const { theme, toggle } = useTheme();
   const isDark = theme === "dark";
@@ -262,10 +279,10 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
       title={isDark ? "切换到浅色模式" : "切换到深色模式"}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
     >
       {isDark ? (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="5" />
           <line x1="12" y1="1" x2="12" y2="3" />
           <line x1="12" y1="21" x2="12" y2="23" />
@@ -277,7 +294,7 @@ function ThemeToggle() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </svg>
       ) : (
-        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
