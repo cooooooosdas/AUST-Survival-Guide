@@ -81,6 +81,8 @@ export type Comment = {
   created_at: string;
   display_name: string | null;
   avatar_url: string | null;
+  // 0007 migration 之前的 schema 不会返回这些字段；从 supabase 加载
+  // 后必须经过 lib/comments.ts 的 normalizeComment 才能保证字段完整。
   parent_id: number | null;
   status: CommentStatus;
   tags: string[];

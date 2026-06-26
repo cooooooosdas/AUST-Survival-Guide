@@ -30,15 +30,30 @@ export async function postComment(input: {
 
   const tags = (input.tags ?? []).filter((t) => COMMENT_TAGS.includes(t));
 
-  const { error } = await supabase.from("comments").insert({
+  const fullPayload = {
     user_id: user.id,
     target_type: input.target_type,
     target_id: input.target_id,
     content,
     parent_id: input.parent_id ?? null,
     tags,
-    status: "approved",
-  });
+    status: "approved" as const,
+  };
+  let { error } = await supabase.from("comments").insert(fullPayload);
+
+  // 0007 migration 没跑时 comments 表没有 parent_id/tags/status 列，
+  // PostgREST 报 PGRST204 "Could not find the '...' column"。降级到最小
+  // insert 让留言至少能发出去；楼中楼/标签在 schema 升级前不生效。
+  if (error && /Could not find the .* column/i.test(error.message)) {
+    const minimalPayload = {
+      user_id: user.id,
+      target_type: input.target_type,
+      target_id: input.target_id,
+      content,
+    };
+    const fallback = await supabase.from("comments").insert(minimalPayload);
+    error = fallback.error;
+  }
 
   if (error) return { ok: false, error: error.message };
 

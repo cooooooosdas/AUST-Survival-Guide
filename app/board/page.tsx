@@ -1,5 +1,6 @@
 import CommentBoard from "@/components/CommentBoard";
 import { createClient } from "@/lib/supabase/server";
+import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
 
 export const metadata = { title: "留言区" };
@@ -24,7 +25,7 @@ async function loadBoardData() {
       return { comments: [] as Comment[], userId: null as string | null, ready: false };
     }
     return {
-      comments: (comments ?? []) as Comment[],
+      comments: normalizeComments(comments as Partial<Comment>[]),
       userId: user?.id ?? null,
       ready: true,
     };

@@ -10,6 +10,7 @@ import LetterToc from "@/components/LetterToc";
 import ViewTracker from "@/components/ViewTracker";
 import ShareButton from "@/components/ShareButton";
 import { createClient } from "@/lib/supabase/server";
+import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
 import { siteUrl, SITE } from "@/lib/site";
 import fs from "node:fs";
@@ -102,7 +103,7 @@ async function loadCommentsAndUser(slug: string) {
       return { comments: [] as Comment[], userId: null as string | null, ready: false };
     }
     return {
-      comments: (comments ?? []) as Comment[],
+      comments: normalizeComments(comments as Partial<Comment>[]),
       userId: user?.id ?? null,
       ready: true,
     };
