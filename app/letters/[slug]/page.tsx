@@ -13,6 +13,7 @@ import { createClient } from "@/lib/supabase/server";
 import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
 import { siteUrl, SITE } from "@/lib/site";
+import { slug as githubSlug } from "github-slugger";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -65,10 +66,8 @@ function extractHeadings(text: string): { id: string; text: string; level: 2 | 3
     if (!m) continue;
     const level = m[1].length === 2 ? 2 : 3;
     const textRaw = m[2].replace(/[`*_#]+/g, "").trim();
-    const id = textRaw
-      .toLowerCase()
-      .replace(/[^一-鿿\w]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+    // 用 github-slugger 生成 id，跟 rehype-slug 完全一致，保证 TOC 点击跳转能命中
+    const id = githubSlug(textRaw);
     if (textRaw && id) out.push({ id, text: textRaw, level });
   }
   return out;
