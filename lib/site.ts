@@ -22,6 +22,6 @@ export const SITE = {
   shortName: "AUST 生存指南",
   description:
     "写给安徽理工大学新生的一站式资源导航与学长来信。工具、微服务、学习资源、软件、AI 与长文经验，慢慢更新。",
-  author: "胡希",
+  author: "coolin",
   locale: "zh-CN",
 };

@@ -8,7 +8,7 @@ export default function AboutPage() {
       <h1 className="text-2xl md:text-3xl font-semibold text-primary">关于我</h1>
       <div className="mt-8 space-y-5 leading-loose text-text">
         <p>
-          胡希，安徽理工大学计算机科学与工程学院 · 软件工程 25-4 班 · 班长。
+          coolin，安徽理工大学计算机科学与工程学院。
         </p>
         <p>
           做这个站的初衷很简单：去年九月我自己来安理大的时候，对学校、对专业都没什么把握。

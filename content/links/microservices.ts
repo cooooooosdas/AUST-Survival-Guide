@@ -104,12 +104,6 @@ export const groups: LinkGroup[] = [
     title: "校园生活",
     items: [
       {
-        title: "校园卡 / 一卡通",
-        url: "https://ykt.aust.edu.cn/",
-        description: "余额查询 / 挂失 / 充值",
-        icon: AUST_ICON,
-      },
-      {
         title: "宿舍报修 / 后勤",
         url: "https://hqzx.aust.edu.cn/",
         description: "灯坏、马桶堵、空调坏报这里",

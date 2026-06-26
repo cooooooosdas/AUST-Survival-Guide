@@ -32,7 +32,7 @@ export default function HomePage() {
               <p>你可以从下面任意一个板块进去，随便翻。</p>
             </div>
             <p className="mt-10 text-sm text-muted">
-              —— 胡希 · 软件工程 25-4 · 长期维护
+              —— coolin · 长期维护
             </p>
           </div>
 

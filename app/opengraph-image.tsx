@@ -94,7 +94,7 @@ export default function OpengraphImage() {
             color: "rgba(255,255,255,0.65)",
           }}
         >
-          <span>{SITE.author} · 软件工程 25-4</span>
+          <span>{SITE.author} · 长期维护</span>
           <span style={{ color: "#E5C998" }}>aust 生存指南</span>
         </div>
       </div>

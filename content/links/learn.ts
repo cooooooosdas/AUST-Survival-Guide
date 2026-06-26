@@ -137,7 +137,7 @@ export const groups: LinkGroup[] = [
     items: [
       {
         title: "扇贝 · 阅读 / 听力",
-        url: "https://web.shanbay.com/",
+        url: "https://www.shanbay.com/",
         description: "考研单词 / 四六级阅读",
       },
       {
