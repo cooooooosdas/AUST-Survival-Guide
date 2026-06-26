@@ -36,14 +36,6 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
-  async rewrites() {
-    return [
-      {
-        source: "/feed.xml",
-        destination: "/api/feed",
-      },
-    ];
-  },
   async headers() {
     return [
       {

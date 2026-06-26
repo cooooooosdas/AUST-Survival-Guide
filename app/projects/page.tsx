@@ -20,6 +20,12 @@ const TECH_COLORS: Record<string, string> = {
   "Node.js": "bg-[#339933]/10 text-[#1A6B1A]",
   "MySQL": "bg-[#4479A1]/10 text-[#2C5F8A]",
   "Element Plus": "bg-[#409EFF]/10 text-[#2B6CB0]",
+  "HTML5": "bg-[#E34F26]/10 text-[#E34F26]",
+  "CSS3": "bg-[#1572B6]/10 text-[#1572B6]",
+  "JavaScript": "bg-[#F7DF1E]/20 text-[#92760A]",
+  "html2canvas": "bg-[#EC4899]/10 text-[#EC4899]",
+  "C 语言": "bg-[#5C6BC0]/10 text-[#5C6BC0]",
+  "EasyX": "bg-[#10B981]/10 text-[#0E8F66]",
 };
 
 export default function ProjectsPage() {

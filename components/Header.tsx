@@ -113,7 +113,6 @@ export default function Header({ user }: { user: HeaderUser }) {
             <TagsLink />
             <SearchLink />
             <BoardLink />
-            <RssLink />
             <ThemeToggle />
           </div>
           <span className="hidden md:block h-4 w-px bg-border mx-1" />
@@ -278,25 +277,6 @@ function BoardLink() {
     >
       <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-      </svg>
-    </Link>
-  );
-}
-
-function RssLink() {
-  return (
-    <Link
-      href="/feed.xml"
-      target="_blank"
-      rel="alternate"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-      aria-label="RSS 订阅"
-      title="RSS 订阅"
-    >
-      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M4 11a9 9 0 0 1 9 9" />
-        <path d="M4 4a16 16 0 0 1 16 16" />
-        <circle cx="5" cy="19" r="1" />
       </svg>
     </Link>
   );

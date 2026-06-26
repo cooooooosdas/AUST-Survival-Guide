@@ -20,8 +20,6 @@ function resolveItem(item: LeaderboardItem): { title: string; href: string } | n
   if (item.target_type === "letter") {
     // Dynamic import to avoid circular
     const letters = [
-      { slug: "information-gap", title: "大学最大的差距不是天赋，是信息差" },
-      { slug: "start-building", title: "为什么大一就该开始动手做点东西" },
       { slug: "first-week", title: "开学第一周，先把这几件事处理好" },
       { slug: "college-truths", title: "大学四年，这些事你越早知道越好" },
       { slug: "campus-survival", title: "贴吧学长说的那些事：安理入学生存指南" },
