@@ -26,15 +26,29 @@ export default function AboutPage() {
         <ul className="mt-4 space-y-2 text-sm text-text">
           <li>
             <span className="text-muted">B 站：</span>
-            <span>（待补充）</span>
+            <a
+              href="https://space.bilibili.com/350016742"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline-offset-4 hover:underline"
+            >
+              space.bilibili.com/350016742
+            </a>
           </li>
           <li>
             <span className="text-muted">QQ：</span>
-            <span>（待补充）</span>
+            <span>3328908142</span>
           </li>
           <li>
             <span className="text-muted">GitHub：</span>
-            <span>（待补充）</span>
+            <a
+              href="https://github.com/cooooooosdas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline-offset-4 hover:underline"
+            >
+              github.com/cooooooosdas
+            </a>
           </li>
         </ul>
       </div>
