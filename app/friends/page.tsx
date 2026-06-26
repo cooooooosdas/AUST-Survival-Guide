@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { siteUrl } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "友链交换",
@@ -17,7 +18,7 @@ type FriendLink = {
 };
 
 async function getFriendLinks(): Promise<FriendLink[]> {
-  const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const base = siteUrl();
   try {
     const res = await fetch(`${base}/api/friend-links`, { next: { revalidate: 60 } });
     if (!res.ok) return [];
@@ -124,7 +125,7 @@ function SubmitForm() {
           required
           maxLength={100}
           placeholder="你的网站名称"
-          className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/50 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary/20"
+          className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/50 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </div>
       <div>
@@ -138,7 +139,7 @@ function SubmitForm() {
           required
           maxLength={500}
           placeholder="https://example.com"
-          className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/50 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary/20"
+          className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/50 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
         />
       </div>
       <div>
@@ -151,7 +152,7 @@ function SubmitForm() {
           maxLength={300}
           rows={2}
           placeholder="简单介绍一下你的网站"
-          className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/50 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary/20 resize-none"
+          className="w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/50 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 resize-none"
         />
       </div>
       <button

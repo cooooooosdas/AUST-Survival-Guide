@@ -50,6 +50,8 @@ export default function LetterToc({ headings }: Props) {
         <button
           type="button"
           onClick={() => setCollapsed((v) => !v)}
+          aria-expanded={!collapsed}
+          aria-controls="toc-list"
           className="flex w-full items-center justify-between text-xs font-medium text-muted uppercase tracking-widest"
         >
           <span>目录</span>
@@ -59,7 +61,7 @@ export default function LetterToc({ headings }: Props) {
         </button>
 
         {!collapsed && (
-          <ul className="mt-2 space-y-1 border-t border-border pt-2">
+          <ul id="toc-list" className="mt-2 space-y-1 border-t border-border pt-2">
             {headings.map((h) => {
               const isActive = activeId === h.id;
               const indent = h.level === 3 ? "pl-3 text-xs" : "text-sm";

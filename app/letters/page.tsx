@@ -1,23 +1,12 @@
 import Link from "next/link";
-import { LETTERS, readingTimeMinutes } from "@/lib/letters";
+import { LETTERS } from "@/lib/letters";
 import ScrollReveal from "@/components/ScrollReveal";
-import fs from "node:fs";
-import path from "node:path";
 
 export const metadata = { title: "学长来信" };
 
 function formatDate(iso: string) {
   const d = new Date(iso);
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
-}
-
-function letterReadingTime(slug: string): number {
-  try {
-    const text = fs.readFileSync(path.join(process.cwd(), "content", "letters", `${slug}.mdx`), "utf8");
-    return readingTimeMinutes(text);
-  } catch {
-    return 5;
-  }
 }
 
 export default function LettersIndexPage() {
@@ -48,7 +37,7 @@ export default function LettersIndexPage() {
                 <div className="flex items-center gap-3 text-xs text-muted">
                   <time>{formatDate(letter.date)}</time>
                   <span>·</span>
-                  <span>约 {letterReadingTime(letter.slug)} 分钟</span>
+                  <span>约 {letter.readingTime ?? 5} 分钟</span>
                   <span>·</span>
                   <span>{letter.author}</span>
                 </div>

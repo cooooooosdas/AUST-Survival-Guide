@@ -64,7 +64,7 @@ export default function UserMenu({ user }: Props) {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-1.5 w-48 overflow-hidden rounded-xl border border-border bg-bg shadow-lg shadow-black/5">
+        <div className="absolute right-0 top-full z-50 mt-1.5 w-48 overflow-hidden rounded-xl border border-border bg-bg shadow-lg">
           <div className="py-1">
             <Link href="/profile" className="flex items-center gap-2 px-3 py-2 text-sm text-text transition-colors hover:bg-primary/5 hover:text-primary" onClick={() => setOpen(false)}>
               <svg viewBox="0 0 24 24" className="h-4 w-4 text-muted" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

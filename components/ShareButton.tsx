@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   targetType: string;
@@ -22,6 +22,16 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
   const [copied, setCopied] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+
+  // Escape 关闭下拉菜单
+  useEffect(() => {
+    if (!showMenu) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setShowMenu(false);
+    }
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [showMenu]);
 
   async function trackShare(channel: Channel) {
     try {
@@ -74,6 +84,8 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
       <button
         type="button"
         onClick={() => setShowMenu((v) => !v)}
+        aria-haspopup="true"
+        aria-expanded={showMenu}
         className="inline-flex items-center gap-1.5 rounded-md border border-border bg-bg px-3 py-1.5 text-sm text-muted transition-colors hover:border-primary hover:text-primary"
       >
         <span aria-hidden="true">📤</span>

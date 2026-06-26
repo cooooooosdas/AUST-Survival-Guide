@@ -61,8 +61,8 @@ function buildTree(comments: Comment[]): TreeNode[] {
 }
 
 function isAdmin(userId: string | null): boolean {
-  // 简单判断：你自己就是站长，可扩展为角色表
-  return userId === "站长ID" || false;
+  const adminId = process.env.NEXT_PUBLIC_ADMIN_USER_ID;
+  return adminId ? userId === adminId : false;
 }
 
 export default function CommentBoard({
@@ -205,7 +205,7 @@ export default function CommentBoard({
       <li key={node.id} className={depth > 0 ? "ml-8 mt-3" : "mt-4"}>
         <div
           className={[
-            "rounded-lg border bg-bg p-4 transition-colors",
+            "rounded-lg border-border bg-bg p-4 transition-colors",
             node.pinned
               ? "border-accent/40 bg-accent/5"
               : "border-border hover:border-primary/20",
@@ -316,6 +316,7 @@ export default function CommentBoard({
                     value={replyContent}
                     onChange={(e) => setReplyContent(e.target.value)}
                     placeholder={`回复 ${node.display_name || "这条留言"}…`}
+                    aria-label={`回复 ${node.display_name || "这条留言"}`}
                     maxLength={2000}
                     rows={3}
                     className="w-full resize-y rounded-md border border-border bg-bg-alt px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"

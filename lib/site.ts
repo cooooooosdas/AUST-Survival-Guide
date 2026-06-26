@@ -24,4 +24,5 @@ export const SITE = {
     "写给安徽理工大学新生的一站式资源导航与学长来信。工具、微服务、学习资源、软件、AI 与长文经验，慢慢更新。",
   author: "coolin",
   locale: "zh-CN",
+  github: "https://github.com/cooooooosdas/AUST-Survival-Guide",
 };

@@ -7,6 +7,7 @@ export type LetterMeta = {
   date: string; // ISO yyyy-mm-dd
   author: string;
   tags?: string[];
+  readingTime?: number;
 };
 
 export type LetterModule = {
@@ -28,6 +29,7 @@ export const LETTERS: LetterEntry[] = [
     date: "2026-06-23",
     author: "coolin",
     tags: ["新生", "实用"],
+    readingTime: 10,
     load: () => import("@/content/letters/first-week.mdx"),
   },
   {
@@ -38,6 +40,7 @@ export const LETTERS: LetterEntry[] = [
     date: "2026-06-18",
     author: "coolin",
     tags: ["学业", "保研", "考研", "就业", "竞赛"],
+    readingTime: 9,
     load: () => import("@/content/letters/college-truths.mdx"),
   },
   {
@@ -48,6 +51,7 @@ export const LETTERS: LetterEntry[] = [
     date: "2026-06-12",
     author: "coolin",
     tags: ["新生", "生活", "宿舍", "军训", "转专业", "社团", "体测", "图书馆"],
+    readingTime: 8,
     load: () => import("@/content/letters/campus-survival.mdx"),
   },
   {
@@ -57,6 +61,7 @@ export const LETTERS: LetterEntry[] = [
     date: "2026-06-07",
     author: "coolin",
     tags: ["AI", "学习方法"],
+    readingTime: 6,
     load: () => import("@/content/letters/ai-as-tutor.mdx"),
   },
 ];

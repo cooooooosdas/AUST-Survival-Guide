@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 type LeaderboardItem = {
-  target_type: string;
   target_id: string;
   total_views: number;
-  // title and href need to be resolved client-side
+  title: string;
+  href: string;
 };
 
 const CATEGORIES: { key: string; label: string; icon: string }[] = [
@@ -15,21 +15,27 @@ const CATEGORIES: { key: string; label: string; icon: string }[] = [
   { key: "resource", label: "资源下载", icon: "📚" },
 ];
 
-// Resolve title/href from static data
-function resolveItem(item: LeaderboardItem): { title: string; href: string } | null {
-  if (item.target_type === "letter") {
-    // Dynamic import to avoid circular
-    const letters = [
-      { slug: "first-week", title: "开学第一周，先把这几件事处理好" },
-      { slug: "college-truths", title: "大学四年，这些事你越早知道越好" },
-      { slug: "campus-survival", title: "贴吧学长说的那些事：安理入学生存指南" },
-      { slug: "ai-as-tutor", title: "把 AI 当家教用：写给不会用 ChatGPT 的同学" },
-    ];
-    const found = letters.find((l) => l.slug === item.target_id);
-    if (found) return { title: found.title, href: `/letters/${found.slug}` };
-  }
-  // resources need server-side fetch
-  return null;
+function SkeletonRow() {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-border bg-bg-alt px-4 py-3">
+      <span className="shrink-0 w-6 h-6 rounded-full bg-bg animate-pulse" />
+      <span className="flex-1 h-4 rounded bg-bg animate-pulse" />
+      <span className="shrink-0 w-10 h-4 rounded bg-bg animate-pulse" />
+    </div>
+  );
+}
+
+function SkeletonCategory() {
+  return (
+    <div>
+      <div className="h-5 w-24 rounded bg-bg animate-pulse mb-4" />
+      <div className="space-y-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <SkeletonRow key={i} />
+        ))}
+      </div>
+    </div>
+  );
 }
 
 export default function Leaderboard() {
@@ -37,7 +43,6 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch stats from API
     fetch("/api/stats/leaderboard")
       .then((r) => r.json())
       .then((json) => {
@@ -47,8 +52,6 @@ export default function Leaderboard() {
       .catch(() => setLoading(false));
   }, []);
 
-  if (loading) return null;
-
   return (
     <section className="py-10 md:py-12">
       <div className="flex items-baseline justify-between mb-6">
@@ -56,46 +59,51 @@ export default function Leaderboard() {
         <span className="text-sm text-muted">按阅读量排行</span>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {CATEGORIES.map((cat) => {
-          const items = data[cat.key] ?? [];
+      {loading ? (
+        /* Loading skeleton — 与下方数据区结构一致，避免 CLS */
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" aria-hidden="true">
+          {CATEGORIES.map((cat) => (
+            <SkeletonCategory key={cat.key} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {CATEGORIES.map((cat) => {
+            const items = data[cat.key] ?? [];
 
-          return (
-            <div key={cat.key}>
-              <h3 className="text-base font-medium text-primary mb-4">
-                <span className="border-l-2 border-accent pl-3">
-                  {cat.icon} {cat.label}
-                </span>
-              </h3>
-              {items.length === 0 ? (
-                <p className="text-sm text-muted rounded-lg border border-border bg-bg-alt px-4 py-6 text-center">
-                  暂无数据，浏览后这里会显示热门内容
-                </p>
-              ) : (
-                <div className="space-y-2">
-                  {items.slice(0, 5).map((item, i) => {
-                    const resolved = resolveItem(item);
-                    if (!resolved) return null;
-                    return (
+            return (
+              <div key={cat.key}>
+                <h3 className="text-base font-medium text-primary mb-4">
+                  <span className="border-l-2 border-accent pl-3">
+                    {cat.icon} {cat.label}
+                  </span>
+                </h3>
+                {items.length === 0 ? (
+                  <p className="text-sm text-muted rounded-lg border border-border bg-bg-alt px-4 py-6 text-center">
+                    暂无数据，浏览后这里会显示热门内容
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {items.slice(0, 5).map((item, i) => (
                       <Link
                         key={item.target_id}
-                        href={resolved.href}
+                        href={item.href}
                         className="flex items-center gap-3 rounded-lg border border-border bg-bg-alt px-4 py-3 transition-colors hover:border-primary/20"
                       >
                         <span className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-accent/20 text-xs font-medium text-primary">
                           {i + 1}
                         </span>
-                        <span className="flex-1 text-sm text-text truncate">{resolved.title}</span>
+                        <span className="flex-1 text-sm text-text truncate">{item.title}</span>
                         <span className="shrink-0 text-xs text-muted">👁 {item.total_views}</span>
                       </Link>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }

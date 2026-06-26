@@ -106,7 +106,7 @@ function highlightText(text: string, query: string) {
   const pattern = new RegExp(`(${terms.join("|")})`, "gi");
   const parts = text.split(pattern);
   return parts.map((part, i) =>
-    pattern.test(part) ? (
+    i % 2 === 1 ? (
       <mark key={i} className="rounded bg-accent/30 px-0.5 text-primary">{part}</mark>
     ) : (
       part
@@ -197,6 +197,7 @@ export default function FaqClient({ initialQ, initialCategory, categories }: Pro
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="搜索问题关键词…"
+          aria-label="搜索问题"
           className="flex-1 min-w-[200px] rounded-lg border border-border bg-bg-alt px-4 py-2.5 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
         <button

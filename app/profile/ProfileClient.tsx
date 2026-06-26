@@ -178,9 +178,10 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
 
       {/* 快速生成 */}
       <section className="space-y-3">
-        <p className="text-sm font-medium text-text">快速生成头像（DiceBear）</p>
+        <label htmlFor="dicebear-seed" className="text-sm font-medium text-text">快速生成头像（DiceBear）</label>
         <div className="flex gap-2">
           <input
+            id="dicebear-seed"
             type="text"
             value={seed}
             onChange={(e) => setSeed(e.target.value)}

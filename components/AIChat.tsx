@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
+import { cn } from "@/lib/utils";
 
 type MsgRole = "user" | "assistant" | "system";
 
@@ -12,12 +13,11 @@ type Message = {
   links?: { title: string; href: string; type: string }[];
 };
 
-function uid() {
-  return Math.random().toString(36).slice(2, 10);
-}
-
-function cn(...classes: (string | false | undefined)[]) {
-  return classes.filter(Boolean).join(" ");
+function uid(): string {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
 function renderMarkdown(text: string) {
@@ -369,8 +369,9 @@ export default function AIChat() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKey}
                 placeholder="问点什么…"
+                aria-label="输入问题"
                 disabled={loading}
-                className="flex-1 rounded-lg border border-border bg-bg-alt px-3 py-2 text-xs text-text placeholder:text-muted/60 outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary/20 disabled:opacity-50"
+                className="flex-1 rounded-lg border border-border bg-bg-alt px-3 py-2 text-xs text-text placeholder:text-muted/60 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
               />
               <button
                 type="button"

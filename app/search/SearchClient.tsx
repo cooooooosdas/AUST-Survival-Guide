@@ -27,7 +27,7 @@ function highlightText(text: string, query: string) {
   const pattern = new RegExp(`(${terms.join("|")})`, "gi");
   const parts = text.split(pattern);
   return parts.map((part, i) =>
-    pattern.test(part) ? (
+    i % 2 === 1 ? (
       <mark key={i} className="rounded bg-accent/30 px-0.5 text-primary">{part}</mark>
     ) : (
       part
@@ -42,6 +42,9 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
   const [hot, setHot] = useState<HotSearch[]>([]);
   const [error, setError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const initialQRef = useRef(initialQ);
 
   useEffect(() => {
     // 加载热门搜索
@@ -59,6 +62,13 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
   }, []);
 
   async function doSearch(query: string) {
+    // 取消上一次请求，避免竞态覆盖结果
+    if (abortRef.current) {
+      abortRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setLoading(true);
     setError(null);
     try {
@@ -66,6 +76,7 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ q: query }),
+        signal: controller.signal,
       });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
@@ -74,12 +85,24 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
       const json = await res.json();
       setResults(json.results ?? []);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "搜索失败");
-      setResults([]);
+      if ((err as any)?.name !== "AbortError") {
+        setError(err instanceof Error ? err.message : "搜索失败");
+        setResults([]);
+      }
     } finally {
       setLoading(false);
     }
   }
+
+  // 输入框 300ms 防抖自动搜索
+  useEffect(() => {
+    if (!q.trim() || q === initialQRef.current) return;
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => doSearch(q.trim()), 300);
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [q]);
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -103,6 +126,7 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="搜索：高数、C语言、教务处、AI工具…"
+          aria-label="搜索"
           autoFocus
           className="flex-1 rounded-lg border border-border bg-bg-alt px-4 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />

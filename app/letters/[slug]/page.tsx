@@ -120,9 +120,12 @@ export default async function LetterPage({
   const letter = getLetter(slug);
   if (!letter) notFound();
 
-  const { default: Letter } = await letter.load();
+  const { default: Letter, metadata: letterMetadata } = await letter.load();
   const { comments, userId, ready } = await loadCommentsAndUser(slug);
-  const minutes = readingTimeMinutes(rawFileText(slug));
+
+  // 优先使用 MDX 元数据中预计算的 readingTime，避免每次渲染都读文件
+  const rawText = rawFileText(slug);
+  const minutes = letterMetadata?.readingTime ?? readingTimeMinutes(rawText);
 
   const base = siteUrl();
   const jsonLd = {
@@ -138,7 +141,6 @@ export default async function LetterPage({
     keywords: letter.tags?.join(", "),
   };
 
-  const rawText = rawFileText(slug);
   const headings = extractHeadings(rawText);
 
   // 加载点赞数据
