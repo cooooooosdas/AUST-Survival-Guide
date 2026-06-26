@@ -30,7 +30,7 @@ export default function LetterToc({ headings }: Props) {
         );
         setActiveId(top.target.id);
       },
-      { rootMargin: "-4rem 0px -70% 0px", threshold: 0 }
+      { rootMargin: "-64px 0px -70% 0px", threshold: 0 }
     );
     h2s.forEach((h) => {
       const el = document.getElementById(h.id);
