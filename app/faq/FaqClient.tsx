@@ -23,79 +23,18 @@ type Props = {
   categories: Category[];
 };
 
-const DEFAULT_ITEMS: FaqItem[] = [
-  {
-    id: 1,
-    question: "校园网连接报错怎么办？",
-    answer:
-      "1. 确认已连接 AUST-WiFi 或 AUST-5G 2. 打开浏览器访问任意网站会自动跳转到认证页面 3. 输入学号和初始密码（默认是身份证后6位）登录 4. 如果还是连不上，重启路由器或联系网络中心 0554-660XXXX",
-    category: "high-math",
-    categoryLabel: "高数问题",
-    source_type: "manual",
-    sort_order: 0,
-    is_published: true,
-    created_at: "2026-06-20",
-  },
-  {
-    id: 2,
-    question: "VSCode 怎么配置 C/C++ 编译环境？",
-    answer:
-      "1. 安装 VSCode 2. 安装 C/C++ 扩展（Microsoft 出品）3. 安装 MinGW-w64（推荐用 WinLibs 一键包）4. 在 VSCode 设置里配置 c_cpp_properties.json 的 includePath 5. 创建 tasks.json 配置编译任务 6. 按 Ctrl+Shift+B 编译运行",
-    category: "software",
-    categoryLabel: "软件安装",
-    source_type: "manual",
-    sort_order: 0,
-    is_published: true,
-    created_at: "2026-06-20",
-  },
-  {
-    id: 3,
-    question: "高数极限题有什么解题技巧？",
-    answer:
-      "1. 先判断类型：∞/∞、0/0、∞-∞、1^∞ 2. 常用方法：洛必达法则、等价无穷小替换、泰勒展开、变量替换 3. 注意定义域和连续性 4. 多练习历年真题，尤其是选择题和填空题 5. 推荐看 B 站「猴博士」或「高数叔」的视频讲解",
-    category: "high-math",
-    categoryLabel: "高数问题",
-    source_type: "manual",
-    sort_order: 0,
-    is_published: true,
-    created_at: "2026-06-20",
-  },
-  {
-    id: 4,
-    question: "ChatGPT 回答的内容总出错怎么办？",
-    answer:
-      "1. 明确告诉它你的身份（如\"我是安理大计算机学院大一新生\"）2. 要求它提供出处和参考链接 3. 对于代码问题，让它先分析再给方案 4. 数学问题务必自己验算 5. 用它来辅助理解，不要完全依赖 6. 关键信息去官方文档核实",
-    category: "ai-tools",
-    categoryLabel: "AI 工具使用",
-    source_type: "manual",
-    sort_order: 0,
-    is_published: true,
-    created_at: "2026-06-20",
-  },
-  {
-    id: 5,
-    question: "怎么查看自己的绩点排名？",
-    answer:
-      "教务系统（jw.aust.edu.cn）只能看到自己的成绩，看不到排名。想看排名需要去「测评一览」——这是学工系统的功能，登录后可以看到自己在专业内的百分比排名。",
-    category: "course-select",
-    categoryLabel: "选课疑问",
-    source_type: "manual",
-    sort_order: 0,
-    is_published: true,
-    created_at: "2026-06-20",
-  },
-  {
-    id: 6,
-    question: "选课系统崩了怎么办？",
-    answer:
-      "1. 错峰选课：不要等到截止前一分钟才选 2. 用手机端选，比电脑快 3. 不要刷新重进，你的选择可能已经生效 4. 看到\"朝北\"的奇数不要选——系统偶尔有 bug 5. 选错了也不用慌，开学后学校会多退少补",
-    category: "course-select",
-    categoryLabel: "选课疑问",
-    source_type: "manual",
-    sort_order: 0,
-    is_published: true,
-    created_at: "2026-06-20",
-  },
+const CATEGORY_LABEL: Record<string, string> = {
+  "high-math": "高数问题",
+  software: "软件安装",
+  "ai-tools": "AI 工具使用",
+  "course-select": "选课疑问",
+};
+
+const CATEGORY_LIST: Category[] = [
+  { value: "high-math", label: "高数问题" },
+  { value: "software", label: "软件安装" },
+  { value: "ai-tools", label: "AI 工具使用" },
+  { value: "course-select", label: "选课疑问" },
 ];
 
 function highlightText(text: string, query: string) {
@@ -117,7 +56,7 @@ function highlightText(text: string, query: string) {
 export default function FaqClient({ initialQ, initialCategory, categories }: Props) {
   const [q, setQ] = useState(initialQ);
   const [category, setCategory] = useState(initialCategory);
-  const [items, setItems] = useState<FaqItem[]>(DEFAULT_ITEMS);
+  const [items, setItems] = useState<FaqItem[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -136,24 +75,16 @@ export default function FaqClient({ initialQ, initialCategory, categories }: Pro
       const res = await fetch(`/api/faq?${params.toString()}`);
       if (res.ok) {
         const json = await res.json();
-        if (json.items && json.items.length > 0) {
+        if (json.items) {
           setItems(json.items);
+          setLoading(false);
           return;
         }
       }
     } catch {
-      // fallback to default
+      // network error — fall back to empty state
     }
-    // fallback: filter default items
-    let filtered = DEFAULT_ITEMS;
-    if (cat) filtered = filtered.filter((i) => i.category === cat);
-    if (query) {
-      const ql = query.toLowerCase();
-      filtered = filtered.filter(
-        (i) => i.question.toLowerCase().includes(ql) || i.answer.toLowerCase().includes(ql)
-      );
-    }
-    setItems(filtered);
+    setItems([]);
     setLoading(false);
   }
 
@@ -231,11 +162,11 @@ export default function FaqClient({ initialQ, initialCategory, categories }: Pro
       <div className="mt-8">
         {items.length === 0 ? (
           <div className="rounded-md border border-dashed border-border bg-bg-alt p-10 text-center text-sm text-muted">
-            没有找到相关问题。去{" "}
+            还没有 FAQ 条目。站长尚未录入常见问题，可前往{" "}
             <Link href="/questions" className="text-primary underline-offset-4 hover:underline">
               匿名提问
             </Link>{" "}
-            提交你的问题吧。
+            提交你的问题，或通过管理后台添加。
           </div>
         ) : (
           <div className="space-y-6">
