@@ -20,6 +20,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly" as const,
       priority: s.group === "main" ? 0.8 : 0.6,
     })),
+    {
+      url: `${base}/privacy`,
+      lastModified: today,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+    {
+      url: `${base}/disclaimer`,
+      lastModified: today,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
   ];
 
   const letterEntries: MetadataRoute.Sitemap = LETTERS.map((l) => ({

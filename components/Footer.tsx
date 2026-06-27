@@ -1,4 +1,5 @@
 import { SITE } from "@/lib/site";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -18,6 +19,12 @@ export default function Footer() {
               GitHub
             </a>
           )}
+          <Link href="/privacy" className="hover:text-primary transition-colors">
+            隐私政策
+          </Link>
+          <Link href="/disclaimer" className="hover:text-primary transition-colors">
+            免责声明
+          </Link>
           <span>个人博客 · 长期维护</span>
         </div>
       </div>
