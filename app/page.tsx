@@ -90,6 +90,18 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {/* 免责提示：个人项目，与学校无关 */}
+      <section className="pb-10">
+        <div className="rounded-xl border border-border bg-bg-alt px-5 py-4 text-xs text-muted leading-relaxed">
+          <span className="mr-1.5 text-accent">&#x1F4CB;</span>
+          本站为站长个人项目，与安徽理工大学（AUST）及任何学院、部门无隶属或合作关系。
+          所有内容仅代表个人观点，不代表学校官方立场，仅供参考。
+          <Link href="/disclaimer" className="ml-1 text-primary underline-offset-4 hover:underline">
+            查看完整免责声明
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

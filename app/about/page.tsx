@@ -6,6 +6,28 @@ export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-2xl md:text-3xl font-semibold text-primary">关于我</h1>
+
+      {/* 非官方声明 —— 关于页面最醒目的位置 */}
+      <div className="mt-6 rounded-xl border border-accent/30 bg-accent/5 px-5 py-4 text-sm leading-relaxed text-text">
+        <p className="font-medium text-primary">&#x26A0;&#xFE0F; 非官方声明</p>
+        <p className="mt-2">
+          本站为站长<strong>个人项目</strong>，与安徽理工大学（AUST）及任何学院、部门
+          （包括但不限于计算机学院、教务处、网络中心）<strong>无任何隶属或合作关系</strong>。
+          所有内容——包括学长来信、FAQ、工具箱链接、留言评论——均由站长个人或普通访客
+          以个人身份创建，<strong>不代表学校官方立场</strong>。
+        </p>
+        <p className="mt-2">
+          教务系统、选课、成绩、奖学金等政策以学校官方通知为准，本站内容仅供参考，
+          不作为任何决策依据。
+        </p>
+        <Link
+          href="/disclaimer"
+          className="mt-3 inline-block text-primary underline-offset-4 hover:underline"
+        >
+          查看完整免责声明 →
+        </Link>
+      </div>
+
       <div className="mt-8 space-y-5 leading-loose text-text">
         <p>
           coolin，安徽理工大学计算机科学与工程学院。
