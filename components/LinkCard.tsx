@@ -36,7 +36,7 @@ function renderItemIcon(url?: string, customIcon?: string) {
         width={28}
         height={28}
         loading="lazy"
-        className="hidden sm:block h-7 w-7 shrink-0 rounded-md object-cover"
+        className="block h-7 w-7 shrink-0 rounded-md object-cover"
         onError={(e) => {
           (e.target as HTMLImageElement).style.display = "none";
         }}
@@ -46,7 +46,8 @@ function renderItemIcon(url?: string, customIcon?: string) {
   if (!url) return null;
   try {
     const host = new URL(url).hostname;
-    const favicon = `https://www.google.com/s2/favicons?domain=${host}&sz=64`;
+    // 使用国内可访问的 favicon 服务，避免 google.com/s2/favicons 被 GFW 拦截
+    const favicon = `https://api.iowen.cn/favicon/${host}`;
     return (
       <img
         src={favicon}
@@ -54,7 +55,7 @@ function renderItemIcon(url?: string, customIcon?: string) {
         width={28}
         height={28}
         loading="lazy"
-        className="hidden sm:block h-7 w-7 shrink-0 rounded-md object-cover"
+        className="block h-7 w-7 shrink-0 rounded-md object-cover"
         onError={(e) => {
           (e.target as HTMLImageElement).style.display = "none";
         }}

@@ -134,10 +134,14 @@ export default function SidebarInfoPanel() {
       .catch(() => {});
   }, []);
 
-  // 一言（刷新随机）
+  // 一言（按日期轮转，同一天所有访客看到同一条）
+  const dayIndex = useMemo(
+    () => Math.floor((Date.now() - SITE_START_DATE.getTime()) / 86400000) % QUOTES.length,
+    []
+  );
   useEffect(() => {
-    setQuote(QUOTES[Math.floor(Math.random() * QUOTES.length)]);
-  }, []);
+    setQuote(QUOTES[dayIndex]);
+  }, [dayIndex]);
 
   // 建站天数（随时间自然增长）
   const siteDays = useMemo(
