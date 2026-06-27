@@ -5,16 +5,16 @@ export const metadata = { title: "关于我" };
 export default function AboutPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">关于我</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">关于我</h1>
 
-      {/* 非官方声明 —— 关于页面最醒目的位置 */}
-      <div className="mt-6 rounded-xl border border-accent/30 bg-accent/5 px-5 py-4 text-sm leading-relaxed text-text">
-        <p className="font-medium text-primary">&#x26A0;&#xFE0F; 非官方声明</p>
+      {/* 非官方声明 */}
+      <div className="mt-6 rounded-xl border border-amber-200 bg-accent-light px-5 py-4 text-sm leading-relaxed text-text">
+        <p className="font-medium text-accent">&#x26A0;&#xFE0F; 非官方声明</p>
         <p className="mt-2">
-          本站为站长<strong>个人项目</strong>，与安徽理工大学（AUST）及任何学院、部门
-          （包括但不限于计算机学院、教务处、网络中心）<strong>无任何隶属或合作关系</strong>。
+          本站为站长<strong className="text-text">个人项目</strong>，与安徽理工大学（AUST）及任何学院、部门
+          （包括但不限于计算机学院、教务处、网络中心）<strong className="text-text">无任何隶属或合作关系</strong>。
           所有内容——包括学长来信、FAQ、工具箱链接、留言评论——均由站长个人或普通访客
-          以个人身份创建，<strong>不代表学校官方立场</strong>。
+          以个人身份创建，<strong className="text-text">不代表学校官方立场</strong>。
         </p>
         <p className="mt-2">
           教务系统、选课、成绩、奖学金等政策以学校官方通知为准，本站内容仅供参考，
@@ -28,7 +28,7 @@ export default function AboutPage() {
         </Link>
       </div>
 
-      <div className="mt-8 space-y-5 leading-loose text-text">
+      <div className="mt-8 space-y-5 leading-[1.8] text-text-secondary">
         <p>
           coolin，安徽理工大学计算机科学与工程学院。
         </p>
@@ -44,10 +44,10 @@ export default function AboutPage() {
       </div>
 
       <div className="mt-12 border-t border-border pt-8">
-        <h2 className="text-base font-medium text-primary">联系方式</h2>
-        <ul className="mt-4 space-y-2 text-sm text-text">
-          <li>
-            <span className="text-muted">B 站：</span>
+        <h2 className="text-base font-medium text-text">联系方式</h2>
+        <ul className="mt-4 space-y-2.5 text-sm text-text">
+          <li className="flex items-center gap-2">
+            <span className="text-muted w-12 shrink-0">B 站：</span>
             <a
               href="https://space.bilibili.com/350016742"
               target="_blank"
@@ -57,12 +57,12 @@ export default function AboutPage() {
               space.bilibili.com/350016742
             </a>
           </li>
-          <li>
-            <span className="text-muted">QQ：</span>
-            <span>3328908142</span>
+          <li className="flex items-center gap-2">
+            <span className="text-muted w-12 shrink-0">QQ：</span>
+            <span className="text-text">3328908142</span>
           </li>
-          <li>
-            <span className="text-muted">GitHub：</span>
+          <li className="flex items-center gap-2">
+            <span className="text-muted w-12 shrink-0">GitHub：</span>
             <a
               href="https://github.com/cooooooosdas"
               target="_blank"
@@ -77,13 +77,13 @@ export default function AboutPage() {
 
       {/* 更多 */}
       <div className="mt-10 border-t border-border pt-8">
-        <h2 className="text-base font-medium text-primary mb-4">更多</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <h2 className="text-xl font-serif font-semibold text-text mb-4">更多</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Link
             href="/projects"
-            className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
+            className="group card card-hover p-5 flex items-center gap-4"
           >
-            <span className="text-2xl">💻</span>
+            <span className="text-2xl shrink-0">💻</span>
             <div>
               <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">项目展示</p>
               <p className="text-xs text-muted mt-0.5">网站作品、AI 应用及课程大作业</p>
@@ -91,9 +91,9 @@ export default function AboutPage() {
           </Link>
           <Link
             href="/friends"
-            className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
+            className="group card card-hover p-5 flex items-center gap-4"
           >
-            <span className="text-2xl">🔗</span>
+            <span className="text-2xl shrink-0">🔗</span>
             <div>
               <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">友链交换</p>
               <p className="text-xs text-muted mt-0.5">与学长博客、技术站点交换友情链接</p>

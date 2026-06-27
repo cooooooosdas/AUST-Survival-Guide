@@ -12,7 +12,7 @@ export default async function SignupPage({
 
   return (
     <div className="mx-auto max-w-md px-6 py-16">
-      <h1 className="text-2xl font-semibold text-primary">注册</h1>
+      <h1 className="text-2xl font-serif font-semibold text-text">注册</h1>
       <p className="mt-2 text-sm text-muted">已经有账号？<Link href="/login" className="text-primary underline-offset-4 hover:underline">去登录</Link></p>
 
       {ok && (
@@ -35,7 +35,7 @@ export default async function SignupPage({
             name="display_name"
             type="text"
             maxLength={32}
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
         </div>
         <div>
@@ -46,7 +46,7 @@ export default async function SignupPage({
             type="email"
             required
             autoComplete="email"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
         </div>
         <div>
@@ -58,12 +58,12 @@ export default async function SignupPage({
             required
             minLength={6}
             autoComplete="new-password"
-            className="w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
         </div>
         <button
           type="submit"
-          className="w-full rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover active:scale-[0.99]"
+          className="w-full rounded-xl bg-primary px-5 py-3 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover active:scale-[0.98]"
         >
           注册
         </button>
@@ -78,7 +78,7 @@ export default async function SignupPage({
       <form action={loginWithGitHub}>
         <button
           type="submit"
-          className="flex w-full items-center justify-center gap-2 rounded-md border border-border bg-bg px-4 py-2.5 text-sm font-medium text-text transition-colors hover:border-primary hover:text-primary active:scale-[0.99]"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-text transition-all duration-200 hover:border-primary hover:text-primary active:scale-[0.98]"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
             <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.2 1.9 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />

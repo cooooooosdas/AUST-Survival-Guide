@@ -28,7 +28,6 @@ export default function TagsClient() {
     setSelectedTag(tagName);
     const res = await fetch(`/api/tags?tag=${encodeURIComponent(tagName)}`);
     const json = await res.json();
-    // Update the tag entry with items
     setTags((prev) =>
       prev.map((t) => (t.name === tagName ? { ...t, ...json } : t))
     );
@@ -54,14 +53,14 @@ export default function TagsClient() {
             type="button"
             onClick={() => onTagClick(tag.name)}
             className={[
-              "rounded-full border px-3 py-1 text-sm transition-colors",
+              "rounded-lg border px-3 py-1.5 text-sm transition-all duration-200",
               selectedTag === tag.name
-                ? "border-primary bg-primary-light text-primary"
-                : "border-border text-muted hover:border-primary hover:text-primary",
+                ? "border-primary bg-primary-light text-primary font-medium"
+                : "border-border text-muted hover:border-primary hover:text-primary active:scale-95",
             ].join(" ")}
           >
             #{tag.name}
-            <span className="ml-1 text-xs text-muted">({tag.count})</span>
+            <span className="ml-1.5 text-xs text-muted/60">({tag.count})</span>
           </button>
         ))}
       </div>
@@ -69,20 +68,20 @@ export default function TagsClient() {
       {/* Selected tag items */}
       {selected && selected.items && selected.items.length > 0 && (
         <div className="mt-8">
-          <h2 className="text-lg font-semibold text-primary mb-4">
+          <h2 className="text-xl font-serif font-semibold text-text">
             标签 &ldquo;{selected.name}&rdquo; 相关的内容 ({selected.items.length})
           </h2>
-          <div className="space-y-3">
+          <div className="mt-4 space-y-3">
             {selected.items.map((item, i) => (
               <Link
                 key={i}
                 href={item.href}
-                className="flex items-start gap-3 rounded-xl border border-border bg-bg-alt p-4 transition-colors hover:border-primary/20"
+                className="group card card-hover p-4 flex items-start gap-3"
               >
-                <span className="shrink-0 rounded-md bg-primary-light px-1.5 py-0.5 text-[11px] text-primary">
+                <span className="shrink-0 rounded-lg bg-accent-light px-2 py-1 text-[11px] text-accent font-medium">
                   {item.type}
                 </span>
-                <span className="text-sm text-text">{item.title}</span>
+                <span className="text-sm text-text group-hover:text-primary transition-colors">{item.title}</span>
               </Link>
             ))}
           </div>

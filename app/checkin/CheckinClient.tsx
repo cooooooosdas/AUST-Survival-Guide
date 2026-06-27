@@ -87,7 +87,7 @@ export default function CheckinClient() {
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-10">
         <p className="text-sm uppercase tracking-[0.2em] text-accent">Check-in</p>
-        <h1 className="mt-3 text-3xl font-semibold text-primary">学习打卡</h1>
+        <h1 className="mt-3 text-3xl font-serif font-bold text-text">学习打卡</h1>
         <p className="mt-3 text-muted leading-relaxed">
           每天点一下，记录今天的学习。不打卡、不取消，只是每天做个标记。
         </p>
@@ -125,10 +125,10 @@ export default function CheckinClient() {
       {/* 统计概览 */}
       {stats && (
         <section className="mb-10">
-          <h2 className="text-base font-medium text-primary mb-4">我的记录</h2>
+          <h2 className="text-lg font-serif font-medium text-text mb-4">我的记录</h2>
           <div className="grid grid-cols-3 gap-3">
             <div className="rounded-xl border border-border bg-surface p-4 text-center">
-              <p className="text-2xl font-semibold text-primary">{stats.totalDays}</p>
+              <p className="text-2xl font-serif font-semibold text-text">{stats.totalDays}</p>
               <p className="text-xs text-muted mt-1">累计打卡</p>
             </div>
             <div className="rounded-xl border border-border bg-surface p-4 text-center">
@@ -145,7 +145,7 @@ export default function CheckinClient() {
 
       {/* 热力图 */}
       <section>
-        <h2 className="text-base font-medium text-primary mb-4">最近 {HEATMAP_DAYS} 天</h2>
+        <h2 className="text-lg font-serif font-medium text-text mb-4">最近 {HEATMAP_DAYS} 天</h2>
         <Heatmap dates={recentDates} records={records} />
       </section>
 
@@ -155,7 +155,7 @@ export default function CheckinClient() {
           <div className="flex items-start gap-4">
             <span className="text-3xl">📝</span>
             <div className="flex-1">
-              <h2 className="text-base font-medium text-primary">刷题练习</h2>
+              <h2 className="text-base font-serif font-medium text-text">刷题练习</h2>
               <p className="mt-1 text-xs text-muted leading-relaxed">
                 选择题 + 编程题，支持简单 / 中等 / 困难三档难度，随机出题。
               </p>

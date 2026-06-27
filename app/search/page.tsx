@@ -12,7 +12,7 @@ export default async function SearchPage({
   const resolved = await searchParams;
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">搜索</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">搜索</h1>
       <p className="mt-2 text-sm text-muted">
         搜学长来信、工具链接、板块内容。
       </p>

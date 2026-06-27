@@ -1,15 +1,7 @@
 "use client";
 
-import CursorGlow from "@/components/CursorGlow";
-import ClickRipple from "@/components/ClickRipple";
-import StarField from "@/components/StarField";
+// Effects：极简版，光斑/光标跟随/点击涟漪全部去掉
 
 export default function Effects() {
-  return (
-    <>
-      <StarField count={12} />
-      <CursorGlow />
-      <ClickRipple />
-    </>
-  );
+  return null;
 }

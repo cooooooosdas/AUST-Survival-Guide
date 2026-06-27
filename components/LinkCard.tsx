@@ -160,14 +160,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
         rel="noopener noreferrer"
         aria-label={`${item.title}（在新标签页打开）`}
         className={[
-          "group flex items-start gap-3 rounded-xl p-3",
-          "bg-surface backdrop-blur-md backdrop-saturate-150",
-          "border border-border",
-          "shadow-sm transition-all duration-300",
-          "hover:-translate-y-0.5",
-          "hover:border-primary/30",
-          "hover:shadow-md hover:shadow-primary/10",
-          "active:translate-y-0 active:scale-[0.99]",
+          "group card card-hover p-4 flex items-start gap-3",
           !item.url ? "opacity-60 pointer-events-none" : "",
         ].join(" ")}
       >
@@ -216,7 +209,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
               onClick={copyLink}
               title="复制链接"
               aria-label="复制链接"
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-bg px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-primary hover:text-primary"
+              className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-[11px] text-muted transition-all duration-200 hover:border-primary hover:text-primary"
             >
               {copied ? "已复制 ✓" : "复制链接"}
             </button>
@@ -225,7 +218,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
               onClick={openReport}
               title="反馈链接失效"
               aria-label="反馈链接失效"
-              className="inline-flex items-center gap-1 rounded-md border border-border bg-bg px-2 py-0.5 text-[11px] text-muted transition-colors hover:border-secondary hover:text-secondary"
+              className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-[11px] text-muted transition-all duration-200 hover:border-secondary hover:text-secondary"
             >
               链接失效？
             </button>
@@ -243,10 +236,10 @@ export default function LinkCard({ item, sectionSlug }: Props) {
           onClick={closeReport}
         >
           <div
-            className="w-full max-w-md rounded-xl border border-border bg-bg p-6 shadow-lg"
+            className="w-full max-w-md card p-6 shadow-lg"
             onClick={(e) => e.stopPropagation()}
           >
-            <h3 id="report-title" className="text-lg font-semibold text-primary">
+            <h3 id="report-title" className="text-lg font-serif font-semibold text-text">
               反馈链接失效
             </h3>
             <p className="mt-1 text-xs text-muted">
@@ -256,7 +249,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
             </p>
 
             {submitted ? (
-              <div className="mt-5 rounded-md border border-accent/40 bg-accent/10 px-4 py-3 text-sm text-primary">
+              <div className="mt-5 rounded-lg border border-amber-200 bg-accent-light px-4 py-3 text-sm text-accent">
                 已收到反馈，会尽快处理。谢谢。
               </div>
             ) : (
@@ -274,7 +267,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
                   maxLength={500}
                   rows={3}
                   placeholder="比如：404、需要校园网但进不去、跳转到错误页面…"
-                  className="mt-1 w-full rounded-md border border-border bg-bg-alt px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="mt-1 w-full resize-y rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
                 />
                 {error && (
                   <p role="alert" className="mt-2 text-xs text-red-600">
@@ -288,7 +281,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
               <button
                 type="button"
                 onClick={closeReportOnClick}
-                className="rounded-md border border-border bg-bg px-4 py-1.5 text-sm text-muted hover:border-primary hover:text-primary"
+                className="rounded-lg border border-border bg-surface px-4 py-2 text-sm text-muted transition-all duration-200 hover:border-primary hover:text-primary"
               >
                 {submitted ? "关闭" : "取消"}
               </button>
@@ -297,7 +290,7 @@ export default function LinkCard({ item, sectionSlug }: Props) {
                   type="button"
                   onClick={submitReport}
                   disabled={submitting}
-                  className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-white hover:bg-primary-hover disabled:opacity-50"
+                  className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {submitting ? "提交中…" : "提交"}
                 </button>

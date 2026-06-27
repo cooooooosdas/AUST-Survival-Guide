@@ -1,6 +1,4 @@
-import type { LetterMeta } from "@/lib/letters";
 import { LETTERS } from "@/lib/letters";
-import type { LinkGroup, LinkItem } from "@/lib/types";
 import { MAIN_SECTIONS } from "@/lib/sections";
 import { groups as toolsGroups } from "@/content/links/tools";
 import { groups as microservicesGroups } from "@/content/links/microservices";
@@ -18,6 +16,7 @@ export type SearchItem = {
   href: string;
   section?: string;
   groupTitle?: string;
+  score?: number;
 };
 
 const allGroups: { section: string; groups: LinkGroup[] }[] = [
@@ -69,7 +68,9 @@ const sectionIndex: SearchItem[] = MAIN_SECTIONS.map((s) => ({
   section: s.slug,
 }));
 
-const FULL_INDEX = [...letterIndex, ...linkIndex, ...sectionIndex];
+const FULL_INDEX: SearchItem[] = [...letterIndex, ...linkIndex, ...sectionIndex];
+
+export { FULL_INDEX };
 
 function normalize(s: string) {
   return s.toLowerCase().replace(/[\s\-–—]+/g, " ").trim();

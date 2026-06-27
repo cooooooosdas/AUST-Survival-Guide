@@ -86,7 +86,7 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
         onClick={() => setShowMenu((v) => !v)}
         aria-haspopup="true"
         aria-expanded={showMenu}
-        className="inline-flex items-center gap-1.5 rounded-md border border-border bg-bg px-3 py-1.5 text-sm text-muted transition-colors hover:border-primary hover:text-primary"
+        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-muted transition-all duration-200 hover:border-primary hover:text-primary"
       >
         <span aria-hidden="true">📤</span>
         <span>分享</span>
@@ -98,7 +98,7 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
             className="fixed inset-0 z-40"
             onClick={() => setShowMenu(false)}
           />
-          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 rounded-xl border border-border bg-bg shadow-lg">
+          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 card overflow-hidden shadow-lg">
             {CHANNELS.map((ch) => (
               <button
                 key={ch.key}
@@ -108,7 +108,7 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
                   if (ch.key === "copy_link") copyLink();
                   else handleWechatShare(ch.key);
                 }}
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-text transition-colors hover:bg-bg-alt first:rounded-t-xl last:rounded-b-xl"
+                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-text transition-colors hover:bg-bg-alt"
               >
                 <span>{ch.icon}</span>
                 <span>{copied && ch.key === "copy_link" ? "已复制 ✓" : ch.label}</span>

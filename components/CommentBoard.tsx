@@ -205,16 +205,16 @@ export default function CommentBoard({
       <li key={node.id} className={depth > 0 ? "ml-8 mt-3" : "mt-4"}>
         <div
           className={[
-            "rounded-lg border-border bg-bg p-4 transition-colors",
+            "card p-4 transition-colors",
             node.pinned
-              ? "border-accent/40 bg-accent/5"
-              : "border-border hover:border-primary/20",
+              ? "border-amber-200 bg-accent-light"
+              : "hover:border-border-hover",
             node.status === "rejected" ? "opacity-50" : "",
           ].join(" ")}
         >
           {/* 置顶标识 */}
           {node.pinned && (
-            <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-accent/20 px-2 py-0.5 text-[11px] text-primary">
+            <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-accent-ghost px-2 py-0.5 text-[11px] text-accent font-medium">
               ★ 置顶
             </span>
           )}
@@ -319,7 +319,7 @@ export default function CommentBoard({
                     aria-label={`回复 ${node.display_name || "这条留言"}`}
                     maxLength={2000}
                     rows={3}
-                    className="w-full resize-y rounded-md border border-border bg-bg-alt px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    className="w-full resize-y rounded-xl border border-border bg-surface px-3 py-2 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
                   />
                   <div className="mt-2 flex justify-end gap-2">
                     <button
@@ -371,9 +371,9 @@ export default function CommentBoard({
                     )
                   }
                   className={[
-                    "rounded-full border px-2.5 py-1 text-xs transition-colors",
+                    "rounded-lg border px-2.5 py-1.5 text-xs transition-all duration-200",
                     active
-                      ? "border-primary bg-primary-light text-primary"
+                      ? "border-primary bg-primary-light text-primary font-medium"
                       : "border-border text-muted hover:border-primary hover:text-primary",
                   ].join(" ")}
                 >
@@ -393,14 +393,14 @@ export default function CommentBoard({
             placeholder="写点什么…（最多 2000 字）"
             maxLength={2000}
             rows={4}
-            className="w-full resize-y rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
           <div className="flex items-center justify-between">
             <span className="text-xs text-muted">{content.length}/2000</span>
             <button
               type="submit"
               disabled={submitting || !content.trim()}
-              className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {submitting ? "发送中…" : "发送"}
             </button>
@@ -408,7 +408,7 @@ export default function CommentBoard({
           {error && <p role="alert" className="text-sm text-red-600">{error}</p>}
         </form>
       ) : (
-        <div className="rounded-md border border-dashed border-border bg-bg-alt px-4 py-6 text-center text-sm text-muted">
+        <div className="rounded-xl border border-dashed border-border bg-bg-alt px-4 py-6 text-center text-sm text-muted">
           先{" "}
           <Link href="/login" className="text-primary underline-offset-4 hover:underline">
             登录

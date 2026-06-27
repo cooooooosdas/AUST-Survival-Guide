@@ -172,16 +172,16 @@ export default function FaqClient({ initialQ, initialCategory, categories }: Pro
           <div className="space-y-6">
             {Array.from(grouped.entries()).map(([label, groupItems]) => (
               <section key={label}>
-                <h2 className="text-base font-medium text-primary mb-3">
+                <h2 className="text-lg font-serif font-semibold text-text mb-3">
                   <span className="border-l-2 border-accent pl-3">{label}</span>
                 </h2>
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {groupItems.map((item) => (
                     <div
                       key={item.id}
-                      className="rounded-xl border border-border bg-bg-alt p-5 transition-colors hover:border-primary/20"
+                      className="card p-5 transition-colors hover:border-border-hover"
                     >
-                      <h3 className="text-sm font-medium text-primary">
+                      <h3 className="text-sm font-medium text-text">
                         {highlightText(item.question, initialQ)}
                       </h3>
                       <p className="mt-2 whitespace-pre-wrap text-sm text-text leading-relaxed">

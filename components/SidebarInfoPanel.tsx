@@ -5,7 +5,6 @@ import { QUOTES, SITE_START_DATE } from "@/content/quotes";
 
 const WEEKDAYS = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 
-/* ---------- 小图标（二次元线稿风，14px 统一描边） ---------- */
 const ICONS: Record<string, React.ReactNode> = {
   days: (
     <svg viewBox="0 0 16 16" className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -47,26 +46,15 @@ const ICONS: Record<string, React.ReactNode> = {
   ),
 };
 
-/* ---------- 条目渐变配色 ---------- */
-const ITEM_GRADIENTS: Record<string, string> = {
-  days: "from-primary-light/80 to-primary/5",
-  words: "from-accent-light/80 to-accent/5",
-  clock: "from-secondary-light/80 to-secondary/5",
-  visits: "from-primary-light/60 to-accent-light/40",
-  uptime: "from-secondary-light/60 to-primary-light/40",
-  quote: "from-accent-light/60 to-secondary-light/40",
-};
-
-const ITEM_LABEL_COLORS: Record<string, string> = {
-  days: "text-primary",
-  words: "text-accent-hover",
-  clock: "text-secondary-hover",
+const ITEM_COLORS: Record<string, string> = {
+  days: "text-accent",
+  words: "text-accent",
+  clock: "text-primary",
   visits: "text-primary",
-  uptime: "text-secondary",
-  quote: "text-accent-hover",
+  uptime: "text-primary",
+  quote: "text-accent",
 };
 
-/* ---------- 工具函数 ---------- */
 function formatDuration(ms: number): string {
   const s = Math.floor(ms / 1000);
   const d = Math.floor(s / 86400);
@@ -104,7 +92,6 @@ function saveVisits(v: { today: number; total: number }) {
   }
 }
 
-/* ---------- 主组件 ---------- */
 export default function SidebarInfoPanel() {
   const [now, setNow] = useState(() => new Date());
   const sessionStart = useMemo(() => Date.now(), []);
@@ -112,13 +99,11 @@ export default function SidebarInfoPanel() {
   const [visits, setVisits] = useState<{ today: number; total: number }>({ today: 0, total: 0 });
   const [quote, setQuote] = useState("");
 
-  // 时钟 & 运行时长：每秒刷新
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  // 访问量（只跑一次）
   useEffect(() => {
     const current = loadVisits();
     const next = { today: current.today + 1, total: current.total + 1 };
@@ -126,7 +111,6 @@ export default function SidebarInfoPanel() {
     setVisits(next);
   }, []);
 
-  // 字数（拉一次接口）
   useEffect(() => {
     fetch("/api/stats/word-count", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.resolve({ count: 0 })))
@@ -134,7 +118,6 @@ export default function SidebarInfoPanel() {
       .catch(() => {});
   }, []);
 
-  // 一言（按日期轮转，同一天所有访客看到同一条）
   const dayIndex = useMemo(
     () => Math.floor((Date.now() - SITE_START_DATE.getTime()) / 86400000) % QUOTES.length,
     []
@@ -143,7 +126,6 @@ export default function SidebarInfoPanel() {
     setQuote(QUOTES[dayIndex]);
   }, [dayIndex]);
 
-  // 建站天数（随时间自然增长）
   const siteDays = useMemo(
     () => Math.floor((now.getTime() - SITE_START_DATE.getTime()) / 86400000),
     [now]
@@ -153,7 +135,6 @@ export default function SidebarInfoPanel() {
   const dateLine = `${now.getFullYear()}年${now.getMonth() + 1}月${now.getDate()}日 ${WEEKDAYS[now.getDay()]}`;
   const timeLine = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
 
-  /* ---------- 条目 ---------- */
   type Item = {
     key: string;
     label: string;
@@ -162,71 +143,35 @@ export default function SidebarInfoPanel() {
   };
 
   const items: Item[] = [
-    {
-      key: "days",
-      label: "建站运行天数",
-      primary: <>{siteDays.toLocaleString("zh-CN")} <span className="text-xs font-normal opacity-80">天</span></>,
-    },
-    {
-      key: "words",
-      label: "全站文章总字数",
-      primary: <>{wordCount !== null ? wordCount.toLocaleString("zh-CN") : "..."} <span className="text-xs font-normal opacity-80">字</span></>,
-    },
-    {
-      key: "clock",
-      label: "电子时钟",
-      primary: <span className="tabular-nums">{timeLine}</span>,
-      secondary: <span className="text-[11px]">{dateLine}</span>,
-    },
-    {
-      key: "visits",
-      label: "访问统计",
-      primary: <>{visits.total.toLocaleString("zh-CN")} <span className="text-xs font-normal opacity-70">累计</span></>,
-      secondary: <>{visits.today} 次今日浏览</>,
-    },
-    {
-      key: "uptime",
-      label: "本次停留时长",
-      primary: <span className="text-sm">{sessionUptime}</span>,
-    },
-    {
-      key: "quote",
-      label: "一言",
-      primary: <span className="text-sm italic">"{quote}"</span>,
-    },
+    { key: "days", label: "建站运行天数", primary: <>{siteDays.toLocaleString("zh-CN")} <span className="text-xs font-normal opacity-70">天</span></> },
+    { key: "words", label: "全站文章总字数", primary: <>{wordCount !== null ? wordCount.toLocaleString("zh-CN") : "..."} <span className="text-xs font-normal opacity-70">字</span></> },
+    { key: "clock", label: "电子时钟", primary: <span className="tabular-nums text-base font-medium">{timeLine}</span>, secondary: <span className="text-[11px]">{dateLine}</span> },
+    { key: "visits", label: "访问统计", primary: <>{visits.total.toLocaleString("zh-CN")} <span className="text-xs font-normal opacity-70">累计</span></>, secondary: <>{visits.today} 次今日浏览</> },
+    { key: "uptime", label: "本次停留时长", primary: <span className="text-sm">{sessionUptime}</span> },
+    { key: "quote", label: "一言", primary: <span className="text-sm italic text-text-secondary">"{quote}"</span> },
   ];
 
   return (
-    <div className="mt-6">
-      <p className="mb-3 text-xs font-medium tracking-widest text-muted uppercase">
+    <div>
+      <p className="mb-4 text-xs font-medium tracking-widest text-muted uppercase">
         站点信息
       </p>
 
-      <ul className="space-y-2.5">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {items.map((item) => {
-          const grad = ITEM_GRADIENTS[item.key];
-          const labelColor = ITEM_LABEL_COLORS[item.key];
+          const color = ITEM_COLORS[item.key];
           return (
-            <li
-              key={item.key}
-              className={`rounded-xl bg-gradient-to-br ${grad} px-3.5 py-3`}
-            >
-              <div className="flex items-center gap-2">
-                <span className={`opacity-75 ${labelColor}`}>{ICONS[item.key]}</span>
-                <span className="text-[11px] font-medium tracking-wide text-muted">
-                  {item.label}
-                </span>
+            <div key={item.key} className="rounded-xl border border-border bg-surface px-4 py-3.5">
+              <div className="flex items-center gap-1.5">
+                <span className={`opacity-60 ${color}`}>{ICONS[item.key]}</span>
+                <span className="text-[11px] font-medium tracking-wide text-muted">{item.label}</span>
               </div>
-              <p className={`mt-1.5 text-base font-semibold leading-snug ${labelColor}`}>
-                {item.primary}
-              </p>
-              {item.secondary && (
-                <p className="mt-0.5 text-[11px] text-muted/80">{item.secondary}</p>
-              )}
-            </li>
+              <p className={`mt-1.5 text-sm font-semibold leading-snug ${color}`}>{item.primary}</p>
+              {item.secondary && <p className="mt-0.5 text-[11px] text-muted">{item.secondary}</p>}
+            </div>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 }

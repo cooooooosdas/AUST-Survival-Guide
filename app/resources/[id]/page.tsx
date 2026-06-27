@@ -54,7 +54,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
     return (
       <div className="mx-auto max-w-2xl px-6 py-16 text-center">
         <p className="text-6xl mb-4">🔍</p>
-        <h1 className="text-xl font-semibold text-primary">找不到这个资源</h1>
+        <h1 className="text-xl font-serif font-semibold text-text">找不到这个资源</h1>
         <p className="mt-3 text-sm text-muted leading-relaxed">
           资源可能已被删除、下架，或链接有误。你可以返回列表看看其他文件。
         </p>
@@ -91,7 +91,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
       </Link>
 
       <header className="mt-6 border-b border-border pb-6">
-        <h1 className="text-2xl md:text-3xl font-semibold text-primary">{resource.title}</h1>
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">{resource.title}</h1>
         {resource.description && (
           <p className="mt-2 text-sm text-muted leading-relaxed">{resource.description}</p>
         )}
@@ -108,7 +108,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
       {/* 预览区 */}
       {isPDF && downloadUrl && (
         <div className="mt-8">
-          <h2 className="text-lg font-semibold text-primary mb-3">在线预览</h2>
+          <h2 className="text-lg font-serif font-semibold text-text mb-3">在线预览</h2>
           <div className="rounded-xl border border-border overflow-hidden" style={{ height: "70vh" }}>
             <iframe
               src={downloadUrl}
@@ -122,7 +122,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
 
       {isMD && (
         <div className="mt-8">
-          <h2 className="text-lg font-semibold text-primary mb-3">内容预览</h2>
+          <h2 className="text-lg font-serif font-semibold text-text mb-3">内容预览</h2>
           <Suspense fallback={<p className="text-sm text-muted">加载中…</p>}>
             <MdPreview path={resource.storage_path} />
           </Suspense>
@@ -164,7 +164,7 @@ async function MdPreview({ path }: { path: string }) {
   const text = await res.text();
 
   return (
-    <div className="glass-card p-6 overflow-x-auto">
+    <div className="card p-6 overflow-x-auto">
       <pre className="text-sm leading-relaxed text-text whitespace-pre-wrap font-mono">
         {text}
       </pre>

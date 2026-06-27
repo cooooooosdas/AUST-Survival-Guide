@@ -5,14 +5,14 @@ export const metadata = { title: "隐私政策" };
 export default function PrivacyPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">隐私政策</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">隐私政策</h1>
       <p className="mt-2 text-xs text-muted">
         生效日期：2026-06-27 · 最后更新：2026-06-27
       </p>
 
       <div className="mt-10 space-y-8 leading-relaxed text-text">
         <section>
-          <h2 className="text-base font-medium text-primary">总则</h2>
+          <h2 className="text-lg font-serif font-medium text-text">总则</h2>
           <p className="mt-3 text-sm">
             本站（下称「本站」或「AUST 新生生存指南」，域名 aust.asia）由 coolin 独立运营。
             本政策说明本站收集哪些数据、为何收集、如何保护。继续使用本站即视为同意本政策。
@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">本站收集的数据</h2>
+          <h2 className="text-lg font-serif font-medium text-text">本站收集的数据</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm">
             <li>
               <strong className="text-text">浏览器本地存储（localStorage）</strong>：本站使用 localStorage
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">第三方服务</h2>
+          <h2 className="text-lg font-serif font-medium text-text">第三方服务</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm">
             <li>
               <strong className="text-text">Supabase</strong>：用于用户认证、数据库、文件存储。
@@ -103,7 +103,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">Cookie 使用</h2>
+          <h2 className="text-lg font-serif font-medium text-text">Cookie 使用</h2>
           <p className="mt-3 text-sm">
             本站不使用任何追踪型 Cookie。Supabase Auth 使用 HTTP-only Cookie 维持登录会话，
             这些 Cookie 无法被 JavaScript 读取，不会用于追踪。
@@ -111,7 +111,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">你的权利</h2>
+          <h2 className="text-lg font-serif font-medium text-text">你的权利</h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm">
             <li>
               <strong className="text-text">清除数据</strong>：你可以在账户设置中删除自己发布的留言、提问、头像等。
@@ -127,7 +127,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">未成年人保护</h2>
+          <h2 className="text-lg font-serif font-medium text-text">未成年人保护</h2>
           <p className="mt-3 text-sm">
             本站面向高校学生群体，内容适合 16 岁以上用户阅读。若你未满 16 周岁，
             请在监护人陪同下使用本站。
@@ -135,7 +135,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">政策变更</h2>
+          <h2 className="text-lg font-serif font-medium text-text">政策变更</h2>
           <p className="mt-3 text-sm">
             本站可能在必要时更新本政策。更新会在本站发布新版本时生效，
             并在页面顶部标注最后更新日期。建议你定期查阅。
@@ -143,7 +143,7 @@ export default function PrivacyPage() {
         </section>
 
         <section>
-          <h2 className="text-base font-medium text-primary">联系我们</h2>
+          <h2 className="text-lg font-serif font-medium text-text">联系我们</h2>
           <p className="mt-3 text-sm">
             对本政策有任何疑问，请通过{" "}
             <Link href="/about" className="text-primary underline-offset-4 hover:underline">

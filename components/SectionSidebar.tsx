@@ -2,24 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
 import { useEffect, useRef, useState } from "react";
+import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
 
-/**
- * 侧边工具箱菜单 - 二次元风格
- * 底部带滑动选中色块，平滑跟随当前激活项
- *
- * 注：外层 <aside> 由布局组件控制（sticky + overflow-auto），
- *     SidebarInfoPanel 与本组件平级放在同一容器内。
- */
 export default function SectionSidebar() {
   const pathname = usePathname();
   const [activeIndex, setActiveIndex] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({});
-  const listRef = useRef<HTMLDivElement>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-  // 计算滑动指示器位置
   useEffect(() => {
     const idx = MAIN_SECTIONS.findIndex((s) => {
       if (pathname === s.href) return true;
@@ -32,7 +23,6 @@ export default function SectionSidebar() {
     const el = itemRefs.current[activeIndex];
     if (!el) return;
 
-    // 在移动端横向布局时用 left/width，PC 端纵向用 top/height
     const isMobile = window.innerWidth < 768;
     if (isMobile) {
       setIndicatorStyle({
@@ -42,8 +32,8 @@ export default function SectionSidebar() {
         width: el.offsetWidth,
         height: "100%",
         borderRadius: "8px",
-        background: "linear-gradient(135deg, rgba(123,140,222,0.18) 0%, rgba(255,158,181,0.12) 100%)",
-        border: "1px solid rgba(123,140,222,0.3)",
+        background: "var(--color-primary-ghost)",
+        border: "1px solid var(--color-border)",
         transition: "left 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
         pointerEvents: "none",
         zIndex: 0,
@@ -56,8 +46,8 @@ export default function SectionSidebar() {
         width: "100%",
         height: el.offsetHeight,
         borderRadius: "8px",
-        background: "linear-gradient(135deg, rgba(123,140,222,0.18) 0%, rgba(255,158,181,0.12) 100%)",
-        border: "1px solid rgba(123,140,222,0.3)",
+        background: "var(--color-primary-ghost)",
+        border: "1px solid var(--color-border)",
         transition: "top 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
         pointerEvents: "none",
         zIndex: 0,
@@ -65,7 +55,6 @@ export default function SectionSidebar() {
     }
   }, [activeIndex]);
 
-  // 响应窗口尺寸变化重新计算
   useEffect(() => {
     const onResize = () => {
       const el = itemRefs.current[activeIndex];
@@ -100,9 +89,8 @@ export default function SectionSidebar() {
         资源板块
       </div>
 
-      {/* 导航容器 —— 滑动指示器挂载点 */}
-      <div ref={listRef} className="relative flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible">
-        {/* 滑动选中色块 */}
+      {/* 导航容器 */}
+      <div className="relative flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible">
         <div aria-hidden style={indicatorStyle} />
 
         {MAIN_SECTIONS.map((s, i) => {
@@ -117,7 +105,7 @@ export default function SectionSidebar() {
                 "relative z-10 rounded-lg px-3 py-2 text-sm transition-colors duration-200 whitespace-nowrap",
                 active
                   ? "text-primary font-medium"
-                  : "text-text hover:bg-primary-ghost hover:text-primary",
+                  : "text-text-secondary hover:bg-primary-ghost hover:text-primary",
               ].join(" ")}
             >
               {s.title}

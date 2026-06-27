@@ -42,7 +42,7 @@ export default function FriendsPage() {
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-10">
         <p className="text-sm uppercase tracking-[0.2em] text-accent">Friends</p>
-        <h1 className="mt-3 text-3xl font-semibold text-primary">友链交换</h1>
+        <h1 className="mt-3 text-3xl font-serif font-semibold text-text">友链交换</h1>
         <p className="mt-3 text-muted leading-relaxed">
           欢迎与本站交换友情链接。要求：内容健康、与大学生/技术学习相关、网站可正常访问。
         </p>

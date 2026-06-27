@@ -33,7 +33,7 @@ export default function ProjectsPage() {
     <div className="mx-auto max-w-6xl px-6 py-10">
       <div className="mb-10">
         <p className="text-sm uppercase tracking-[0.2em] text-accent">Portfolio</p>
-        <h1 className="mt-3 text-3xl font-semibold text-primary">项目展示</h1>
+        <h1 className="mt-3 text-3xl font-serif font-semibold text-text">项目展示</h1>
         <p className="mt-3 text-muted leading-relaxed">
           个人项目作品集，包含网站开发、AI 应用及课程大作业。持续更新中。
         </p>

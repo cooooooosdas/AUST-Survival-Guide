@@ -55,10 +55,10 @@ export default function LikeButton({
       disabled={loading}
       aria-pressed={liked}
       className={[
-        "inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm transition-colors",
+        "inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-all duration-200",
         liked
-          ? "border-accent bg-accent/10 text-primary"
-          : "border-border bg-bg text-muted hover:border-accent hover:text-primary",
+          ? "border-accent bg-accent-light text-accent"
+          : "border-border bg-surface text-muted hover:border-accent hover:text-accent",
         "disabled:cursor-not-allowed disabled:opacity-50",
       ].join(" ")}
     >

@@ -28,7 +28,7 @@ function highlightText(text: string, query: string) {
   const parts = text.split(pattern);
   return parts.map((part, i) =>
     i % 2 === 1 ? (
-      <mark key={i} className="rounded bg-accent/30 px-0.5 text-primary">{part}</mark>
+      <mark key={i} className="rounded bg-accent-light px-0.5 text-accent">{part}</mark>
     ) : (
       part
     )
@@ -47,7 +47,6 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
   const initialQRef = useRef(initialQ);
 
   useEffect(() => {
-    // 加载热门搜索
     fetch("/api/search")
       .then((r) => r.json())
       .then((json) => setHot(json.hot ?? []))
@@ -58,11 +57,9 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
     if (initialQ) {
       doSearch(initialQ);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function doSearch(query: string) {
-    // 取消上一次请求，避免竞态覆盖结果
     if (abortRef.current) {
       abortRef.current.abort();
     }
@@ -94,7 +91,6 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
     }
   }
 
-  // 输入框 300ms 防抖自动搜索
   useEffect(() => {
     if (!q.trim() || q === initialQRef.current) return;
     if (debounceRef.current) clearTimeout(debounceRef.current);
@@ -109,7 +105,6 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
     const trimmed = q.trim();
     if (!trimmed) return;
     doSearch(trimmed);
-    // 更新 URL 但不跳转
     const url = new URL(window.location.href);
     url.searchParams.set("q", trimmed);
     window.history.replaceState({}, "", url.toString());
@@ -119,7 +114,7 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
 
   return (
     <div>
-      <form onSubmit={onSubmit} className="mt-6 flex gap-2">
+      <form onSubmit={onSubmit} className="mt-6 flex gap-3">
         <input
           ref={inputRef}
           type="search"
@@ -128,12 +123,12 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
           placeholder="搜索：高数、C语言、教务处、AI工具…"
           aria-label="搜索"
           autoFocus
-          className="flex-1 rounded-lg border border-border bg-bg-alt px-4 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="flex-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+          className="rounded-xl bg-primary px-6 py-3 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
         >
           {loading ? "搜索中…" : "搜索"}
         </button>
@@ -145,8 +140,8 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
 
       {/* 热门搜索 */}
       {hotSearches.length > 0 && (
-        <div className="mt-5">
-          <p className="text-xs text-muted uppercase tracking-widest mb-2">
+        <div className="mt-6">
+          <p className="text-xs text-muted uppercase tracking-widest mb-3 font-medium">
             {results.length === 0 && initialQ ? "试试这些热门搜索" : "热门搜索"}
           </p>
           <div className="flex flex-wrap gap-2">
@@ -161,10 +156,10 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
                   url.searchParams.set("q", h.query);
                   window.history.replaceState({}, "", url.toString());
                 }}
-                className="rounded-full border border-border bg-bg-alt px-3 py-1 text-xs text-muted transition-colors hover:border-primary hover:text-primary"
+                className="rounded-lg border border-border bg-surface px-3 py-1.5 text-xs text-muted transition-all duration-200 hover:border-primary hover:text-primary active:scale-95"
               >
                 {h.query}
-                <span className="ml-1 text-[10px] text-muted/70">({h.count})</span>
+                <span className="ml-1.5 text-[10px] text-muted/60">{h.count}</span>
               </button>
             ))}
           </div>
@@ -183,13 +178,13 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
               <li key={r.id}>
                 <Link
                   href={r.href}
-                  className="group flex items-start gap-3 rounded-xl border border-border bg-bg-alt p-4 transition-colors hover:border-primary/30 hover:bg-bg"
+                  className="group card card-hover p-5 flex items-start gap-3"
                 >
-                  <span className={`shrink-0 rounded-md px-1.5 py-0.5 text-[11px] leading-4 font-medium ${r.typeClass}`}>
+                  <span className={`shrink-0 rounded-lg px-2 py-1 text-[11px] leading-4 font-medium ${r.typeClass}`}>
                     {r.typeLabel}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-primary group-hover:underline">
+                    <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">
                       {highlightText(r.title, initialQ)}
                     </p>
                     {r.text && (

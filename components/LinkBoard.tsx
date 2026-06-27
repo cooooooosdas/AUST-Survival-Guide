@@ -31,7 +31,7 @@ export default function LinkBoard({
         className="mb-10 border-b border-border pb-6"
         style={{ animation: "fade-up 0.6s var(--ease-out-soft) forwards" }}
       >
-        <h1 className="text-2xl md:text-3xl font-semibold text-primary">{title}</h1>
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">{title}</h1>
         {intro && (
           <p className="mt-3 max-w-2xl text-sm md:text-base text-muted leading-relaxed">
             {intro}
@@ -47,9 +47,9 @@ export default function LinkBoard({
               animation: `fade-up 0.6s var(--ease-out-soft) ${120 + gi * 80}ms both`,
             }}
           >
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3 mb-5">
               {renderSectionIcon(g.icon)}
-              <h2 className="text-base font-medium text-primary">
+              <h2 className="text-base font-serif font-medium text-text">
                 <span className="border-l-2 border-accent pl-3">{g.title}</span>
               </h2>
             </div>

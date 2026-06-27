@@ -132,7 +132,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
       <section className="space-y-2">
         <p className="text-sm font-medium text-text">本地上传</p>
         <div className="flex items-center gap-4">
-          <label className="cursor-pointer rounded-md border border-dashed border-border bg-bg-alt px-4 py-2.5 text-sm text-muted transition-colors hover:border-accent hover:text-accent">
+          <label className="cursor-pointer rounded-xl border border-dashed border-border bg-bg-alt px-4 py-3 text-sm text-muted transition-all duration-200 hover:border-accent hover:text-accent active:scale-[0.98]">
             {uploading ? "上传中…" : "选择文件"}
             <input
               ref={fileRef}
@@ -169,7 +169,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
           value={avatarUrl ?? ""}
           onChange={(e) => handleAvatarUrlChange(e.target.value)}
           placeholder="https://example.com/avatar.png"
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
         <p className="text-xs text-muted">
           留空则显示彩色首字母头像。本地上传和粘贴链接二选一即可。
@@ -187,13 +187,13 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
             onChange={(e) => setSeed(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), useDicebear())}
             placeholder="输入任意文字生成独特头像"
-            className="flex-1 rounded-md border border-border bg-bg px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="flex-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
           <button
             type="button"
             onClick={useDicebear}
             disabled={!seed.trim()}
-            className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >
             生成
           </button>
@@ -204,7 +204,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
               key={s}
               type="button"
               onClick={() => pickPreset(s)}
-              className="rounded-full border border-border px-3 py-1 text-xs text-muted transition-colors hover:border-accent hover:text-accent"
+              className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted transition-all duration-200 hover:border-accent hover:text-accent active:scale-95"
             >
               {s}
             </button>
@@ -241,7 +241,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value)}
           maxLength={32}
-          className="w-full rounded-md border border-border bg-bg px-3 py-2 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
       </section>
 

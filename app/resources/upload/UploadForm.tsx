@@ -115,7 +115,7 @@ export default function UploadForm({ categories }: Props) {
           required
           maxLength={200}
           placeholder="例如：高数上 期末复习提纲"
-          className="mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="mt-1 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
         />
       </div>
 
@@ -130,7 +130,7 @@ export default function UploadForm({ categories }: Props) {
           maxLength={500}
           rows={3}
           placeholder="这个资源是什么、怎么用…"
-          className="mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="mt-1 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
         />
       </div>
 
@@ -142,7 +142,7 @@ export default function UploadForm({ categories }: Props) {
           id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+          className="mt-1 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
         >
           {categories.map((c) => (
             <option key={c.value} value={c.value}>{c.label}</option>

@@ -14,7 +14,7 @@ export default function NotFound() {
     <div className="mx-auto max-w-2xl px-6 py-16 md:py-24">
       {/* 装饰性 404 标签 */}
       <p className="text-sm uppercase tracking-[0.2em] text-accent">404</p>
-      <h1 className="mt-3 text-3xl font-semibold text-primary">这页没找着</h1>
+      <h1 className="mt-3 text-3xl font-serif font-semibold text-text">这页没找着</h1>
       <p className="mt-4 leading-relaxed text-muted">
         可能链接打错了，也可能我把页面挪走了。试试下面这些方式找到你想看的内容：
       </p>

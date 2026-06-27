@@ -39,7 +39,7 @@ export default async function BoardPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">留言区</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">留言区</h1>
       <p className="mt-3 text-sm text-muted">
         想说什么都可以——吐槽、提问、分享经验。请保持基本礼貌，过激内容会被删掉。
       </p>

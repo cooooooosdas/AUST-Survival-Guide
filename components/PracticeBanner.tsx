@@ -33,7 +33,7 @@ export default function PracticeBanner() {
         <div className="flex items-center gap-3 mb-4">
           <span className="text-2xl">📝</span>
           <div>
-            <h2 className="text-base font-semibold text-primary">刷题练习</h2>
+            <h2 className="text-base font-serif font-medium text-text">刷题练习</h2>
             <p className="text-xs text-muted mt-0.5">对接洛谷 + LeetCode，选难度后直接跳转刷题</p>
           </div>
         </div>

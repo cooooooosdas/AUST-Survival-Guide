@@ -8,7 +8,7 @@ export const metadata: Metadata = { title: "站点动态" };
 export default function ChangelogPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">站点动态</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">站点动态</h1>
       <p className="mt-2 text-sm text-muted">
         记录平台的更新和维护动态。
       </p>

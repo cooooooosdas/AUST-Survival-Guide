@@ -52,7 +52,7 @@ export default function PracticePage() {
 
       <div className="mt-8">
         <p className="text-sm uppercase tracking-[0.2em] text-accent">Practice</p>
-        <h1 className="mt-2 text-2xl font-semibold text-primary">刷题练习</h1>
+        <h1 className="mt-2 text-2xl font-serif font-semibold text-text">刷题练习</h1>
         <p className="mt-2 text-sm text-muted">精选洛谷 + LeetCode 题目，选难度后直接跳转。</p>
       </div>
 
@@ -61,7 +61,7 @@ export default function PracticePage() {
         <div className="flex items-center gap-2 mb-4">
           <span className="text-xl">🎯</span>
           <div>
-            <h2 className="text-base font-semibold text-primary">每日一题</h2>
+            <h2 className="text-base font-serif font-medium text-text">每日一题</h2>
             <p className="text-xs text-muted">每天 0 点自动刷新，今日推荐一题</p>
           </div>
           <span className="ml-auto rounded-full bg-accent/15 px-2 py-0.5 text-[10px] text-accent">

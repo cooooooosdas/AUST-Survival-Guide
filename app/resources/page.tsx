@@ -66,7 +66,7 @@ export default async function ResourcesPage({
   if (error || isNotConfigured) {
     return (
       <div className="mx-auto max-w-4xl px-6 py-16">
-        <h1 className="text-2xl md:text-3xl font-semibold text-primary">资源下载</h1>
+        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">资源下载</h1>
         <p className="mt-2 text-sm text-muted">
           正在补充中，敬请期待。
         </p>
@@ -89,7 +89,7 @@ export default async function ResourcesPage({
       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
         <div>
           <p className="text-sm uppercase tracking-[0.2em] text-accent">Downloads</p>
-          <h1 className="mt-2 text-2xl md:text-3xl font-semibold text-primary">资源下载</h1>
+          <h1 className="mt-2 text-2xl md:text-3xl font-serif font-semibold text-text">资源下载</h1>
           <p className="mt-2 text-sm text-muted leading-relaxed">
             高数笔记、课件、软件安装包、复习提纲等学习资料。
             {!resources || resources.length === 0

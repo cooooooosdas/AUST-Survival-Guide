@@ -35,13 +35,10 @@ export default function Header({ user }: { user: HeaderUser }) {
     };
   }, []);
 
-  // 路由变化时自动收起移动菜单
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setOpen(false);
   }, [pathname]);
 
-  // 打开抽屉时锁定 body 滚动
   useEffect(() => {
     if (typeof document === "undefined") return;
     document.body.style.overflow = open ? "hidden" : "";
@@ -52,9 +49,9 @@ export default function Header({ user }: { user: HeaderUser }) {
 
   const linkClass = (active: boolean, muted = false) =>
     [
-      "relative px-1 py-1 transition-colors duration-200 whitespace-nowrap",
-      muted ? "text-muted" : "text-text",
-      active ? "text-primary" : "hover:text-primary",
+      "relative px-1.5 py-1 transition-colors duration-200 whitespace-nowrap text-[13px]",
+      muted ? "text-muted" : "text-text-secondary",
+      active ? "text-primary font-medium" : "hover:text-primary",
       "after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[1.5px] after:bg-accent after:transition-transform after:duration-300 after:origin-left",
       active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
     ].join(" ");
@@ -65,24 +62,23 @@ export default function Header({ user }: { user: HeaderUser }) {
   return (
     <header
       className={[
-        "sticky top-0 z-30 rounded-b-xl border transition-all duration-300",
+        "sticky top-0 z-30 border-b transition-all duration-300",
         scrolled
-          ? "border-border glass-strong shadow-glow"
-          : "border-transparent glass",
+          ? "border-border bg-bg/80 backdrop-blur-lg shadow-sm"
+          : "border-transparent bg-bg/60 backdrop-blur-md",
       ].join(" ")}
     >
-      <div className="mx-auto flex h-14 items-center gap-3 px-4 md:px-6">
-        {/* 左侧：标题 + 导航 */}
+      <div className="mx-auto flex h-14 items-center gap-3 px-4 md:px-6 max-w-6xl">
         <Link
           href="/"
-          className="shrink-0 bg-gradient-to-r from-primary to-accent bg-clip-text font-semibold tracking-wide text-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
+          className="shrink-0 font-serif font-semibold tracking-wide text-text text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
         >
           安理大生存指南
         </Link>
 
         <nav
           aria-label="主导航"
-          className="hidden lg:flex items-center gap-3 text-xs"
+          className="hidden lg:flex items-center gap-4 text-[13px]"
         >
           {MAIN_SECTIONS.map((s) => (
             <Link
@@ -107,8 +103,7 @@ export default function Header({ user }: { user: HeaderUser }) {
           ))}
         </nav>
 
-        {/* 右侧工具区 */}
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex items-center gap-0.5">
           <div className="hidden md:flex items-center gap-0.5">
             <TagsLink />
             <SearchLink />
@@ -120,21 +115,20 @@ export default function Header({ user }: { user: HeaderUser }) {
             <UserMenu user={user} />
           </div>
 
-          {/* 移动端汉堡按钮 */}
           <button
             type="button"
             aria-label={open ? "关闭菜单" : "打开菜单"}
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md text-text transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             <svg
               viewBox="0 0 24 24"
               className="h-5 w-5"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden
@@ -156,16 +150,15 @@ export default function Header({ user }: { user: HeaderUser }) {
         </div>
       </div>
 
-      {/* 移动端抽屉 */}
       <div
         id="mobile-nav"
         className={[
-          "md:hidden overflow-hidden border-t border-border glass-strong transition-[max-height,opacity] duration-300 ease-out",
+          "md:hidden overflow-hidden border-t border-border bg-bg/95 backdrop-blur-lg transition-[max-height,opacity] duration-300 ease-out",
           open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
         ].join(" ")}
       >
-        <nav aria-label="移动端导航" className="px-6 py-4">
-          <p className="text-xs uppercase tracking-widest text-muted mb-2">
+        <nav aria-label="移动端导航" className="px-4 py-4">
+          <p className="text-[11px] uppercase tracking-widest text-muted mb-2 font-medium">
             资源
           </p>
           <ul className="grid grid-cols-2 gap-1">
@@ -176,10 +169,10 @@ export default function Header({ user }: { user: HeaderUser }) {
                   <Link
                     href={s.href}
                     className={[
-                      "block rounded-lg px-3 py-2 text-sm transition-all duration-200",
+                      "block rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
                       active
-                        ? "bg-primary text-white shadow-md shadow-primary/20"
-                        : "text-text hover:bg-primary/10 hover:text-primary",
+                        ? "bg-primary text-white font-medium shadow-sm"
+                        : "text-text-secondary hover:bg-primary-ghost hover:text-primary",
                     ].join(" ")}
                   >
                     {s.title}
@@ -189,7 +182,7 @@ export default function Header({ user }: { user: HeaderUser }) {
             })}
           </ul>
 
-          <p className="mt-5 mb-2 text-xs uppercase tracking-widest text-muted">
+          <p className="mt-5 mb-2 text-[11px] uppercase tracking-widest text-muted font-medium">
             其他
           </p>
           <ul className="grid grid-cols-2 gap-1">
@@ -200,10 +193,10 @@ export default function Header({ user }: { user: HeaderUser }) {
                   <Link
                     href={s.href}
                     className={[
-                      "block rounded-lg px-3 py-2 text-sm transition-all duration-200",
+                      "block rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
                       active
-                        ? "bg-accent/30 text-primary shadow-sm shadow-accent/20"
-                        : "text-muted hover:bg-accent/10 hover:text-primary",
+                        ? "bg-accent-light text-accent font-medium"
+                        : "text-muted hover:bg-accent-ghost hover:text-accent",
                     ].join(" ")}
                   >
                     {s.title}
@@ -214,19 +207,17 @@ export default function Header({ user }: { user: HeaderUser }) {
             <li>
               <Link
                 href="/search"
-                className="block rounded-lg px-3 py-2 text-sm text-muted transition-all duration-200 hover:bg-accent/10 hover:text-primary"
+                className="block rounded-lg px-3 py-2.5 text-sm text-muted transition-all duration-200 hover:bg-primary-ghost hover:text-primary"
               >
                 搜索
               </Link>
             </li>
           </ul>
 
-          {/* 移动端主题切换 */}
           <div className="mt-5 border-t border-border pt-4">
             <MobileThemeToggle />
           </div>
-
-          <div className="mt-6 border-t border-border pt-4">
+          <div className="mt-5 border-t border-border pt-4">
             <UserMenu user={user} />
           </div>
         </nav>
@@ -239,7 +230,7 @@ function SearchLink() {
   return (
     <Link
       href="/search"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       aria-label="搜索"
       title="搜索"
     >
@@ -255,7 +246,7 @@ function TagsLink() {
   return (
     <Link
       href="/tags"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       aria-label="标签云"
       title="标签云"
     >
@@ -271,7 +262,7 @@ function BoardLink() {
   return (
     <Link
       href="/board"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       aria-label="留言区"
       title="留言区"
     >
@@ -292,7 +283,7 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
       title={isDark ? "切换到浅色模式" : "切换到深色模式"}
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
     >
       {isDark ? (
         <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -324,7 +315,7 @@ function MobileThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
-      className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-text transition-all duration-200 hover:bg-primary/10 hover:text-primary active:scale-[0.98]"
+      className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-text-secondary transition-all duration-200 hover:bg-primary-ghost hover:text-primary active:scale-[0.98]"
     >
       {isDark ? (
         <>

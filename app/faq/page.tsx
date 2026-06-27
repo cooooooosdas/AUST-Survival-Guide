@@ -23,7 +23,7 @@ export default async function FaqPage({
     <div className="mx-auto max-w-3xl px-6 py-16">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold text-primary">常见问题</h1>
+          <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">常见问题</h1>
           <p className="mt-1 text-sm text-muted">
             从留言区和匿名提问中整理的高频问题解答。找不到答案？去{" "}
             <Link href="/board" className="text-primary underline-offset-4 hover:underline">

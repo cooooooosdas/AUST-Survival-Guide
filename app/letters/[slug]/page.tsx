@@ -198,7 +198,7 @@ export default async function LetterPage({
           <span>{letter.author}</span>
           <span>· 约 {minutes} 分钟</span>
         </div>
-        <h1 className="mt-3 text-3xl md:text-4xl font-semibold leading-tight text-primary">
+        <h1 className="mt-3 text-3xl md:text-4xl font-serif font-bold leading-tight text-text tracking-tight">
           {letter.title}
         </h1>
         {letter.tags && letter.tags.length > 0 && (
@@ -234,14 +234,20 @@ export default async function LetterPage({
         </div>
       </header>
 
-      <div className="mt-8 glass-card p-6 md:p-10">
-        <Letter />
+      <div className="mt-8 card p-6 md:p-10">
+        <div className="prose">
+          <Letter />
+        </div>
       </div>
 
-      <hr className="my-16 border-t border-border" />
+      <div className="my-16 flex items-center gap-4">
+        <div className="flex-1 h-px bg-gradient-to-r from-amber-200 to-transparent" />
+        <span className="text-amber-300 text-sm select-none">— — —</span>
+        <div className="flex-1 h-px bg-gradient-to-l from-amber-200 to-transparent" />
+      </div>
 
       <section>
-        <h2 className="text-xl font-semibold text-primary">读完想说点什么？</h2>
+        <h2 className="text-2xl font-serif font-semibold text-text mt-0">读完想说点什么？</h2>
         <p className="mt-2 text-sm text-muted">
           这条留言只在这封信下面显示，作者会看到。
         </p>

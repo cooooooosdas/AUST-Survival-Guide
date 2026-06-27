@@ -13,7 +13,7 @@ export default function SectionsLayout({
           <SectionSidebar />
           <SidebarInfoPanel />
         </aside>
-        <div className="glass-card p-4 md:p-8">{children}</div>
+        <div className="card p-4 md:p-8">{children}</div>
       </div>
     </div>
   );

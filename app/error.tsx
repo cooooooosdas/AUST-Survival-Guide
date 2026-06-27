@@ -17,7 +17,7 @@ export default function GlobalError({
   return (
     <div className="mx-auto max-w-2xl px-6 py-24">
       <p className="text-sm uppercase tracking-[0.2em] text-accent">error</p>
-      <h1 className="mt-3 text-3xl font-semibold text-primary">出错了</h1>
+      <h1 className="mt-3 text-3xl font-serif font-semibold text-text">出错了</h1>
       <p className="mt-4 text-sm text-muted">
         页面加载时发生意外。这通常是临时问题。
       </p>

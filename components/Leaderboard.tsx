@@ -10,30 +10,17 @@ type LeaderboardItem = {
   href: string;
 };
 
-const CATEGORIES: { key: string; label: string; icon: string }[] = [
-  { key: "letter", label: "学长来信", icon: "📝" },
-  { key: "resource", label: "资源下载", icon: "📚" },
+const CATEGORIES: { key: string; label: string }[] = [
+  { key: "letter", label: "学长来信" },
+  { key: "resource", label: "资源下载" },
 ];
 
 function SkeletonRow() {
   return (
-    <div className="flex items-center gap-3 rounded-lg border border-border bg-bg-alt px-4 py-3">
-      <span className="shrink-0 w-6 h-6 rounded-full bg-bg animate-pulse" />
-      <span className="flex-1 h-4 rounded bg-bg animate-pulse" />
-      <span className="shrink-0 w-10 h-4 rounded bg-bg animate-pulse" />
-    </div>
-  );
-}
-
-function SkeletonCategory() {
-  return (
-    <div>
-      <div className="h-5 w-24 rounded bg-bg animate-pulse mb-4" />
-      <div className="space-y-2">
-        {Array.from({ length: 5 }).map((_, i) => (
-          <SkeletonRow key={i} />
-        ))}
-      </div>
+    <div className="flex items-center gap-4 py-3">
+      <span className="shrink-0 w-8 h-8 rounded-lg bg-bg-alt animate-pulse" />
+      <span className="flex-1 h-4 rounded bg-bg-alt animate-pulse" />
+      <span className="shrink-0 w-12 h-4 rounded bg-bg-alt animate-pulse" />
     </div>
   );
 }
@@ -55,46 +42,65 @@ export default function Leaderboard() {
   return (
     <section className="py-10 md:py-12">
       <div className="flex items-baseline justify-between mb-6">
-        <h2 className="text-xl font-semibold text-primary">🔥 热门推荐</h2>
+        <h2 className="text-xl font-serif font-semibold text-text">热门推荐</h2>
         <span className="text-sm text-muted">按阅读量排行</span>
       </div>
 
       {loading ? (
-        /* Loading skeleton — 与下方数据区结构一致，避免 CLS */
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8" aria-hidden="true">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10" aria-hidden="true">
           {CATEGORIES.map((cat) => (
-            <SkeletonCategory key={cat.key} />
+            <div key={cat.key}>
+              <h3 className="text-base font-medium text-text mb-4 flex items-center gap-2">
+                <span className="w-1 h-4 bg-accent rounded-full" />
+                {cat.label}
+              </h3>
+              <div className="space-y-0">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <SkeletonRow key={i} />
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {CATEGORIES.map((cat) => {
             const items = data[cat.key] ?? [];
 
             return (
               <div key={cat.key}>
-                <h3 className="text-base font-medium text-primary mb-4">
-                  <span className="border-l-2 border-accent pl-3">
-                    {cat.icon} {cat.label}
-                  </span>
+                <h3 className="text-base font-medium text-text mb-4 flex items-center gap-2">
+                  <span className="w-1 h-4 bg-accent rounded-full" />
+                  {cat.label}
                 </h3>
                 {items.length === 0 ? (
-                  <p className="text-sm text-muted rounded-lg border border-border bg-bg-alt px-4 py-6 text-center">
+                  <p className="text-sm text-muted rounded-xl border border-dashed border-border bg-bg-alt px-4 py-8 text-center">
                     暂无数据，浏览后这里会显示热门内容
                   </p>
                 ) : (
-                  <div className="space-y-2">
+                  <div>
                     {items.slice(0, 5).map((item, i) => (
                       <Link
                         key={item.target_id}
                         href={item.href}
-                        className="flex items-center gap-3 rounded-lg border border-border bg-bg-alt px-4 py-3 transition-colors hover:border-primary/20"
+                        className="group flex items-center gap-4 py-3 border-b border-border last:border-b-0 transition-colors hover:bg-bg-alt/60"
                       >
-                        <span className="shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-accent/20 text-xs font-medium text-primary">
-                          {i + 1}
+                        <span className="shrink-0 w-8 text-center">
+                          <span className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-sm font-serif font-semibold ${
+                            i === 0 ? "bg-amber-100 text-amber-700" :
+                            i === 1 ? "bg-stone-100 text-stone-600" :
+                            i === 2 ? "bg-orange-50 text-orange-700" :
+                            "text-muted"
+                          }`}>
+                            {i + 1}
+                          </span>
                         </span>
-                        <span className="flex-1 text-sm text-text truncate">{item.title}</span>
-                        <span className="shrink-0 text-xs text-muted">👁 {item.total_views}</span>
+                        <span className="flex-1 text-sm text-text group-hover:text-primary transition-colors truncate">
+                          {item.title}
+                        </span>
+                        <span className="shrink-0 text-xs text-muted tabular-nums">
+                          {item.total_views.toLocaleString("zh-CN")}
+                        </span>
                       </Link>
                     ))}
                   </div>

@@ -53,7 +53,7 @@ export default function AskPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">匿名提问</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">匿名提问</h1>
       <p className="mt-2 text-sm text-muted">
         有问题不敢问？匿名提出来，管理员会回复你。被采纳的好问题会被公开到 FAQ 页面。
       </p>
@@ -67,7 +67,7 @@ export default function AskPage() {
             id="category"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="mt-1 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+            className="mt-1 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           >
             {CATEGORIES.map((c) => (
               <option key={c.value} value={c.value}>{c.label}</option>
@@ -108,7 +108,7 @@ export default function AskPage() {
       </form>
 
       <div className="mt-10 border-t border-border pt-8">
-        <h2 className="text-lg font-semibold text-primary">常见问题</h2>
+        <h2 className="text-lg font-serif font-semibold text-text">常见问题</h2>
         <p className="mt-1 text-sm text-muted">
           先看看 FAQ 里有没有你要的答案：
         </p>

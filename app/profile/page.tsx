@@ -36,7 +36,7 @@ export default async function ProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-semibold text-primary">个人设置</h1>
+      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">个人设置</h1>
       <p className="mt-2 text-sm text-muted">设置你的头像和昵称，留言时就会显示出来。</p>
 
       <div className="mt-10">
@@ -48,7 +48,7 @@ export default async function ProfilePage() {
       </div>
 
       <section className="mt-16 border-t border-border pt-10">
-        <h2 className="text-xl font-semibold text-primary">我的收藏</h2>
+        <h2 className="text-xl font-serif font-semibold text-text">我的收藏</h2>
         <p className="mt-1 text-sm text-muted">
           {favLetters.length === 0
             ? "还没收藏任何信件。去学长来信页点击 ☆ 收藏吧。"
@@ -61,10 +61,10 @@ export default async function ProfilePage() {
               <li key={l.slug}>
                 <a
                   href={`/letters/${l.slug}`}
-                  className="group flex items-start justify-between gap-4 rounded-xl border border-border bg-bg-alt p-4 transition-colors hover:border-primary/30 hover:bg-bg"
+                  className="group card card-hover p-4 flex items-start justify-between gap-4"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-primary group-hover:underline">
+                    <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">
                       {l.title}
                     </p>
                     <p className="mt-1 text-xs text-muted line-clamp-1">{l.excerpt}</p>

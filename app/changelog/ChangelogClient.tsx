@@ -63,7 +63,7 @@ export default function ChangelogClient() {
               {CATEGORY_LABEL[log.category] ?? "综合"}
             </span>
           </div>
-          <h2 className="mt-2 text-base font-medium text-primary">{log.title}</h2>
+          <h2 className="mt-2 text-base font-serif font-medium text-text">{log.title}</h2>
           <p className="mt-2 text-sm text-text whitespace-pre-wrap leading-relaxed">
             {log.content}
           </p>

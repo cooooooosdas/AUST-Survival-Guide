@@ -64,7 +64,7 @@ export default async function ProjectPage({ params }: PageProps) {
       </Link>
 
       <header className="mt-8">
-        <h1 className="text-3xl font-semibold text-primary">{project.title}</h1>
+        <h1 className="text-3xl font-serif font-semibold text-text">{project.title}</h1>
         <p className="mt-3 text-muted leading-relaxed">{project.description}</p>
 
         <div className="mt-5 flex flex-wrap items-center gap-3">
@@ -118,7 +118,7 @@ export default async function ProjectPage({ params }: PageProps) {
         </div>
       </header>
 
-      <div className="mt-10 glass-card p-6 md:p-8">
+      <div className="mt-10 card p-6 md:p-8">
         <ProjectContent />
       </div>
     </div>
