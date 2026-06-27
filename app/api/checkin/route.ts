@@ -11,20 +11,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "请先登录" }, { status: 401 });
   }
 
-  const body = await req.json();
-  const { task_id, date } = body;
+  const body = await req.json().catch(() => ({}));
+  const checkDate = (body as { date?: string }).date || new Date().toISOString().split("T")[0];
 
-  if (!task_id) {
-    return NextResponse.json({ error: "缺少任务 ID" }, { status: 400 });
-  }
-
-  const checkDate = date || new Date().toISOString().split("T")[0];
-
+  // 用固定的 task_id=1 作为「每日学习打卡」的通用任务
   const { error } = await supabase
     .from("checkin_records")
     .upsert(
       {
-        task_id: Number(task_id),
+        task_id: 1,
         user_id: user.id,
         date: checkDate,
       },
@@ -36,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "打卡失败" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, date: checkDate });
+  return NextResponse.json({ ok: true, record: { task_id: 1, date: checkDate } });
 }
 
 export async function GET(req: NextRequest) {
@@ -46,21 +41,17 @@ export async function GET(req: NextRequest) {
   } = await supabase.auth.getUser();
 
   const url = new URL(req.url);
-  const taskId = url.searchParams.get("task_id");
-  const limit = Number(url.searchParams.get("limit") || 30);
+  const limit = Number(url.searchParams.get("limit") || 60);
 
   let query = supabase
     .from("checkin_records")
     .select("task_id, date, created_at")
+    .eq("task_id", 1)
     .order("date", { ascending: false })
     .limit(limit);
 
   if (user) {
     query = query.eq("user_id", user.id);
-  }
-
-  if (taskId) {
-    query = query.eq("task_id", Number(taskId));
   }
 
   const { data, error } = await query;
