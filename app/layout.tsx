@@ -106,7 +106,8 @@ async function loadUser() {
         avatarUrl = profile.avatar_url ?? null;
         if (!displayName) displayName = profile.display_name ?? null;
       }
-    } catch {
+    } catch (e) {
+      console.error("Failed to load user profile:", e);
       // profile 查询失败时退回到 metadata
     }
     return {
@@ -114,7 +115,8 @@ async function loadUser() {
       displayName,
       avatarUrl,
     };
-  } catch {
+  } catch (e) {
+    console.error("Failed to load user:", e);
     return null;
   }
 }

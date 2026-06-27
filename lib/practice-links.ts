@@ -22,7 +22,7 @@ export const PRACTICE_LINKS: PracticeLink[] = [
   { id: "lg-e10", title: "P5707 【深基3.习2】骑车上学", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5707", difficulty: "easy", tags: ["基础语法", "时间"], description: "时间计算：给定速度和距离，计算到达时间。时分秒运算。" },
   { id: "lg-e11", title: "P5708 【深基3.习3】直角三角形", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5708", difficulty: "easy", tags: ["基础语法", "几何"], description: "判断三条边是否能构成直角三角形。勾股定理判断。" },
   { id: "lg-e12", title: "P5709 【深基3.习4】植物浇花", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5709", difficulty: "easy", tags: ["循环", "模拟"], description: "模拟植物浇水，根据天数计算剩余水量。循环变量更新。" },
-  { id: "lg-e13", title: "P5710 【深基3.习5】 snug 与二进制", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5710", difficulty: "easy", tags: ["进制转换"], description: "三位数转二进制、八进制、十六进制。进制转换基础。" },
+  { id: "lg-e13", title: "P5711 【深基3.习6】闰年判断", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5711", difficulty: "easy", tags: ["基础语法", "判断"], description: "判断闰年：能被4整除但不能被100整除，或能被400整除。" },
   { id: "lg-e14", title: "P5711 【深基3.习6】闰年判断", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5711", difficulty: "easy", tags: ["基础语法", "判断"], description: "判断闰年：能被4整除但不能被100整除，或能被400整除。" },
   { id: "lg-e15", title: "P5712 【深基3.习7】距离判断", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5712", difficulty: "easy", tags: ["基础语法", "条件"], description: "给定两点坐标，判断距离是否小于等于给定半径。" },
   { id: "lg-e16", title: "P5713 【深基3.习8】棋盘", platform: "luogu", url: "https://www.luogu.com.cn/problem/P5713", difficulty: "easy", tags: ["模拟", "循环"], description: "模拟国际象棋棋盘染色，计算黑格数量。" },
@@ -82,7 +82,6 @@ export const PRACTICE_LINKS: PracticeLink[] = [
   { id: "lg-h7", title: "P1508 【NOIP2005 提高组】 道路", platform: "luogu", url: "https://www.luogu.com.cn/problem/P1508", difficulty: "hard", tags: ["图论", "最小割"], description: "NOIP 2005，网络流最小割问题，求最大流量。" },
   { id: "lc-h1", title: "LC 42. Trapping Rain Water", platform: "leetcode", url: "https://leetcode.cn/problems/trapping-rain-water/", difficulty: "hard", tags: ["双指针", "栈"], description: "接雨水。经典 hard 题，双指针或单调栈解法。" },
   { id: "lc-h2", title: "LC 23. Merge k Sorted Lists", platform: "leetcode", url: "https://leetcode.cn/problems/merge-k-sorted-lists/", difficulty: "hard", tags: ["链表", "堆"], description: "合并 k 个升序链表。优先队列（最小堆）应用。" },
-  { id: "lc-h3", title: "LC 42. Trapping Rain Water (Alternate)", platform: "leetcode", url: "https://leetcode.cn/problems/trapping-rain-water/", difficulty: "hard", tags: ["双指针"], description: "接雨水 DP 解法：左右最大高度预处理。" },
 ];
 
 export const DIFFICULTY_LABEL: Record<string, string> = {

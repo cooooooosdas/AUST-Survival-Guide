@@ -20,8 +20,18 @@ function uid(): string {
   return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function renderMarkdown(text: string) {
-  const lines = text.split("\n");
+  const escaped = escapeHtml(text);
+  const lines = escaped.split("\n");
   const elements: React.ReactNode[] = [];
   let inCode = false;
   let codeLines: string[] = [];
@@ -105,6 +115,8 @@ export default function AIChat() {
   const [streamingId, setStreamingId] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
 
   useEffect(() => {
     if (open && inputRef.current) {
@@ -128,7 +140,7 @@ export default function AIChat() {
     setMessages((prev) => [...prev, userMsg]);
 
     try {
-      const history = [...messages, userMsg].map((m) => ({
+      const history = [...messagesRef.current, userMsg].map((m) => ({
         role: m.role,
         content: m.content,
       }));
@@ -139,30 +151,9 @@ export default function AIChat() {
         body: JSON.stringify({ messages: history }),
       });
 
-      const data = await res.json();
+      const contentType = res.headers.get("content-type") || "";
 
-      if (data.mode === "local") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: uid(),
-            role: "assistant",
-            content: data.message,
-            mode: "local",
-            links: data.results,
-          },
-        ]);
-      } else if (data.mode === "fallback") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: uid(),
-            role: "assistant",
-            content: data.message,
-            mode: "fallback",
-          },
-        ]);
-      } else if (data.mode === "ai" || res.headers.get("content-type")?.includes("event-stream")) {
+      if (contentType.includes("event-stream")) {
         // Streaming AI response
         const assistantId = uid();
         setStreamingId(assistantId);
@@ -214,6 +205,43 @@ export default function AIChat() {
         }
 
         setStreamingId(null);
+      } else {
+        // JSON response (local search or fallback)
+        const data = await res.json();
+
+        if (data.mode === "local") {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: uid(),
+              role: "assistant",
+              content: data.message,
+              mode: "local",
+              links: data.results,
+            },
+          ]);
+        } else if (data.mode === "fallback") {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: uid(),
+              role: "assistant",
+              content: data.message,
+              mode: "fallback",
+            },
+          ]);
+        } else {
+          // Unexpected response format
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: uid(),
+              role: "assistant",
+              content: data.message || "收到未知响应，请稍后再试。",
+              mode: "fallback",
+            },
+          ]);
+        }
       }
     } catch {
       setMessages((prev) => [
@@ -227,7 +255,7 @@ export default function AIChat() {
     } finally {
       setLoading(false);
     }
-  }, [input, loading, messages]);
+  }, [input, loading]);
 
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {

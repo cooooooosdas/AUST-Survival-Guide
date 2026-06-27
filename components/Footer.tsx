@@ -1,5 +1,6 @@
 import { SITE } from "@/lib/site";
 import Link from "next/link";
+import FooterYear from "./FooterYear";
 
 export default function Footer() {
   return (
@@ -7,7 +8,7 @@ export default function Footer() {
       <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-8 text-sm text-muted md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-2">
           <span className="text-accent text-xs">—</span>
-          <span>© {new Date().getFullYear()} {SITE.shortName} · {SITE.author}</span>
+          <span>© <FooterYear /> {SITE.shortName} · {SITE.author}</span>
         </div>
         <div className="flex items-center gap-5">
           {SITE.github && (

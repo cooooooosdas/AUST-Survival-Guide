@@ -97,7 +97,10 @@ export default function SidebarInfoPanel() {
   const sessionStart = useMemo(() => Date.now(), []);
   const [wordCount, setWordCount] = useState<number | null>(null);
   const [visits, setVisits] = useState<{ today: number; total: number }>({ today: 0, total: 0 });
-  const [quote, setQuote] = useState("");
+  const [quote, setQuote] = useState(() => {
+    const idx = Math.floor((Date.now() - SITE_START_DATE.getTime()) / 86400000) % QUOTES.length;
+    return QUOTES[idx];
+  });
 
   useEffect(() => {
     const id = setInterval(() => setNow(new Date()), 1000);
@@ -115,16 +118,13 @@ export default function SidebarInfoPanel() {
     fetch("/api/stats/word-count", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : Promise.resolve({ count: 0 })))
       .then((d) => setWordCount(d.count))
-      .catch(() => {});
+      .catch((e) => console.error("Failed to load word count:", e));
   }, []);
 
-  const dayIndex = useMemo(
-    () => Math.floor((Date.now() - SITE_START_DATE.getTime()) / 86400000) % QUOTES.length,
-    []
-  );
   useEffect(() => {
-    setQuote(QUOTES[dayIndex]);
-  }, [dayIndex]);
+    const idx = Math.floor((now.getTime() - SITE_START_DATE.getTime()) / 86400000) % QUOTES.length;
+    setQuote(QUOTES[idx]);
+  }, [now]);
 
   const siteDays = useMemo(
     () => Math.floor((now.getTime() - SITE_START_DATE.getTime()) / 86400000),

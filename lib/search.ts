@@ -1,5 +1,6 @@
 import { LETTERS } from "@/lib/letters";
 import { MAIN_SECTIONS } from "@/lib/sections";
+import type { LinkGroup } from "@/lib/types";
 import { groups as toolsGroups } from "@/content/links/tools";
 import { groups as microservicesGroups } from "@/content/links/microservices";
 import { groups as learnGroups } from "@/content/links/learn";

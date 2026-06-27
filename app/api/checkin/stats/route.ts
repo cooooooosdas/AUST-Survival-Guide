@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+function formatLocalDate(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
 export async function GET() {
   const supabase = await createClient();
   const {
@@ -45,8 +49,8 @@ export async function GET() {
     prev = d;
   }
 
-  const today = new Date().toISOString().split("T")[0];
-  const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+  const today = formatLocalDate(new Date());
+  const yesterday = formatLocalDate(new Date(Date.now() - 86400000));
   const lastDate = uniqueDates[uniqueDates.length - 1];
   if (lastDate === today || lastDate === yesterday) {
     current = streak;

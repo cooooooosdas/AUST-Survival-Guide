@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import Avatar from "@/components/Avatar";
 import { updateProfile } from "./actions";
 
@@ -26,6 +26,12 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
   const [localPreview, setLocalPreview] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    return () => {
+      if (localPreview) URL.revokeObjectURL(localPreview);
+    };
+  }, [localPreview]);
 
   const dicebearUrl = (() => {
     const s = seed.trim();

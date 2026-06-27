@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { signup, loginWithGitHub } from "@/app/auth/actions";
+import ClearQueryParam from "@/components/ClearQueryParam";
 
 export const metadata = { title: "注册" };
 
@@ -14,6 +15,8 @@ export default async function SignupPage({
     <div className="mx-auto max-w-md px-6 py-16">
       <h1 className="text-2xl font-serif font-semibold text-text">注册</h1>
       <p className="mt-2 text-sm text-muted">已经有账号？<Link href="/login" className="text-primary underline-offset-4 hover:underline">去登录</Link></p>
+
+      {ok && <ClearQueryParam param="ok" />}
 
       {ok && (
         <div role="status" className="mt-6 rounded-md border border-accent bg-accent/20 px-4 py-3 text-sm text-primary">

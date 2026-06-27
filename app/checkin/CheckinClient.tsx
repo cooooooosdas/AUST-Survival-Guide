@@ -12,13 +12,25 @@ type Stats = {
 
 const HEATMAP_DAYS = 30;
 
+function formatLocalDate(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+function parseLocalDate(dateStr: string): Date {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+
 export default function CheckinClient() {
   const [records, setRecords] = useState<CheckinRecord[]>([]);
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
 
-  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
+  const today = useMemo(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  }, []);
   const checkedToday = useMemo(
     () => records.some((r) => r.date === today),
     [records, today]
@@ -37,6 +49,11 @@ export default function CheckinClient() {
     load();
   }, []);
 
+  async function refetchStats() {
+    const res = await fetch("/api/checkin/stats");
+    if (res.ok) setStats(await res.json());
+  }
+
   async function handleCheckin() {
     if (checkedToday || checking) return;
     setChecking(true);
@@ -49,14 +66,7 @@ export default function CheckinClient() {
       if (res.ok) {
         const json = await res.json();
         setRecords((prev) => [...prev, json.record]);
-        if (stats) {
-          setStats({
-            ...stats,
-            totalDays: stats.totalDays + 1,
-            currentStreak: json.streak.current,
-            maxStreak: Math.max(stats.maxStreak, json.streak.current),
-          });
-        }
+        refetchStats();
       }
     } catch {
       // ignore
@@ -70,7 +80,7 @@ export default function CheckinClient() {
     for (let i = HEATMAP_DAYS - 1; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      dates.push(d.toISOString().split("T")[0]);
+      dates.push(formatLocalDate(d));
     }
     return dates;
   }, []);
@@ -190,8 +200,8 @@ function Heatmap({
     <div className="flex flex-wrap gap-1.5">
       {dates.map((date) => {
         const done = dateSet.has(date);
-        const isToday = date === new Date().toISOString().split("T")[0];
-        const d = new Date(date + "T00:00:00");
+        const isToday = date === formatLocalDate(new Date());
+        const d = parseLocalDate(date);
         const label = `${d.getMonth() + 1}/${d.getDate()}`;
 
         return (

@@ -168,6 +168,7 @@ export default function Header({ user }: { user: HeaderUser }) {
                 <li key={s.slug}>
                   <Link
                     href={s.href}
+                    aria-current={active ? "page" : undefined}
                     className={[
                       "block rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
                       active
@@ -192,6 +193,7 @@ export default function Header({ user }: { user: HeaderUser }) {
                 <li key={s.slug}>
                   <Link
                     href={s.href}
+                    aria-current={active ? "page" : undefined}
                     className={[
                       "block rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
                       active

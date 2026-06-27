@@ -7,9 +7,14 @@ import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
 
 export default function SectionSidebar() {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [indicatorStyle, setIndicatorStyle] = useState({});
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const idx = MAIN_SECTIONS.findIndex((s) => {
@@ -91,7 +96,7 @@ export default function SectionSidebar() {
 
       {/* 导航容器 */}
       <div className="relative flex flex-row md:flex-col gap-1 overflow-x-auto md:overflow-visible">
-        <div aria-hidden style={indicatorStyle} />
+        {mounted && <div aria-hidden style={indicatorStyle} />}
 
         {MAIN_SECTIONS.map((s, i) => {
           const active = pathname === s.href || pathname?.startsWith(s.href + "/");

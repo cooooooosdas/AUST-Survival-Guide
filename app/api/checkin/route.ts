@@ -12,7 +12,14 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json().catch(() => ({}));
-  const checkDate = (body as { date?: string }).date || new Date().toISOString().split("T")[0];
+  const clientDate = (body as { date?: string }).date;
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+  const checkDate = clientDate || today;
+
+  if (checkDate !== today) {
+    return NextResponse.json({ error: "只能打卡今天" }, { status: 400 });
+  }
 
   // 用固定的 task_id=1 作为「每日学习打卡」的通用任务
   const { error } = await supabase
@@ -40,21 +47,20 @@ export async function GET(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    return NextResponse.json([]);
+  }
+
   const url = new URL(req.url);
   const limit = Number(url.searchParams.get("limit") || 60);
 
-  let query = supabase
+  const { data, error } = await supabase
     .from("checkin_records")
     .select("task_id, date, created_at")
     .eq("task_id", 1)
+    .eq("user_id", user.id)
     .order("date", { ascending: false })
     .limit(limit);
-
-  if (user) {
-    query = query.eq("user_id", user.id);
-  }
-
-  const { data, error } = await query;
 
   if (error) {
     console.error("Failed to fetch checkins:", error);

@@ -28,15 +28,23 @@ function SkeletonRow() {
 export default function Leaderboard() {
   const [data, setData] = useState<Record<string, LeaderboardItem[]>>({});
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetch("/api/stats/leaderboard")
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then((json) => {
         setData(json.leaderboard ?? {});
         setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch((e) => {
+        console.error("Failed to load leaderboard:", e);
+        setError(true);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -73,7 +81,31 @@ export default function Leaderboard() {
                   <span className="w-1 h-4 bg-accent rounded-full" />
                   {cat.label}
                 </h3>
-                {items.length === 0 ? (
+                {error ? (
+                  <div className="rounded-xl border border-dashed border-border bg-bg-alt px-4 py-8 text-center">
+                    <p className="text-sm text-muted">加载失败</p>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setError(false);
+                        setLoading(true);
+                        fetch("/api/stats/leaderboard")
+                          .then((r) => r.json())
+                          .then((json) => {
+                            setData(json.leaderboard ?? {});
+                            setLoading(false);
+                          })
+                          .catch(() => {
+                            setError(true);
+                            setLoading(false);
+                          });
+                      }}
+                      className="mt-3 text-xs text-primary hover:underline"
+                    >
+                      点击重试
+                    </button>
+                  </div>
+                ) : items.length === 0 ? (
                   <p className="text-sm text-muted rounded-xl border border-dashed border-border bg-bg-alt px-4 py-8 text-center">
                     暂无数据，浏览后这里会显示热门内容
                   </p>

@@ -1,6 +1,5 @@
 import { pipeline, env } from "@xenova/transformers";
 
-// @ts-expect-error transformers pipeline types are too broad for feature-extraction
 type EmbeddingPipeline = Awaited<ReturnType<typeof pipeline>>;
 
 env.allowLocalModels = false;
@@ -15,7 +14,6 @@ export async function getEmbedder(): Promise<EmbeddingPipeline> {
     if (result) cached = result;
     return result!;
   }
-  // @ts-expect-error transformers pipeline types are too broad for feature-extraction
   loading = pipeline("feature-extraction", "Xenova/paraphrase-multilingual-MiniLM-L12-v2");
   const result = await loading;
   if (result) cached = result;
@@ -24,9 +22,9 @@ export async function getEmbedder(): Promise<EmbeddingPipeline> {
 
 export async function embedText(text: string): Promise<number[]> {
   const pipe = await getEmbedder();
-  // @ts-expect-error transformers pipeline types are too broad for feature-extraction
+  // @ts-expect-error transformers pipeline overloads reject normalize:true
   const output = await pipe(text, { pooling: "mean", normalize: true });
-  // @ts-expect-error transformers pipeline types are too broad for feature-extraction
+  // @ts-expect-error output type from feature-extraction pipeline has .data
   return Array.from(output.data);
 }
 

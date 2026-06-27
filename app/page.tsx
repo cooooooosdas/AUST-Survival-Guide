@@ -20,6 +20,7 @@ async function loadHomeComments() {
       supabase.auth.getUser(),
     ]);
     if (commentsError) {
+      console.error("Failed to load home comments:", commentsError);
       return { comments: [] as Comment[], userId: null as string | null, ready: false };
     }
     return {
@@ -27,7 +28,8 @@ async function loadHomeComments() {
       userId: user?.id ?? null,
       ready: true,
     };
-  } catch {
+  } catch (e) {
+    console.error("Failed to load home comments:", e);
     return { comments: [] as Comment[], userId: null as string | null, ready: false };
   }
 }

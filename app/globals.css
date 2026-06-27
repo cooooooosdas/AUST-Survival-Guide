@@ -28,9 +28,13 @@
   --color-primary-ghost: rgba(37, 99, 235, 0.06);
   --color-primary-ring: rgba(37, 99, 235, 0.25);
 
-  /* ---------- 边框 ---------- */
-  --color-border: #E7E5E4;
-  --color-border-hover: #D6D3D1;
+  /* ---------- 装饰 ---------- */
+  --color-deco-envelope: #FFFFFF;
+  --color-deco-stroke: #1C1917;
+  --color-deco-stroke-light: #E7E5E4;
+  --color-deco-plane: #FEF3C7;
+  --color-deco-plane-accent: #FDE68A;
+  --color-deco-dash: #D6D3D1;
 
   /* ---------- 阴影 ---------- */
   --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.04);
@@ -306,6 +310,13 @@ select:focus-visible {
 
   --color-border: #44403C;
   --color-border-hover: #57534E;
+
+  --color-deco-envelope: #292524;
+  --color-deco-stroke: #FAFAF9;
+  --color-deco-stroke-light: #44403C;
+  --color-deco-plane: #451A03;
+  --color-deco-plane-accent: #92400E;
+  --color-deco-dash: #57534E;
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
