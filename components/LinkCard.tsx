@@ -27,45 +27,88 @@ function tagStyle(tag: string): string {
   return TAG_STYLE[tag] ?? "bg-[#F1F5F9] text-[#475569]";
 }
 
-function renderItemIcon(url?: string, customIcon?: string) {
+/* ---------- 图标 ---------- */
+const FAVICON_SERVICES = [
+  (host: string) => `https://icon.horse/icon/${host}`,
+  (host: string) => `https://favicon.cccyun.cc/${host}`,
+];
+
+function renderItemIcon(url?: string, customIcon?: string, title = "") {
   if (customIcon) {
     return (
       <img
         src={customIcon}
         alt=""
-        width={28}
-        height={28}
+        width={32}
+        height={32}
         loading="lazy"
-        className="block h-7 w-7 shrink-0 rounded-md object-cover"
+        className="h-8 w-8 rounded-lg object-cover"
         onError={(e) => {
           (e.target as HTMLImageElement).style.display = "none";
         }}
       />
     );
   }
-  if (!url) return null;
+  if (!url) {
+    return <HostFallbackIcon host={title} />;
+  }
   try {
     const host = new URL(url).hostname;
-    // 使用国内可访问的 favicon 服务，避免 google.com/s2/favicons 被 GFW 拦截
-    const favicon = `https://api.iowen.cn/favicon/${host}`;
-    return (
-      <img
-        src={favicon}
-        alt=""
-        width={28}
-        height={28}
-        loading="lazy"
-        className="block h-7 w-7 shrink-0 rounded-md object-cover"
-        onError={(e) => {
-          (e.target as HTMLImageElement).style.display = "none";
-        }}
-      />
-    );
+    return <LazyFavicon host={host} title={title} />;
   } catch {
-    return null;
+    return <HostFallbackIcon host={title} />;
   }
 }
 
+function HostFallbackIcon({ host }: { host: string }) {
+  const letter = host?.[0]?.toUpperCase() ?? "?";
+  return (
+    <div
+      className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-sm font-semibold text-primary"
+      aria-hidden="true"
+    >
+      {letter}
+    </div>
+  );
+}
+
+function LazyFavicon({ host, title }: { host: string; title: string }) {
+  const [src, setSrc] = useState<string>(FAVICON_SERVICES[0](host));
+  const [idx, setIdx] = useState(0);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setSrc(FAVICON_SERVICES[0](host));
+    setIdx(0);
+    setFailed(false);
+  }, [host]);
+
+  if (failed) {
+    return <HostFallbackIcon host={title || host} />;
+  }
+
+  return (
+    <img
+      src={src}
+      alt=""
+      width={32}
+      height={32}
+      loading="lazy"
+      className="h-8 w-8 rounded-lg object-cover"
+      onError={() => {
+        const next = idx + 1;
+        if (next < FAVICON_SERVICES.length) {
+          setSrc(FAVICON_SERVICES[next](host));
+          setIdx(next);
+        } else {
+          setFailed(true);
+        }
+      }}
+    />
+  );
+}
+
+/* ---------- 主组件 ---------- */
 export default function LinkCard({ item, sectionSlug }: Props) {
   const [copied, setCopied] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -160,67 +203,72 @@ export default function LinkCard({ item, sectionSlug }: Props) {
         rel="noopener noreferrer"
         aria-label={`${item.title}（在新标签页打开）`}
         className={[
-          "group card card-hover p-4 flex items-start gap-3",
+          "group card card-hover flex flex-col",
           !item.url ? "opacity-60 pointer-events-none" : "",
         ].join(" ")}
       >
-        {renderItemIcon(item.url, item.icon)}
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-sm font-medium text-text group-hover:text-primary truncate">
-              {item.title}
-            </span>
-            <span
-              className={`shrink-0 rounded-md px-1.5 py-0.5 text-[11px] leading-4 font-medium ${kindMeta.className}`}
-              title={kindMeta.label}
-            >
-              {kindMeta.short}
-            </span>
+        {/* 图标区 */}
+        <div className="flex justify-center pt-3">
+          {renderItemIcon(item.url, item.icon, item.title)}
+        </div>
+
+        {/* 内容区 */}
+        <div className="flex flex-1 flex-col px-3 pt-2.5">
+          <h3 className="text-[13px] font-medium text-text group-hover:text-primary line-clamp-1">
+            {item.title}
+          </h3>
+          {item.description && (
+            <p className="mt-1 text-[11px] text-muted leading-relaxed line-clamp-2">
+              {item.description}
+            </p>
+          )}
+        </div>
+
+        {/* 标签 + 操作 */}
+        <div className="flex items-center justify-between gap-1 px-3 pb-3">
+          <div className="flex flex-wrap gap-1">
+            {kindMeta.short !== "外" && (
+              <span
+                className={`rounded-md px-1.5 py-0.5 text-[10px] leading-4 font-medium ${kindMeta.className}`}
+                title={kindMeta.label}
+              >
+                {kindMeta.short}
+              </span>
+            )}
             {primary && (
               <span
-                className={`shrink-0 rounded-md px-1.5 py-0.5 text-[11px] leading-4 font-medium ${tagStyle(primary)}`}
+                className={`rounded-md px-1.5 py-0.5 text-[10px] leading-4 font-medium ${tagStyle(primary)}`}
               >
                 {primary}
               </span>
             )}
+            {extra.slice(0, 2).map((t) => (
+              <span
+                key={t}
+                className={`rounded-md px-1.5 py-0.5 text-[10px] leading-4 ${tagStyle(t)}`}
+              >
+                {t}
+              </span>
+            ))}
           </div>
-          {item.description && (
-            <p className="text-xs text-muted leading-relaxed line-clamp-2">
-              {item.description}
-            </p>
-          )}
-          {extra.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {extra.map((t) => (
-                <span
-                  key={t}
-                  className={`rounded-md px-1.5 py-0.5 text-[10px] leading-4 ${tagStyle(t)}`}
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-
-          {/* 操作按钮 */}
-          <div className="mt-2 flex items-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <div className="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
             <button
               type="button"
               onClick={copyLink}
               title="复制链接"
               aria-label="复制链接"
-              className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-[11px] text-muted transition-all duration-200 hover:border-primary hover:text-primary"
+              className="inline-flex items-center rounded-md border border-border bg-surface px-1.5 py-0.5 text-[10px] text-muted transition-all duration-200 hover:border-primary hover:text-primary"
             >
-              {copied ? "已复制 ✓" : "复制链接"}
+              {copied ? "已复制" : "复制"}
             </button>
             <button
               type="button"
               onClick={openReport}
               title="反馈链接失效"
               aria-label="反馈链接失效"
-              className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-[11px] text-muted transition-all duration-200 hover:border-secondary hover:text-secondary"
+              className="inline-flex items-center rounded-md border border-border bg-surface px-1.5 py-0.5 text-[10px] text-muted transition-all duration-200 hover:border-secondary hover:text-secondary"
             >
-              链接失效？
+              反馈
             </button>
           </div>
         </div>

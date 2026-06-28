@@ -1,16 +1,28 @@
-// 站点 URL 解析。优先级：显式 NEXT_PUBLIC_SITE_URL > Vercel 注入的 VERCEL_URL > localhost。
+// 站点 URL 解析。优先级：
+// 1. 显式 NEXT_PUBLIC_SITE_URL（但生产环境会跳过 localhost）
+// 2. Vercel 注入的 VERCEL_URL
+// 3. localhost 兜底
 // 解析后保证：含协议、不带末尾斜杠。
 
 export function siteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
   if (explicit) {
-    return stripTrailingSlash(explicit);
+    const trimmed = stripTrailingSlash(explicit);
+    // 生产环境不要回跳到 localhost（例如忘记改 Vercel 环境变量时兜住）
+    const isDev = process.env.NODE_ENV !== "production";
+    if (isDev || !isLocalhost(trimmed)) {
+      return trimmed;
+    }
   }
   const vercel = process.env.VERCEL_URL;
   if (vercel) {
     return `https://${stripTrailingSlash(vercel)}`;
   }
   return "http://localhost:3000";
+}
+
+function isLocalhost(url: string): boolean {
+  return /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/.test(url);
 }
 
 function stripTrailingSlash(s: string) {

@@ -52,7 +52,12 @@ export async function loginWithGitHub() {
   });
 
   if (error || !data.url) {
-    redirect(`/login?error=${encodeURIComponent(error?.message ?? "github_oauth_failed")}`);
+    const raw = error?.message ?? "github_oauth_failed";
+    const hint =
+      raw.includes("not enabled") || raw.includes("Unsupported provider")
+        ? "请在 Supabase Dashboard → Authentication → Providers 里启用 GitHub，并填入 GitHub OAuth App 的 Client ID / Secret。"
+        : undefined;
+    redirect(`/login?error=${encodeURIComponent(hint ? `${raw} ${hint}` : raw)}`);
   }
 
   redirect(data.url);

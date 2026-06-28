@@ -1,5 +1,4 @@
 import SectionSidebar from "@/components/SectionSidebar";
-import SidebarInfoPanel from "@/components/SidebarInfoPanel";
 
 export default function SectionsLayout({
   children,
@@ -11,7 +10,6 @@ export default function SectionsLayout({
       <div className="grid gap-10 md:grid-cols-[180px_1fr]">
         <aside className="md:sticky md:top-20 md:h-[calc(100vh-5rem)] md:overflow-auto">
           <SectionSidebar />
-          <SidebarInfoPanel />
         </aside>
         <div className="card p-4 md:p-8">{children}</div>
       </div>

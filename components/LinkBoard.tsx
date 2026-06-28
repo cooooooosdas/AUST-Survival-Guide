@@ -28,18 +28,18 @@ export default function LinkBoard({
   return (
     <div>
       <header
-        className="mb-10 border-b border-border pb-6"
+        className="mb-8 border-b border-border pb-4"
         style={{ animation: "fade-up 0.6s var(--ease-out-soft) forwards" }}
       >
-        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">{title}</h1>
+        <h1 className="text-2xl font-serif font-semibold text-text">{title}</h1>
         {intro && (
-          <p className="mt-3 max-w-2xl text-sm md:text-base text-muted leading-relaxed">
+          <p className="mt-2 max-w-2xl text-sm text-muted leading-relaxed">
             {intro}
           </p>
         )}
       </header>
 
-      <div className="space-y-12">
+      <div className="space-y-10">
         {groups.map((g, gi) => (
           <section
             key={g.id}

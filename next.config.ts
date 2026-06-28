@@ -10,8 +10,8 @@ const csp = [
   "font-src 'self' data: https://fonts.gstatic.com",
   // OG 图、用户头像、Supabase storage
   "img-src 'self' data: blob: https:",
-  // Supabase Auth + Vercel Analytics 上报
-  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://va.vercel-scripts.com",
+  // Supabase Auth + Vercel Analytics 上报 + GitHub OAuth 取 token
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://va.vercel-scripts.com https://github.com https://api.github.com",
   // OAuth 跳转
   "form-action 'self' https://github.com https://*.supabase.co",
   "frame-ancestors 'self'",

@@ -26,6 +26,8 @@ export default function CheckinClient() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [checking, setChecking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [notLoggedIn, setNotLoggedIn] = useState(false);
 
   const today = useMemo(() => {
     const d = new Date();
@@ -38,12 +40,21 @@ export default function CheckinClient() {
 
   useEffect(() => {
     async function load() {
+      setError(null);
       const [recordsRes, statsRes] = await Promise.all([
         fetch("/api/checkin"),
         fetch("/api/checkin/stats"),
       ]);
-      if (recordsRes.ok) setRecords(await recordsRes.json());
-      if (statsRes.ok) setStats(await statsRes.json());
+      if (recordsRes.ok) {
+        setRecords(await recordsRes.json());
+      } else if (recordsRes.status === 401) {
+        setNotLoggedIn(true);
+      }
+      if (statsRes.ok) {
+        setStats(await statsRes.json());
+      } else if (statsRes.status === 401) {
+        setNotLoggedIn(true);
+      }
       setLoading(false);
     }
     load();
@@ -51,12 +62,17 @@ export default function CheckinClient() {
 
   async function refetchStats() {
     const res = await fetch("/api/checkin/stats");
-    if (res.ok) setStats(await res.json());
+    if (res.ok) {
+      setStats(await res.json());
+    } else if (res.status === 401) {
+      setNotLoggedIn(true);
+    }
   }
 
   async function handleCheckin() {
     if (checkedToday || checking) return;
     setChecking(true);
+    setError(null);
     try {
       const res = await fetch("/api/checkin", {
         method: "POST",
@@ -67,9 +83,14 @@ export default function CheckinClient() {
         const json = await res.json();
         setRecords((prev) => [...prev, json.record]);
         refetchStats();
+      } else {
+        const json = await res.json().catch(() => ({}));
+        const msg = (json as { error?: string }).error ?? `请求失败 (${res.status})`;
+        setError(msg);
+        if (res.status === 401) setNotLoggedIn(true);
       }
     } catch {
-      // ignore
+      setError("网络异常，请稍后再试");
     } finally {
       setChecking(false);
     }
@@ -103,8 +124,23 @@ export default function CheckinClient() {
         </p>
       </div>
 
+      {notLoggedIn && (
+        <div className="mb-8 rounded-xl border border-border bg-surface p-6 text-center">
+          <p className="text-sm text-muted">
+            请先<Link href="/login" className="text-primary underline-offset-4 hover:underline mx-1">登录</Link>后再打卡
+          </p>
+        </div>
+      )}
+
+      {error && !notLoggedIn && (
+        <div role="alert" className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
       {/* 今日打卡按钮 */}
-      <section className="mb-10">
+      {!notLoggedIn && (
+        <section className="mb-10">
         <button
           type="button"
           onClick={handleCheckin}
@@ -131,6 +167,7 @@ export default function CheckinClient() {
           </p>
         </button>
       </section>
+      )}
 
       {/* 统计概览 */}
       {stats && (

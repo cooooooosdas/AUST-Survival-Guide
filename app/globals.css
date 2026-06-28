@@ -342,3 +342,141 @@ select:focus-visible {
   background-color: var(--color-accent);
   color: var(--color-bg);
 }
+
+/* ============================================================
+   水墨风格（博客 / 全站可选启用）
+   ============================================================ */
+
+/* 宣纸质感背景：微噪点 + 暖白底色 */
+.ink-theme {
+  --ink-bg: #F5F0E6;
+  --ink-surface: #FAF7F0;
+  --ink-ink: #1a1a1a;
+  --ink-ink-light: #4a4a4a;
+  --ink-ink-faint: #9a9a9a;
+  --ink-seal: #c9372c;
+  --ink-seal-ghost: rgba(201, 55, 44, 0.08);
+  --ink-border: #e8e0d4;
+  --ink-border-hover: #c8bfb0;
+
+  background-color: var(--ink-bg);
+  color: var(--ink-ink);
+  /* 宣纸颗粒感 */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+.ink-theme .card {
+  background: var(--ink-surface);
+  border-color: var(--ink-border);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  border-radius: 2px;
+}
+
+.ink-theme .card-hover:hover {
+  border-color: var(--ink-border-hover);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.ink-theme ::selection {
+  background-color: rgba(201, 55, 44, 0.15);
+  color: var(--ink-seal);
+}
+
+.ink-theme ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* 水墨标题 */
+.ink-title {
+  font-family: var(--font-noto-serif), "Noto Serif SC", "STSong", "Songti SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink-ink);
+  position: relative;
+}
+
+/* 标题下方的笔锋横线 */
+.ink-title::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 3px;
+  margin-top: 0.5rem;
+  background: linear-gradient(90deg, var(--ink-seal) 0%, transparent 100%);
+  border-radius: 1px;
+  opacity: 0.7;
+}
+
+/* 印章小红点装饰 */
+.ink-seal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border: 1.5px solid var(--ink-seal);
+  border-radius: 3px;
+  color: var(--ink-seal);
+  font-family: var(--font-noto-serif), "Noto Serif SC", serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+  transform: rotate(-4deg);
+  opacity: 0.85;
+  flex-shrink: 0;
+}
+
+/* 墨笔书写动效（InkReveal 组件配合） */
+.ink-reveal {
+  will-change: transform, opacity;
+}
+
+/* 墨点展开动画 */
+@keyframes ink-spread {
+  0%   { transform: scale(0); opacity: 0.6; }
+  60%  { opacity: 0.3; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* 飞白横线（分隔线） */
+.ink-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--ink-ink-faint);
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  user-select: none;
+  margin: 2.5rem 0;
+}
+.ink-divider::before,
+.ink-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink-border), transparent);
+}
+
+/* 暗色模式下的水墨风格 */
+.dark .ink-theme {
+  --ink-bg: #1C1917;
+  --ink-surface: #211F1C;
+  --ink-ink: #E7E5E4;
+  --ink-ink-light: #A8A29E;
+  --ink-ink-faint: #78716C;
+  --ink-seal: #EF4444;
+  --ink-seal-ghost: rgba(239, 68, 68, 0.1);
+  --ink-border: #44403C;
+  --ink-border-hover: #57534E;
+
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+.dark .ink-theme .card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark .ink-theme ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+

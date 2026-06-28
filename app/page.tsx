@@ -2,7 +2,6 @@ import Link from "next/link";
 import { SECTIONS } from "@/lib/sections";
 import HeroDecoration from "@/components/HeroDecoration";
 import ScrollReveal from "@/components/ScrollReveal";
-import SidebarInfoPanel from "@/components/SidebarInfoPanel";
 import Leaderboard from "@/components/Leaderboard";
 import CommentBoard from "@/components/CommentBoard";
 import { createClient } from "@/lib/supabase/server";
@@ -77,13 +76,6 @@ export default async function HomePage() {
             <HeroDecoration />
           </div>
         </div>
-      </section>
-
-      {/* ========== 站点信息面板 ========== */}
-      <section className="py-8 md:py-10">
-        <ScrollReveal>
-          <SidebarInfoPanel />
-        </ScrollReveal>
       </section>
 
       {/* ========== 热门推荐 ========== */}

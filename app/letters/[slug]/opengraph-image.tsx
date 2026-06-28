@@ -63,7 +63,7 @@ export default async function LetterOg({
             textTransform: "uppercase",
           }}
         >
-          <span style={{ color: "#1E3A5F", fontWeight: 700 }}>letters</span>
+          <span style={{ color: "#1C1917", fontWeight: 700 }}>letters</span>
           <span>·</span>
           <span>{date}</span>
         </div>
@@ -74,7 +74,7 @@ export default async function LetterOg({
             fontSize: 72,
             fontWeight: 700,
             letterSpacing: -2,
-            color: "#1E3A5F",
+            color: "#1C1917",
             lineHeight: 1.18,
             maxWidth: 1040,
           }}
@@ -95,7 +95,7 @@ export default async function LetterOg({
           }}
         >
           <span>—— {author}</span>
-          <span style={{ color: "#1E3A5F", fontWeight: 600 }}>
+          <span style={{ color: "#1C1917", fontWeight: 600 }}>
             {SITE.name}
           </span>
         </div>
