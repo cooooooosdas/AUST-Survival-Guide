@@ -1,18 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import CheckinCelebration from "@/components/effects/CheckinCelebration";
 
-type CheckinRecord = { task_id: number; date: string; created_at: string };
-type Stats = {
-  totalDays: number;
-  currentStreak: number;
-  maxStreak: number;
-};
-
 const HEATMAP_DAYS = 30;
 const SUMMARY_PREFIX = "aust-checkin-summary-";
+const RECORDS_PREFIX = "aust-checkin-records-";
+
+type CheckinRecord = { date: string };
+type Stats = { totalDays: number; currentStreak: number; maxStreak: number };
 
 function formatLocalDate(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -23,6 +20,22 @@ function parseLocalDate(dateStr: string): Date {
   return new Date(y, m - 1, d);
 }
 
+function loadRecords(): CheckinRecord[] {
+  try {
+    const raw = localStorage.getItem(RECORDS_PREFIX + formatLocalDate(new Date()).slice(0, 7));
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveRecords(records: CheckinRecord[]): void {
+  const monthKey = formatLocalDate(new Date()).slice(0, 7);
+  try { localStorage.setItem(RECORDS_PREFIX + monthKey, JSON.stringify(records)); } catch {}
+}
+
 function loadSummary(date: string): string | null {
   try { return localStorage.getItem(SUMMARY_PREFIX + date); } catch { return null; }
 }
@@ -31,110 +44,92 @@ function saveSummary(date: string, text: string): void {
   try { localStorage.setItem(SUMMARY_PREFIX + date, text); } catch {}
 }
 
+function computeStats(records: CheckinRecord[]): Stats {
+  const uniqueDates = [...new Set(records.map((r) => r.date))].sort();
+  let current = 0;
+  let max = 0;
+  let streak = 0;
+  let prev: string | null = null;
+  for (const d of uniqueDates) {
+    if (prev) {
+      const diff = (new Date(d).getTime() - new Date(prev).getTime()) / 86400000;
+      streak = diff === 1 ? streak + 1 : 1;
+    } else {
+      streak = 1;
+    }
+    max = Math.max(max, streak);
+    prev = d;
+  }
+  const today = formatLocalDate(new Date());
+  const yesterday = formatLocalDate(new Date(Date.now() - 86400000));
+  const lastDate = uniqueDates[uniqueDates.length - 1];
+  if (lastDate === today || lastDate === yesterday) {
+    current = streak;
+  }
+  return { totalDays: uniqueDates.length, currentStreak: current, maxStreak: max };
+}
+
 export default function CheckinClient() {
   const [records, setRecords] = useState<CheckinRecord[]>([]);
-  const [stats, setStats] = useState<Stats | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState<Stats>({ totalDays: 0, currentStreak: 0, maxStreak: 0 });
   const [checking, setChecking] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [notLoggedIn, setNotLoggedIn] = useState(false);
-
-  // 庆祝特效
   const [celebrate, setCelebrate] = useState(0);
-  // 提示条
   const [toast, setToast] = useState<string | null>(null);
-  // 今日总结
   const [showSummary, setShowSummary] = useState(false);
   const [summaryText, setSummaryText] = useState("");
   const [savedSummary, setSavedSummary] = useState<string | null>(null);
   const [editingSummary, setEditingSummary] = useState(false);
 
-  const today = useMemo(() => {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  }, []);
-  const checkedToday = useMemo(
-    () => records.some((r) => r.date === today),
-    [records, today]
-  );
+  const today = useMemo(() => formatLocalDate(new Date()), []);
+  const checkedToday = useMemo(() => records.some((r) => r.date === today), [records, today]);
 
-  // 页面加载后，如果今日已打卡，读取本地总结
+  useEffect(() => {
+    setRecords(loadRecords());
+  }, []);
+
   useEffect(() => {
     if (checkedToday) {
       setSavedSummary(loadSummary(today));
     }
   }, [checkedToday, today]);
 
-  // 提示条自动消失
+  useEffect(() => {
+    setStats(computeStats(records));
+  }, [records]);
+
   useEffect(() => {
     if (!toast) return;
     const t = setTimeout(() => setToast(null), 3500);
     return () => clearTimeout(t);
   }, [toast]);
 
-  useEffect(() => {
-    async function load() {
-      setError(null);
-      const [recordsRes, statsRes] = await Promise.all([
-        fetch("/api/checkin"),
-        fetch("/api/checkin/stats"),
-      ]);
-      if (recordsRes.ok) {
-        setRecords(await recordsRes.json());
-      } else if (recordsRes.status === 401) {
-        setNotLoggedIn(true);
-      }
-      if (statsRes.ok) {
-        setStats(await statsRes.json());
-      } else if (statsRes.status === 401) {
-        setNotLoggedIn(true);
-      }
-      setLoading(false);
-    }
-    load();
-  }, []);
-
-  async function refetchStats() {
-    const res = await fetch("/api/checkin/stats");
-    if (res.ok) {
-      setStats(await res.json());
-    } else if (res.status === 401) {
-      setNotLoggedIn(true);
-    }
-  }
-
-  async function handleCheckin() {
+  const handleCheckin = useCallback(() => {
     if (checkedToday || checking) return;
     setChecking(true);
-    setError(null);
-    try {
-      const res = await fetch("/api/checkin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ date: today }),
-      });
-      if (res.ok) {
-        const json = await res.json();
-        setRecords((prev) => [...prev, json.record]);
-        refetchStats();
-        // 触发庆祝特效 + 提示
-        setCelebrate((c) => c + 1);
-        setToast("🎉 今日已打卡");
-        setShowSummary(true);
-        setSummaryText("");
-        setEditingSummary(false);
-      } else {
-        const json = await res.json().catch(() => ({}));
-        const msg = (json as { error?: string }).error ?? `请求失败 (${res.status})`;
-        setError(msg);
-        if (res.status === 401) setNotLoggedIn(true);
-      }
-    } catch {
-      setError("网络异常，请稍后再试");
-    } finally {
+    // 模拟短延迟，让用户感知到操作
+    setTimeout(() => {
+      const newRecord = { date: today };
+      const next = [...records, newRecord];
+      setRecords(next);
+      saveRecords(next);
+      setCelebrate((c) => c + 1);
+      setToast("🎉 今日已打卡");
+      setShowSummary(true);
+      setSummaryText("");
+      setEditingSummary(false);
       setChecking(false);
-    }
-  }
+    }, 350);
+  }, [checkedToday, checking, records, today]);
+
+  const handleSaveSummary = useCallback(() => {
+    const trimmed = summaryText.trim();
+    if (!trimmed) return;
+    saveSummary(today, trimmed);
+    setSavedSummary(trimmed);
+    setShowSummary(false);
+    setEditingSummary(false);
+    setSummaryText("");
+  }, [summaryText, today]);
 
   const recentDates = useMemo(() => {
     const dates: string[] = [];
@@ -146,17 +141,8 @@ export default function CheckinClient() {
     return dates;
   }, []);
 
-  if (loading) {
-    return (
-      <div className="mx-auto max-w-6xl px-6 py-10">
-        <p className="text-sm text-muted">加载中…</p>
-      </div>
-    );
-  }
-
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
-      {/* 打卡成功提示条 */}
       {toast && (
         <div
           role="status"
@@ -165,8 +151,6 @@ export default function CheckinClient() {
           {toast}
         </div>
       )}
-
-      {/* 庆祝粒子特效 */}
       <CheckinCelebration trigger={celebrate} />
 
       <div className="mb-10">
@@ -177,73 +161,46 @@ export default function CheckinClient() {
         </p>
       </div>
 
-      {notLoggedIn && (
-        <div className="mb-8 rounded-xl border border-border bg-surface p-6 text-center">
-          <p className="text-sm text-muted">
-            请先<Link href="/login" className="text-primary underline-offset-4 hover:underline mx-1">登录</Link>后再打卡
+      <section className="mb-10">
+        <button
+          type="button"
+          onClick={handleCheckin}
+          disabled={checkedToday || checking}
+          className={[
+            "w-full rounded-2xl border px-6 py-10 text-center transition-all duration-300",
+            checkedToday
+              ? "border-accent/30 bg-accent/5 cursor-default"
+              : "border-border bg-surface hover:border-primary/30 hover:shadow-md hover:shadow-primary/5 active:scale-[0.99]",
+          ].join(" ")}
+        >
+          <div className="text-4xl mb-3">{checking ? "⏳" : checkedToday ? "✅" : "📝"}</div>
+          <p className={["text-lg font-semibold", checkedToday ? "text-accent" : "text-primary"].join(" ")}>
+            {checking ? "打卡中…" : checkedToday ? "今日已打卡" : "今日打卡"}
           </p>
-        </div>
-      )}
+          <p className="mt-1 text-xs text-muted">
+            {checkedToday ? `${today} · 明天再来` : "点击完成今日学习记录"}
+          </p>
+        </button>
+      </section>
 
-      {error && !notLoggedIn && (
-        <div role="alert" className="mb-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
-        </div>
-      )}
-
-      {/* 今日打卡按钮 */}
-      {!notLoggedIn && (
-        <section className="mb-10">
-          <button
-            type="button"
-            onClick={handleCheckin}
-            disabled={checkedToday || checking}
-            className={[
-              "w-full rounded-2xl border px-6 py-10 text-center transition-all duration-300",
-              checkedToday
-                ? "border-accent/30 bg-accent/5 cursor-default"
-                : "border-border bg-surface hover:border-primary/30 hover:shadow-md hover:shadow-primary/5 active:scale-[0.99]",
-            ].join(" ")}
-          >
-            <div className="text-4xl mb-3">{checkedToday ? "✅" : "📝"}</div>
-            <p className={["text-lg font-semibold", checkedToday ? "text-accent" : "text-primary"].join(" ")}>
-              {checking
-                ? "打卡中…"
-                : checkedToday
-                  ? "今日已打卡"
-                  : "今日打卡"}
-            </p>
-            <p className="mt-1 text-xs text-muted">
-              {checkedToday
-                ? `${today} · 明天再来`
-                : "点击完成今日学习记录"}
-            </p>
-          </button>
-        </section>
-      )}
-
-      {/* 统计概览 */}
-      {stats && (
-        <section className="mb-10">
-          <h2 className="text-lg font-serif font-medium text-text mb-4">我的记录</h2>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl border border-border bg-surface p-4 text-center">
-              <p className="text-2xl font-serif font-semibold text-text">{stats.totalDays}</p>
-              <p className="text-xs text-muted mt-1">累计打卡</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-4 text-center">
-              <p className="text-2xl font-semibold text-accent">{stats.currentStreak}</p>
-              <p className="text-xs text-muted mt-1">连续天数</p>
-            </div>
-            <div className="rounded-xl border border-border bg-surface p-4 text-center">
-              <p className="text-2xl font-semibold text-secondary">{stats.maxStreak}</p>
-              <p className="text-xs text-muted mt-1">最长连续</p>
-            </div>
+      <section className="mb-10">
+        <h2 className="text-lg font-serif font-medium text-text mb-4">我的记录</h2>
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-xl border border-border bg-surface p-4 text-center">
+            <p className="text-2xl font-serif font-semibold text-text">{stats.totalDays}</p>
+            <p className="text-xs text-muted mt-1">累计打卡</p>
           </div>
-        </section>
-      )}
+          <div className="rounded-xl border border-border bg-surface p-4 text-center">
+            <p className="text-2xl font-semibold text-accent">{stats.currentStreak}</p>
+            <p className="text-xs text-muted mt-1">连续天数</p>
+          </div>
+          <div className="rounded-xl border border-border bg-surface p-4 text-center">
+            <p className="text-2xl font-semibold text-secondary">{stats.maxStreak}</p>
+            <p className="text-xs text-muted mt-1">最长连续</p>
+          </div>
+        </div>
+      </section>
 
-      {/* 今日总结（可选） */}
       {checkedToday && (
         <section className="mb-10">
           <div className="rounded-xl border border-border bg-surface p-5">
@@ -274,15 +231,7 @@ export default function CheckinClient() {
                 <div className="mt-3 flex gap-2">
                   <button
                     type="button"
-                    onClick={() => {
-                      const trimmed = summaryText.trim();
-                      if (!trimmed) return;
-                      saveSummary(today, trimmed);
-                      setSavedSummary(trimmed);
-                      setShowSummary(false);
-                      setEditingSummary(false);
-                      setSummaryText("");
-                    }}
+                    onClick={handleSaveSummary}
                     className="rounded-lg bg-primary px-4 py-1.5 text-sm font-medium text-white hover:bg-primary-hover transition-colors"
                   >
                     保存
@@ -290,11 +239,8 @@ export default function CheckinClient() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (savedSummary) {
-                        setEditingSummary(false);
-                      } else {
-                        setShowSummary(false);
-                      }
+                      if (savedSummary) setEditingSummary(false);
+                      else setShowSummary(false);
                       setSummaryText("");
                     }}
                     className="rounded-lg border border-border px-4 py-1.5 text-sm text-muted hover:text-text transition-colors"
@@ -308,13 +254,11 @@ export default function CheckinClient() {
         </section>
       )}
 
-      {/* 热力图 */}
       <section>
         <h2 className="text-lg font-serif font-medium text-text mb-4">最近 {HEATMAP_DAYS} 天</h2>
         <Heatmap dates={recentDates} records={records} />
       </section>
 
-      {/* 刷题练习入口 */}
       <section className="mt-10">
         <div className="rounded-xl border border-border bg-gradient-to-br from-primary/5 to-accent/5 p-6">
           <div className="flex items-start gap-4">
