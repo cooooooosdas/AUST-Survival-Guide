@@ -1,6 +1,28 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+// 解析当前应使用的打卡任务 ID
+// 优先查 checkin_tasks 表中的首个活跃任务；
+// 若表为空/查询失败（如迁移未运行），则回退到 task_id=1，保证打卡可用。
+async function resolveTaskId(
+  supabase: Awaited<ReturnType<typeof createClient>>
+): Promise<number> {
+  try {
+    const { data: tasks, error } = await supabase
+      .from("checkin_tasks")
+      .select("id")
+      .eq("is_active", true)
+      .limit(1);
+
+    if (!error && tasks && tasks.length > 0) {
+      return tasks[0].id;
+    }
+  } catch {
+    // 表不存在或查询异常，走回退逻辑
+  }
+  return 1;
+}
+
 export async function POST(req: NextRequest) {
   const supabase = await createClient();
   const {
@@ -21,19 +43,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "只能打卡今天" }, { status: 400 });
   }
 
-  // 查询当前可用的打卡任务（避免 task_id 硬编码导致 FK 约束失败）
-  const { data: tasks, error: taskError } = await supabase
-    .from("checkin_tasks")
-    .select("id")
-    .eq("is_active", true)
-    .limit(1);
-
-  if (taskError || !tasks || tasks.length === 0) {
-    console.error("No active checkin task found:", taskError);
-    return NextResponse.json({ error: "暂无可用打卡任务，请联系管理员" }, { status: 500 });
-  }
-
-  const taskId = tasks[0].id;
+  const taskId = await resolveTaskId(supabase);
 
   const { error } = await supabase
     .from("checkin_records")
@@ -67,10 +77,12 @@ export async function GET(req: NextRequest) {
   const url = new URL(req.url);
   const limit = Number(url.searchParams.get("limit") || 60);
 
+  const taskId = await resolveTaskId(supabase);
+
   const { data, error } = await supabase
     .from("checkin_records")
     .select("task_id, date, created_at")
-    .eq("task_id", 1)
+    .eq("task_id", taskId)
     .eq("user_id", user.id)
     .order("date", { ascending: false })
     .limit(limit);
