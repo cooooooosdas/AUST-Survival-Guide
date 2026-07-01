@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
 import UserMenu from "@/components/UserMenu";
 import { useTheme } from "@/components/ThemeProvider";
+import AustLogo from "@/components/AustLogo";
 
 type HeaderUser = {
   email: string | null;
@@ -71,9 +72,9 @@ export default function Header({ user }: { user: HeaderUser }) {
       <div className="mx-auto flex h-14 items-center gap-3 px-4 md:px-6 max-w-6xl">
         <Link
           href="/"
-          className="shrink-0 font-serif font-semibold tracking-wide text-text text-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
+          className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
         >
-          安理大生存指南
+          <AustLogo />
         </Link>
 
         <nav

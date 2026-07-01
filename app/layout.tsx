@@ -46,6 +46,10 @@ export const metadata: Metadata = {
   authors: [{ name: SITE.author }],
   creator: SITE.author,
   publisher: SITE.author,
+  icons: {
+    icon: "/images/aust-logo.png",
+    apple: "/images/aust-logo.png",
+  },
   keywords: [
     "安徽理工大学",
     "AUST",
