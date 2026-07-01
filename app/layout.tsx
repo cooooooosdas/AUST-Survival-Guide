@@ -9,6 +9,8 @@ import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import AIChat from "@/components/AIChat";
 import ParticleCanvas from "@/components/effects/ParticleCanvas";
+import CursorGlow from "@/components/CursorGlow";
+import ClickRipple from "@/components/ClickRipple";
 import { createClient } from "@/lib/supabase/server";
 import { SITE, siteUrl } from "@/lib/site";
 
@@ -158,6 +160,8 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col bg-bg text-text">
         <ThemeProvider>
         <ParticleCanvas />
+        <CursorGlow />
+        <ClickRipple />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-white"

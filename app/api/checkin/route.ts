@@ -21,12 +21,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "只能打卡今天" }, { status: 400 });
   }
 
-  // 用固定的 task_id=1 作为「每日学习打卡」的通用任务
+  // 查询当前可用的打卡任务（避免 task_id 硬编码导致 FK 约束失败）
+  const { data: tasks, error: taskError } = await supabase
+    .from("checkin_tasks")
+    .select("id")
+    .eq("is_active", true)
+    .limit(1);
+
+  if (taskError || !tasks || tasks.length === 0) {
+    console.error("No active checkin task found:", taskError);
+    return NextResponse.json({ error: "暂无可用打卡任务，请联系管理员" }, { status: 500 });
+  }
+
+  const taskId = tasks[0].id;
+
   const { error } = await supabase
     .from("checkin_records")
     .upsert(
       {
-        task_id: 1,
+        task_id: taskId,
         user_id: user.id,
         date: checkDate,
       },
@@ -38,7 +51,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "打卡失败" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, record: { task_id: 1, date: checkDate } });
+  return NextResponse.json({ ok: true, record: { task_id: taskId, date: checkDate } });
 }
 
 export async function GET(req: NextRequest) {
