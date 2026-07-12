@@ -7,10 +7,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import AIChat from "@/components/AIChat";
-import ParticleCanvas from "@/components/effects/ParticleCanvas";
-import CursorGlow from "@/components/CursorGlow";
-import ClickRipple from "@/components/ClickRipple";
+import SceneEffects from "@/components/SceneEffects";
 import { createClient } from "@/lib/supabase/server";
 import { SITE, siteUrl } from "@/lib/site";
 
@@ -146,6 +143,9 @@ export default async function RootLayout({
           <link rel="preconnect" href={`${sbUrl}/storage/v1`} crossOrigin="anonymous" />
         </>
       )}
+      {/* AI 与 Embedding API 预连接（聊天/搜索功能用） */}
+      <link rel="preconnect" href="https://api.siliconflow.cn" />
+      <link rel="preconnect" href="https://dashscope.aliyuncs.com" />
       {/* 防止深色模式闪烁：在首屏渲染前读取 localStorage */}
       <script
         dangerouslySetInnerHTML={{
@@ -163,9 +163,7 @@ export default async function RootLayout({
       />
       <body className="min-h-full flex flex-col bg-bg text-text">
         <ThemeProvider>
-        <ParticleCanvas />
-        <CursorGlow />
-        <ClickRipple />
+        <SceneEffects />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-white"
@@ -178,7 +176,6 @@ export default async function RootLayout({
         </main>
         <Footer />
         <Analytics />
-        <AIChat />
         </ThemeProvider>
       </body>
     </html>

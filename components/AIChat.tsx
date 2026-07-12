@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useTransition, useCallback } from "react";
 import { cn } from "@/lib/utils";
 
 type MsgRole = "user" | "assistant" | "system";
@@ -111,16 +111,23 @@ export default function AIChat() {
     },
   ]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [streamingId, setStreamingId] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  // Loading indicator (render only — not in send deps).
+  const [sending, setSending] = useState(false);
+  // Refs for transient values — avoids recreating the send callback
+  // on every keystroke (Vercel best practice: rerender-use-ref-transient-values).
+  const inputRef = useRef(input);
   const messagesRef = useRef(messages);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const inputElRef = useRef<HTMLInputElement>(null);
+  const [, startTransition] = useTransition();
+
+  // Sync refs with state (synchronous, no extra render)
+  inputRef.current = input;
   messagesRef.current = messages;
 
   useEffect(() => {
-    if (open && inputRef.current) {
-      inputRef.current.focus();
+    if (open && inputElRef.current) {
+      inputElRef.current.focus();
     }
   }, [open]);
 
@@ -128,13 +135,13 @@ export default function AIChat() {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, streamingId]);
+  }, [messages]);
 
   const send = useCallback(async () => {
-    const text = input.trim();
-    if (!text || loading) return;
-    setInput("");
-    setLoading(true);
+    // Read from refs so the callback has stable deps (rerender-use-ref-transient-values)
+    const text = inputRef.current.trim();
+    if (!text || sending) return;
+    setSending(true);
 
     const userMsg: Message = { id: uid(), role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
@@ -154,9 +161,9 @@ export default function AIChat() {
       const contentType = res.headers.get("content-type") || "";
 
       if (contentType.includes("event-stream")) {
-        // Streaming AI response
+        // Streaming AI response — use startTransition so input stays responsive
+        // while text arrives (Vercel best practice: rerender-transitions).
         const assistantId = uid();
-        setStreamingId(assistantId);
         setMessages((prev) => [...prev, { id: assistantId, role: "assistant", content: "", mode: "ai" }]);
 
         const reader = res.body?.getReader();
@@ -182,8 +189,10 @@ export default function AIChat() {
                   const delta = parsed.choices?.[0]?.delta?.content;
                   if (delta) {
                     fullText += delta;
-                    setMessages((prev) =>
-                      prev.map((m) => (m.id === assistantId ? { ...m, content: fullText } : m))
+                    startTransition(() =>
+                      setMessages((prev) =>
+                        prev.map((m) => (m.id === assistantId ? { ...m, content: fullText } : m))
+                      )
                     );
                     continue;
                   }
@@ -192,8 +201,10 @@ export default function AIChat() {
                   const anthText = parsed.delta?.text;
                   if (anthText) {
                     fullText += anthText;
-                    setMessages((prev) =>
-                      prev.map((m) => (m.id === assistantId ? { ...m, content: fullText } : m))
+                    startTransition(() =>
+                      setMessages((prev) =>
+                        prev.map((m) => (m.id === assistantId ? { ...m, content: fullText } : m))
+                      )
                     );
                   }
                 } catch {
@@ -203,8 +214,6 @@ export default function AIChat() {
             }
           }
         }
-
-        setStreamingId(null);
       } else {
         // JSON response (local search or fallback)
         const data = await res.json();
@@ -264,9 +273,9 @@ export default function AIChat() {
         },
       ]);
     } finally {
-      setLoading(false);
+      setSending(false);
     }
-  }, [input, loading]);
+  }, [sending]); // stable — reads all values from refs
 
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -389,7 +398,7 @@ export default function AIChat() {
                 </div>
               </div>
             ))}
-            {loading && (
+            {sending && (
               <div className="flex justify-start">
                 <div className="rounded-xl bg-bg-alt px-3 py-2">
                   <span className="inline-flex gap-1">
@@ -406,20 +415,20 @@ export default function AIChat() {
           <div className="border-t border-border px-3 py-2.5">
             <div className="flex items-center gap-2">
               <input
-                ref={inputRef}
+                ref={inputElRef}
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKey}
                 placeholder="问点什么…"
                 aria-label="输入问题"
-                disabled={loading}
+                disabled={sending}
                 className="flex-1 rounded-lg border border-border bg-bg-alt px-3 py-2 text-xs text-text placeholder:text-muted/60 outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-50"
               />
               <button
                 type="button"
                 onClick={send}
-                disabled={!input.trim() || loading}
+                disabled={!input.trim() || sending}
                 aria-label="发送"
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-primary-hover disabled:opacity-40 active:scale-95"
               >
