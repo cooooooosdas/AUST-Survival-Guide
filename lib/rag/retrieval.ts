@@ -2,21 +2,17 @@
  * RAG (Retrieval Augmented Generation) pipeline for the AI chat.
  *
  * Flow:
- *   1. Load embeddings from data/embeddings.json
+ *   1. Load embeddings from bundled JS module (Vercel) or data/embeddings.json (local)
  *   2. Embed the user's query using the same embedding model
  *   3. Find top-k most similar content items via cosine similarity
  *   4. Return formatted context string for the LLM prompt
  */
 
-import { readFileSync } from "node:fs";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-
 import { FULL_INDEX, type SearchItem } from "@/lib/search";
 import { embed } from "@/lib/rag/embedding";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const EMBEDDINGS_PATH = join(__dirname, "..", "data", "embeddings.json");
+// Try bundled module first (Vercel serverless), fall back to filesystem (local dev)
+import { EMBEDDINGS_DATA as bundledEmbeddings } from "./embeddings-data";
 
 export interface RagContext {
   /** Raw search items retrieved */
@@ -27,26 +23,19 @@ export interface RagContext {
   ready: boolean;
 }
 
-let cachedRecords: Array<{ id: string; vector: number[] }> = [];
-let loadPromise: Promise<Array<{ id: string; vector: number[] }>> | null = null;
+const ITEM_MAP = new Map(FULL_INDEX.map((item) => [item.id, item]));
 
-function loadEmbeddingsSync(): Array<{ id: string; vector: number[] }> {
+let cachedRecords: Array<{ id: string; vector: number[] }> = [];
+
+function loadEmbeddings(): Array<{ id: string; vector: number[] }> {
   if (cachedRecords.length > 0) return cachedRecords;
-  try {
-    const raw = readFileSync(EMBEDDINGS_PATH, "utf8");
-    cachedRecords = JSON.parse(raw) as Array<{ id: string; vector: number[] }>;
-    return cachedRecords;
-  } catch {
-    cachedRecords = [];
+  // Use bundled data (works on Vercel where filesystem reads fail)
+  if (bundledEmbeddings && bundledEmbeddings.length > 0) {
+    cachedRecords = bundledEmbeddings;
     return cachedRecords;
   }
-}
-
-export async function getEmbeddings(): Promise<Array<{ id: string; vector: number[] }>> {
-  if (cachedRecords.length > 0) return cachedRecords;
-  if (loadPromise) return loadPromise;
-  loadPromise = Promise.resolve(loadEmbeddingsSync());
-  return loadPromise;
+  cachedRecords = [];
+  return cachedRecords;
 }
 
 function cosineSim(a: number[], b: number[]): number {
@@ -63,14 +52,12 @@ function cosineSim(a: number[], b: number[]): number {
   return denom === 0 ? 0 : dot / denom;
 }
 
-const ITEM_MAP = new Map(FULL_INDEX.map((item) => [item.id, item]));
-
 /**
  * Run the RAG pipeline: embed query → retrieve top-k → format context.
  */
 export async function retrieve(query: string, topK = 8): Promise<RagContext> {
   try {
-    const records = await getEmbeddings();
+    const records = loadEmbeddings();
     if (records.length === 0) {
       return { items: [], context: "", ready: false };
     }
