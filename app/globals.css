@@ -383,22 +383,36 @@ select:focus-visible {
 .aurora-bg::before {
   content: "";
   position: absolute;
-  inset: -40%;
+  inset: -50%;
   background:
-    radial-gradient(ellipse 60% 50% at 20% 40%, rgba(123, 140, 222, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 75% 30%, rgba(255, 158, 181, 0.15) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 45% at 50% 80%, rgba(125, 212, 184, 0.12) 0%, transparent 70%);
-  filter: blur(40px);
-  animation: aurora-drift 20s ease-in-out infinite;
+    radial-gradient(ellipse 70% 60% at 15% 35%, rgba(123, 140, 222, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 70% at 85% 25%, rgba(255, 158, 181, 0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 85%, rgba(125, 212, 184, 0.14) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 50% at 50% 50%, rgba(251, 246, 241, 0.35) 0%, transparent 70%);
+  filter: blur(50px);
+  animation: aurora-drift 24s ease-in-out infinite;
   background-size: 200% 200%;
+  pointer-events: none;
+  z-index: 0;
+}
+/* 文字区域底下额外一层淡暖径向渐变，确保可读性但不形成"框" */
+.aurora-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 55% at 30% 50%, rgba(251, 246, 241, 0.45) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
 .dark .aurora-bg::before {
   background:
-    radial-gradient(ellipse 60% 50% at 20% 40%, rgba(123, 140, 222, 0.22) 0%, transparent 70%),
-    radial-gradient(ellipse 50% 60% at 75% 30%, rgba(255, 158, 181, 0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 45% 45% at 50% 80%, rgba(125, 212, 184, 0.14) 0%, transparent 70%);
+    radial-gradient(ellipse 70% 60% at 15% 35%, rgba(123, 140, 222, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 70% at 85% 25%, rgba(255, 158, 181, 0.22) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 85%, rgba(125, 212, 184, 0.16) 0%, transparent 50%),
+    radial-gradient(ellipse 80% 50% at 50% 50%, rgba(28, 25, 23, 0.5) 0%, transparent 70%);
+}
+.dark .aurora-bg::after {
+  background: radial-gradient(ellipse 70% 55% at 30% 50%, rgba(28, 25, 23, 0.55) 0%, transparent 70%);
 }
 
 /* ============================================================

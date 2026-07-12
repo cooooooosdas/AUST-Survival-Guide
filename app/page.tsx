@@ -61,7 +61,7 @@ export default async function HomePage() {
     <div className="mx-auto max-w-6xl px-6">
       {/* ========== 信件开场 ========== */}
       <section className="aurora-bg relative border-b border-border py-16 md:py-24 lg:py-28 overflow-hidden">
-        {/* 极光背景通过 .aurora-bg::before 实现 */}
+        {/* 极光背景通过 .aurora-bg::before + ::after 实现（光斑 + 可读性柔化） */}
         <div className="relative z-10 grid items-center gap-10 md:gap-12 md:grid-cols-[1fr_300px]">
           <div style={{ animation: "fade-up 0.9s var(--ease-out-soft) forwards" }}>
             {/* Eyebrow label — 三色点 */}
