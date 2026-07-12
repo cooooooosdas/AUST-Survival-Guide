@@ -9,7 +9,7 @@ type Message = {
   id: string;
   role: MsgRole;
   content: string;
-  mode?: "local" | "ai" | "fallback";
+  mode?: "local" | "rag-only" | "ai" | "fallback";
   links?: { title: string; href: string; type: string }[];
 };
 
@@ -220,6 +220,17 @@ export default function AIChat() {
               links: data.results,
             },
           ]);
+        } else if (data.mode === "rag-only") {
+          // RAG 检索到了内容但未配置 LLM，直接把检索内容作为回答展示
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: uid(),
+              role: "assistant",
+              content: data.message,
+              mode: "rag-only",
+            },
+          ]);
         } else if (data.mode === "fallback") {
           setMessages((prev) => [
             ...prev,
@@ -361,6 +372,10 @@ export default function AIChat() {
                       >
                         前往搜索页 →
                       </a>
+                    </div>
+                  ) : msg.role === "assistant" && msg.mode === "rag-only" ? (
+                    <div className="text-xs leading-relaxed whitespace-pre-wrap">
+                      {msg.content}
                     </div>
                   ) : msg.role === "assistant" && msg.mode === "ai" ? (
                     <div className="text-xs leading-relaxed">
