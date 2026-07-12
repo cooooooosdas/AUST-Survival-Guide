@@ -13,7 +13,7 @@ export default function ClickRipple() {
       top: ${y}px;
       width: 0; height: 0;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(64,145,108,0.35) 0%, rgba(255,209,102,0.15) 60%, transparent 100%);
+      background: radial-gradient(circle, rgba(123,140,222,0.3) 0%, rgba(255,158,181,0.15) 50%, rgba(125,212,184,0.05) 100%);
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 9999;

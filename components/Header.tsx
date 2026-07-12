@@ -17,7 +17,15 @@ type HeaderUser = {
 export default function Header({ user }: { user: HeaderUser }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+
+  // 移动端菜单打开状态：记录打开时的 pathname，
+  // 路由变化后自动失效（无需 useEffect 写 setState）。
+  const [mobileOpenAt, setMobileOpenAt] = useState<string | null>(null);
+  const isMobileOpen = mobileOpenAt !== null && mobileOpenAt === pathname;
+  const toggleMobile = () => {
+    if (isMobileOpen) setMobileOpenAt(null);
+    else setMobileOpenAt(pathname);
+  };
 
   useEffect(() => {
     let raf = 0;
@@ -37,16 +45,12 @@ export default function Header({ user }: { user: HeaderUser }) {
   }, []);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     if (typeof document === "undefined") return;
-    document.body.style.overflow = open ? "hidden" : "";
+    document.body.style.overflow = isMobileOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [open]);
+  }, [isMobileOpen]);
 
   const linkClass = (active: boolean, muted = false) =>
     [
@@ -118,10 +122,10 @@ export default function Header({ user }: { user: HeaderUser }) {
 
           <button
             type="button"
-            aria-label={open ? "关闭菜单" : "打开菜单"}
-            aria-expanded={open}
+            aria-label={isMobileOpen ? "关闭菜单" : "打开菜单"}
+            aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
-            onClick={() => setOpen((v) => !v)}
+            onClick={toggleMobile}
             className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             <svg
@@ -134,7 +138,7 @@ export default function Header({ user }: { user: HeaderUser }) {
               strokeLinejoin="round"
               aria-hidden
             >
-              {open ? (
+              {isMobileOpen ? (
                 <>
                   <line x1="18" y1="6" x2="6" y2="18" />
                   <line x1="6" y1="6" x2="18" y2="18" />
@@ -155,7 +159,7 @@ export default function Header({ user }: { user: HeaderUser }) {
         id="mobile-nav"
         className={[
           "md:hidden overflow-hidden border-t border-border bg-bg/95 backdrop-blur-lg transition-[max-height,opacity] duration-300 ease-out",
-          open ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
+          isMobileOpen ? "max-h-[80vh] opacity-100" : "max-h-0 opacity-0",
         ].join(" ")}
       >
         <nav aria-label="移动端导航" className="px-4 py-4">

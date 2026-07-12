@@ -15,18 +15,26 @@
   --color-text-secondary: #78716C;
   --color-muted: #A8A29E;
 
-  /* ---------- 强调色 ---------- */
-  --color-accent: #B45309;
-  --color-accent-hover: #92400E;
-  --color-accent-light: #FEF3C7;
-  --color-accent-ghost: rgba(180, 83, 9, 0.08);
-  --color-accent-ring: rgba(180, 83, 9, 0.3);
+  /* ---------- 主色（天空蓝紫，用于交互与默认强调） ---------- */
+  --color-primary: #7B8CDE;
+  --color-primary-hover: #6478C8;
+  --color-primary-light: #EEF1FB;
+  --color-primary-ghost: rgba(123, 140, 222, 0.08);
+  --color-primary-ring: rgba(123, 140, 222, 0.3);
 
-  --color-primary: #2563EB;
-  --color-primary-hover: #1D4ED8;
-  --color-primary-light: #EFF6FF;
-  --color-primary-ghost: rgba(37, 99, 235, 0.06);
-  --color-primary-ring: rgba(37, 99, 235, 0.25);
+  /* ---------- 辅色（樱花粉，用于社区 / 温暖强调） ---------- */
+  --color-secondary: #FF9EB5;
+  --color-secondary-hover: #F489A5;
+  --color-secondary-light: #FFF0F4;
+  --color-secondary-ghost: rgba(255, 158, 181, 0.1);
+  --color-secondary-ring: rgba(255, 158, 181, 0.3);
+
+  /* ---------- 三色（薄荷绿，用于工具 / 完成状态） ---------- */
+  --color-tertiary: #7DD4B8;
+  --color-tertiary-hover: #5CC4A5;
+  --color-tertiary-light: #EDFBF6;
+  --color-tertiary-ghost: rgba(125, 212, 184, 0.1);
+  --color-tertiary-ring: rgba(125, 212, 184, 0.3);
 
   /* ---------- 装饰 ---------- */
   --color-deco-envelope: #FFFFFF;
@@ -65,6 +73,30 @@
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50%      { transform: translateY(-8px); }
+}
+
+/* 极光呼吸 —— hero 区背景渐变缓慢流动 */
+@keyframes aurora-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+
+/* 星星闪烁 */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50%      { opacity: 0.9; transform: scale(1.4); }
+}
+
+/* 信封信纸浮动（Hero 右侧装饰） */
+@keyframes letter-float {
+  0%, 100% { transform: translateY(0) rotate(-1deg); }
+  50%      { transform: translateY(-10px) rotate(1deg); }
+}
+
+/* 纸飞机轨迹 —— 信封装饰用 */
+@keyframes plane-dash {
+  0%   { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -20; }
 }
 
 /* ============================================================
@@ -136,7 +168,68 @@ select:focus-visible {
 }
 
 /* ============================================================
-   卡片系统（纸质感）
+   玻璃拟态（Glassmorphism）卡片系统
+   ============================================================ */
+.glass {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px) saturate(1.5);
+  -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.4s var(--ease-out-soft),
+              border-color 0.4s var(--ease-out-soft),
+              transform 0.4s var(--ease-out-soft);
+}
+
+.glass-card:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.75);
+  transform: translateY(-2px);
+}
+
+.glass-strong {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* 暗色模式玻璃 */
+.dark .glass {
+  background: rgba(28, 25, 23, 0.65);
+  border-color: rgba(68, 64, 60, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.dark .glass-card {
+  background: rgba(41, 37, 36, 0.75);
+  border-color: rgba(68, 64, 60, 0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.dark .glass-card:hover {
+  border-color: rgba(87, 83, 78, 0.7);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.dark .glass-strong {
+  background: rgba(41, 37, 36, 0.85);
+  border-color: rgba(87, 83, 78, 0.5);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================================
+   卡片系统（纸质感 / 毛玻璃）
    ============================================================ */
 .card {
   background: var(--color-surface);
@@ -207,14 +300,60 @@ select:focus-visible {
   font-weight: 700;
 }
 
+/* 渐变文字 */
+.gradient-text {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-text-hero {
+  background: linear-gradient(160deg, #1C1917 0%, #44403C 50%, #78716C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dark .gradient-text-hero {
+  background: linear-gradient(160deg, #FAFAF9 0%, #D6D3D1 50%, #A8A29E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 顶部渐变条 */
+.accent-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+}
+
+.accent-bar-primary {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-primary), transparent);
+}
+
+.accent-bar-secondary {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-secondary), transparent);
+}
+
+.accent-bar-tertiary {
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--color-tertiary), transparent);
+}
+
+/* 淡入上升初始状态 */
 .reveal-init {
   opacity: 0;
   transform: translateY(14px);
 }
 
-/* ============================================================
-   减少动效偏好
-   ============================================================ */
+/* 减少动效偏好 */
 @media (prefers-reduced-motion: reduce) {
   .reveal-init {
     opacity: 1;
@@ -225,6 +364,34 @@ select:focus-visible {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+/* ============================================================
+   极光 Hero 区背景
+   ============================================================ */
+.aurora-bg {
+  position: relative;
+  overflow: hidden;
+}
+.aurora-bg::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 40%, rgba(123, 140, 222, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 75% 30%, rgba(255, 158, 181, 0.15) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 45% at 50% 80%, rgba(125, 212, 184, 0.12) 0%, transparent 70%);
+  filter: blur(40px);
+  animation: aurora-drift 20s ease-in-out infinite;
+  background-size: 200% 200%;
+  pointer-events: none;
+  z-index: 0;
+}
+.dark .aurora-bg::before {
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 40%, rgba(123, 140, 222, 0.22) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 60% at 75% 30%, rgba(255, 158, 181, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 45% at 50% 80%, rgba(125, 212, 184, 0.14) 0%, transparent 70%);
 }
 
 /* ============================================================
@@ -302,11 +469,23 @@ select:focus-visible {
   --color-accent-ghost: rgba(245, 158, 11, 0.1);
   --color-accent-ring: rgba(245, 158, 11, 0.3);
 
-  --color-primary: #60A5FA;
-  --color-primary-hover: #3B82F6;
-  --color-primary-light: #172554;
-  --color-primary-ghost: rgba(96, 165, 250, 0.08);
-  --color-primary-ring: rgba(96, 165, 250, 0.3);
+  --color-primary: #A5B4FC;
+  --color-primary-hover: #8B9BF0;
+  --color-primary-light: #1E2040;
+  --color-primary-ghost: rgba(165, 180, 252, 0.1);
+  --color-primary-ring: rgba(165, 180, 252, 0.35);
+
+  --color-secondary: #FFB8CC;
+  --color-secondary-hover: #F8A0B8;
+  --color-secondary-light: #3A1D28;
+  --color-secondary-ghost: rgba(255, 184, 204, 0.12);
+  --color-secondary-ring: rgba(255, 184, 204, 0.3);
+
+  --color-tertiary: #9EE8CF;
+  --color-tertiary-hover: #7ED4B8;
+  --color-tertiary-light: #132B23;
+  --color-tertiary-ghost: rgba(158, 232, 207, 0.1);
+  --color-tertiary-ring: rgba(158, 232, 207, 0.3);
 
   --color-border: #44403C;
   --color-border-hover: #57534E;

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SECTIONS } from "@/lib/sections";
+import { SECTIONS, type Section } from "@/lib/sections";
 import HeroDecoration from "@/components/HeroDecoration";
 import ScrollReveal from "@/components/ScrollReveal";
 import Leaderboard from "@/components/Leaderboard";
@@ -39,25 +39,48 @@ const BENTO_SPAN: Record<string, "sm:col-span-2" | ""> = {
   ai: "sm:col-span-2",
 };
 
+const ACCENT_BAR_CLASS: Record<Section["accent"], string> = {
+  primary: "accent-bar-primary",
+  secondary: "accent-bar-secondary",
+  tertiary: "accent-bar-tertiary",
+};
+
+const ACCENT_HOVER_CLASS: Record<Section["accent"], string> = {
+  primary: "group-hover:text-primary",
+  secondary: "group-hover:text-secondary",
+  tertiary: "group-hover:text-tertiary",
+};
+
 export default async function HomePage() {
   const { comments, userId, ready } = await loadHomeComments();
 
   return (
     <div className="mx-auto max-w-6xl px-6">
       {/* ========== 信件开场 ========== */}
-      <section className="relative border-b border-border py-16 md:py-24 overflow-hidden">
-        <div className="grid items-center gap-12 md:grid-cols-[1fr_320px]">
+      <section className="aurora-bg relative border-b border-border py-16 md:py-24 lg:py-28 overflow-hidden">
+        {/* 极光背景通过 .aurora-bg::before 实现 */}
+        <div className="relative z-10 grid items-center gap-12 md:grid-cols-[1fr_320px]">
           <div style={{ animation: "fade-up 0.9s var(--ease-out-soft) forwards" }}>
-            <p className="mb-5 text-xs tracking-[0.2em] text-accent uppercase font-medium">
-              A Letter to the Next One
-            </p>
+            {/* Eyebrow label — 三色点 */}
+            <div className="mb-5 flex items-center gap-3">
+              <span className="inline-flex items-center gap-1.5 text-xs tracking-[0.2em] text-text-secondary uppercase font-medium">
+                <span className="inline-block h-2 w-2 rounded-full bg-primary" />
+                <span className="inline-block h-2 w-2 rounded-full bg-secondary" />
+                <span className="inline-block h-2 w-2 rounded-full bg-tertiary" />
+                A Letter to the Next One
+              </span>
+            </div>
 
-            <h1 className="text-3xl md:text-5xl font-serif font-bold leading-[1.2] text-text tracking-tight">
+            {/* 主标题 — 更大字号、更紧凑字距 */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold leading-[1.15] text-text tracking-tight">
               致即将到来的你
             </h1>
-            <div className="mt-4 mb-8 h-[2px] w-16 bg-gradient-to-r from-amber-400 to-transparent" />
 
-            <div className="space-y-5 text-base md:text-lg leading-[1.8] text-text-secondary">
+            {/* 三色渐变分隔线 —— 签名元素 */}
+            <div className="mt-5 mb-8 accent-bar w-24" />
+
+            {/* 正文 */}
+            <div className="space-y-4 text-base md:text-lg leading-[1.8] text-text-secondary">
               <p>
                 去年九月我也是个对一切都懵的新生，对学校、对专业、对大学生活都没有把握。
               </p>
@@ -72,8 +95,11 @@ export default async function HomePage() {
             </p>
           </div>
 
+          {/* 右侧信封装饰 —— 浮动动画 */}
           <div className="hidden md:flex items-center justify-center" style={{ animation: "fade-in 1.2s ease-out 0.2s both" }}>
-            <HeroDecoration />
+            <div style={{ animation: "letter-float 8s ease-in-out infinite" }}>
+              <HeroDecoration />
+            </div>
           </div>
         </div>
       </section>
@@ -93,17 +119,27 @@ export default async function HomePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {SECTIONS.map((s, i) => {
             const span = BENTO_SPAN[s.slug] ?? "";
+            const barClass = ACCENT_BAR_CLASS[s.accent];
+            const hoverTextClass = ACCENT_HOVER_CLASS[s.accent];
+            const hoverBorderClass = s.accent === "primary"
+              ? "group-hover:border-primary/30"
+              : s.accent === "secondary"
+                ? "group-hover:border-secondary/30"
+                : "group-hover:border-tertiary/30";
             return (
               <ScrollReveal key={s.slug} delay={60 + i * 50}>
                 <Link
                   href={s.href}
-                  className={`group relative flex flex-col gap-2.5 overflow-hidden rounded-xl border border-border bg-surface p-5 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-border-hover hover:shadow-md active:translate-y-0 active:scale-[0.985] ${span}`}
+                  className={`group relative flex flex-col gap-2.5 overflow-hidden rounded-xl border border-border bg-surface p-5 transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:shadow-md active:translate-y-0 active:scale-[0.985] ${span}`}
                 >
-                  <span className="absolute top-4 right-4 text-xs font-mono text-stone-300 group-hover:text-amber-400 transition-colors">
+                  {/* 顶部强调色条 —— 默认透明，hover 时渐显 */}
+                  <span className={`absolute inset-x-0 top-0 h-[2px] ${barClass} opacity-0 transition-opacity duration-300 group-hover:opacity-100`} />
+
+                  <span className="absolute top-4 right-4 text-xs font-mono text-muted group-hover:text-text-secondary transition-colors">
                     {String(i + 1).padStart(2, "0")}
                   </span>
 
-                  <div className="text-base font-medium text-text group-hover:text-primary transition-colors pr-6">
+                  <div className={`text-base font-medium text-text transition-colors duration-200 pr-6 ${hoverTextClass}`}>
                     {s.title}
                   </div>
 

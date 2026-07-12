@@ -3,13 +3,19 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { MAIN_SECTIONS, EXTRA_SECTIONS } from "@/lib/sections";
+import { MAIN_SECTIONS, EXTRA_SECTIONS, type Section } from "@/lib/sections";
+
+const ACCENT_CLASS: Record<Section["accent"], string> = {
+  primary: "bg-primary",
+  secondary: "bg-secondary",
+  tertiary: "bg-tertiary",
+};
 
 export default function SectionSidebar() {
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [indicatorStyle, setIndicatorStyle] = useState({});
+  const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
@@ -40,9 +46,9 @@ export default function SectionSidebar() {
         background: "var(--color-primary-ghost)",
         border: "1px solid var(--color-border)",
         transition: "left 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
-        pointerEvents: "none",
+        pointerEvents: "none" as const,
         zIndex: 0,
-      } as React.CSSProperties);
+      });
     } else {
       setIndicatorStyle({
         position: "absolute",
@@ -54,9 +60,9 @@ export default function SectionSidebar() {
         background: "var(--color-primary-ghost)",
         border: "1px solid var(--color-border)",
         transition: "top 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
-        pointerEvents: "none",
+        pointerEvents: "none" as const,
         zIndex: 0,
-      } as React.CSSProperties);
+      });
     }
   }, [activeIndex]);
 
@@ -100,6 +106,7 @@ export default function SectionSidebar() {
 
         {MAIN_SECTIONS.map((s, i) => {
           const active = pathname === s.href || pathname?.startsWith(s.href + "/");
+          const accentColor = ACCENT_CLASS[s.accent];
           return (
             <Link
               key={s.slug}
@@ -107,12 +114,14 @@ export default function SectionSidebar() {
               aria-current={active ? "page" : undefined}
               ref={(el) => { itemRefs.current[i] = el; }}
               className={[
-                "relative z-10 rounded-lg px-3 py-2 text-sm transition-colors duration-200 whitespace-nowrap",
+                "relative z-10 flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors duration-200 whitespace-nowrap",
                 active
                   ? "text-primary font-medium"
                   : "text-text-secondary hover:bg-primary-ghost hover:text-primary",
               ].join(" ")}
             >
+              {/* 强调色圆点指示器 */}
+              <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${active ? accentColor : "bg-transparent"}`} />
               {s.title}
             </Link>
           );
@@ -125,12 +134,13 @@ export default function SectionSidebar() {
               href={s.href}
               aria-current={active ? "page" : undefined}
               className={[
-                "relative z-10 rounded-lg px-3 py-2 text-sm transition-colors duration-200 whitespace-nowrap",
+                "relative z-10 flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors duration-200 whitespace-nowrap",
                 active
                   ? "text-primary font-medium"
                   : "text-muted hover:bg-bg-alt hover:text-primary",
               ].join(" ")}
             >
+              <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${active ? "bg-primary" : "bg-transparent"}`} />
               {s.title}
             </Link>
           );
