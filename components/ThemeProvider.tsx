@@ -16,37 +16,33 @@ const ThemeContext = createContext<ThemeContextValue>({
   setTheme: () => {},
 });
 
+function readStoredTheme(): Theme | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") return stored;
+  } catch {}
+  return null;
+}
+
+function getSystemTheme(): Theme {
+  if (typeof window === "undefined") return "light";
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function getInitialTheme(): Theme {
+  return readStoredTheme() ?? getSystemTheme();
+}
+
 export function useTheme() {
   return useContext(ThemeContext);
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
+  const [theme, setTheme] = useState(getInitialTheme);
 
+  // 只做副作用：把主题同步到 DOM class 和 localStorage
   useEffect(() => {
-    setMounted(true);
-    try {
-      const stored = localStorage.getItem("theme") as Theme | null;
-      if (stored === "light" || stored === "dark") {
-        setTheme(stored);
-        return;
-      }
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        setTheme("dark");
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    try {
-      localStorage.setItem("theme", theme);
-    } catch {
-      // ignore
-    }
     const root = document.documentElement;
     if (theme === "dark") {
       root.classList.add("dark");
@@ -56,14 +52,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => {
       root.classList.remove("dark");
     };
-  }, [theme, mounted]);
+  }, [theme]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {}
+  }, [theme]);
 
   const toggle = () => setTheme((t) => (t === "light" ? "dark" : "light"));
-
-  if (!mounted) {
-    // Prevent flash by rendering with inline style
-    return <>{children}</>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggle, setTheme }}>

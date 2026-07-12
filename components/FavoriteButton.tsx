@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 type Props = {
   targetType: string;
@@ -13,12 +13,8 @@ export default function FavoriteButton({
   targetId,
   initialFavorited = false,
 }: Props) {
-  const [favorited, setFavorited] = useState(initialFavorited);
+  const [favorited, setFavorited] = useState(() => initialFavorited);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setFavorited(initialFavorited);
-  }, [initialFavorited]);
 
   async function toggle() {
     if (loading) return;

@@ -70,32 +70,19 @@ function computeStats(records: CheckinRecord[]): Stats {
 }
 
 export default function CheckinClient() {
-  const [records, setRecords] = useState<CheckinRecord[]>([]);
-  const [stats, setStats] = useState<Stats>({ totalDays: 0, currentStreak: 0, maxStreak: 0 });
+  const initialRecords = useMemo(() => loadRecords(), []);
+  const [records, setRecords] = useState<CheckinRecord[]>(initialRecords);
   const [checking, setChecking] = useState(false);
   const [celebrate, setCelebrate] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
   const [showSummary, setShowSummary] = useState(false);
   const [summaryText, setSummaryText] = useState("");
-  const [savedSummary, setSavedSummary] = useState<string | null>(null);
   const [editingSummary, setEditingSummary] = useState(false);
 
   const today = useMemo(() => formatLocalDate(new Date()), []);
   const checkedToday = useMemo(() => records.some((r) => r.date === today), [records, today]);
-
-  useEffect(() => {
-    setRecords(loadRecords());
-  }, []);
-
-  useEffect(() => {
-    if (checkedToday) {
-      setSavedSummary(loadSummary(today));
-    }
-  }, [checkedToday, today]);
-
-  useEffect(() => {
-    setStats(computeStats(records));
-  }, [records]);
+  const stats = useMemo(() => computeStats(records), [records]);
+  const [savedSummary, setSavedSummary] = useState<string | null>(() => loadSummary(today));
 
   useEffect(() => {
     if (!toast) return;
@@ -201,12 +188,22 @@ export default function CheckinClient() {
         </div>
       </section>
 
-      {checkedToday && (
+      {checkedToday && showSummary && (
         <section className="mb-10">
           <div className="rounded-xl border border-border bg-surface p-5">
             {savedSummary && !editingSummary ? (
               <div>
-                <p className="text-xs text-muted mb-1.5">今日心得</p>
+                <div className="flex items-center justify-between mb-1.5">
+                  <p className="text-xs text-muted">今日心得</p>
+                  <button
+                    type="button"
+                    onClick={() => setShowSummary(false)}
+                    className="text-xs text-muted hover:text-text transition-colors"
+                    aria-label="关闭"
+                  >
+                    关闭
+                  </button>
+                </div>
                 <p className="text-sm text-text whitespace-pre-wrap leading-relaxed">{savedSummary}</p>
                 <button
                   type="button"
@@ -239,13 +236,12 @@ export default function CheckinClient() {
                   <button
                     type="button"
                     onClick={() => {
-                      if (savedSummary) setEditingSummary(false);
-                      else setShowSummary(false);
+                      setShowSummary(false);
                       setSummaryText("");
                     }}
                     className="rounded-lg border border-border px-4 py-1.5 text-sm text-muted hover:text-text transition-colors"
                   >
-                    {savedSummary ? "取消编辑" : "跳过"}
+                    跳过
                   </button>
                 </div>
               </div>

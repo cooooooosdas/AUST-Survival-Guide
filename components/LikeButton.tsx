@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 type Props = {
   targetType: string;
@@ -15,14 +15,9 @@ export default function LikeButton({
   initialLiked = false,
   initialCount = 0,
 }: Props) {
-  const [liked, setLiked] = useState(initialLiked);
-  const [count, setCount] = useState(initialCount);
+  const [liked, setLiked] = useState(() => initialLiked);
+  const [count, setCount] = useState(() => initialCount);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLiked(initialLiked);
-    setCount(initialCount);
-  }, [initialLiked, initialCount]);
 
   async function toggle() {
     if (loading) return;
