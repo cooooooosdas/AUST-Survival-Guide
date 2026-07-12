@@ -48,9 +48,9 @@ export default function Leaderboard() {
   }, []);
 
   return (
-    <section className="py-10 md:py-12">
+    <section>
       <div className="flex items-baseline justify-between mb-6">
-        <h2 className="text-xl font-serif font-semibold text-text">热门推荐</h2>
+        <h2 className="text-xl md:text-2xl font-serif font-semibold text-text">热门推荐</h2>
         <span className="text-sm text-muted">按阅读量排行</span>
       </div>
 
