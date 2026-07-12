@@ -1,16 +1,20 @@
 /**
- * RAG embedding service — calls an OpenAI-compatible embeddings API.
+ * RAG embedding service — calls an OpenAI-compatible or DashScope embeddings API.
  *
  * Required env:
  *   EMBEDDING_API_KEY  (falls back to AI_API_KEY)
- *   EMBEDDING_API_URL  (default: https://api.openai.com/v1/embeddings)
- *   EMBEDDING_MODEL    (default: text-embedding-3-small)
+ *   EMBEDDING_API_URL  (default: https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding)
+ *   EMBEDDING_MODEL    (default: text-embedding-v3)
  *
- * Compatible providers: OpenAI, DeepSeek, 通义千问, 智谱, OpenRouter, etc.
+ * Compatible providers: DashScope (阿里云通义千问), OpenAI, DeepSeek, OpenRouter, etc.
+ *
+ * Supports both response formats:
+ *   - OpenAI-compatible: { "data": [{ "embedding": [...] }] }
+ *   - DashScope native:   { "output": { "embeddings": [{ "embedding": [...] }] } }
  */
 
-const DEFAULT_URL = "https://api.openai.com/v1/embeddings";
-const DEFAULT_MODEL = "text-embedding-3-small";
+const DEFAULT_URL = "https://dashscope.aliyuncs.com/api/v1/services/embeddings/text-embedding/text-embedding";
+const DEFAULT_MODEL = "text-embedding-v3";
 
 function getEmbeddingConfig() {
   const apiKey = process.env.EMBEDDING_API_KEY || process.env.AI_API_KEY;
@@ -25,7 +29,25 @@ function getEmbeddingConfig() {
 }
 
 /**
- * Embed a single text string. Returns a 1536-dim vector for text-embedding-3-small.
+ * Extract embedding vector from either OpenAI-compatible or DashScope native response format.
+ */
+function extractEmbedding(data: Record<string, unknown>): number[] {
+  // OpenAI-compatible: { data: [{ embedding: [...] }] }
+  const openAiData = data.data as Array<{ embedding?: number[] }> | undefined;
+  if (openAiData?.[0]?.embedding) {
+    return openAiData[0].embedding;
+  }
+  // DashScope native: { output: { embeddings: [{ embedding: [...] }] } }
+  const output = data.output as Record<string, unknown> | undefined;
+  const dashScopeEmbeddings = output?.embeddings as Array<{ embedding?: number[] }> | undefined;
+  if (dashScopeEmbeddings?.[0]?.embedding) {
+    return dashScopeEmbeddings[0].embedding;
+  }
+  throw new Error("Unexpected embedding response format");
+}
+
+/**
+ * Embed a single text string.
  */
 export async function embed(text: string): Promise<number[]> {
   const { apiKey, apiUrl, model } = getEmbeddingConfig();
@@ -36,10 +58,7 @@ export async function embed(text: string): Promise<number[]> {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     },
-    body: JSON.stringify({ model, input: text }),
-    // Vercel Edge Runtime doesn't support keepalive, but Node.js runtime does
-    // @ts-ignore — nextjs internal type
-    // keepalive: true,
+    body: JSON.stringify({ model, input: { texts: [text] } }),
   });
 
   if (!res.ok) {
@@ -47,9 +66,9 @@ export async function embed(text: string): Promise<number[]> {
     throw new Error(`Embedding API error ${res.status}: ${errText.slice(0, 200)}`);
   }
 
-  const data = (await res.json()) as { data: { embedding: number[] }[] };
-  const embedding = data.data?.[0]?.embedding;
-  if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
+  const data = (await res.json()) as Record<string, unknown>;
+  const embedding = extractEmbedding(data);
+  if (!Array.isArray(embedding) || embedding.length === 0) {
     throw new Error("Empty embedding returned from API");
   }
   return embedding;
