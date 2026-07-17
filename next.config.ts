@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
+const isDev = process.env.NODE_ENV !== "production";
+
 const csp = [
   "default-src 'self'",
   // Next 内联水合脚本 + Vercel Analytics
-  "script-src 'self' 'unsafe-inline' https://va.vercel-scripts.com",
+  `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""} https://va.vercel-scripts.com`,
   // Tailwind 内联样式 + 字体来源
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   "font-src 'self' data: https://fonts.gstatic.com",

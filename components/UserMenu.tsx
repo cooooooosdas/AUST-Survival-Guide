@@ -29,16 +29,16 @@ export default function UserMenu({ user }: Props) {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-2 text-sm">
+      <div className="flex shrink-0 items-center gap-2 text-sm">
         <Link
           href="/login"
-          className="text-muted transition-colors hover:text-primary"
+          className="whitespace-nowrap text-muted transition-colors hover:text-primary"
         >
           登录
         </Link>
         <Link
           href="/signup"
-          className="rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover"
+          className="whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-sm text-white transition-colors hover:bg-primary-hover"
         >
           注册
         </Link>

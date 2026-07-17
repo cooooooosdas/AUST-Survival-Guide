@@ -6,15 +6,13 @@ import FooterYear from "./FooterYear";
 export default function Footer() {
   return (
     <footer className="relative mt-16">
-      {/* 三色渐变顶线 */}
       <div className="accent-bar opacity-60" />
 
-      <div className="glass-strong">
+      <div className="border-t border-border bg-surface/82 backdrop-blur-xl">
         <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:flex-row md:items-start md:justify-between">
-          {/* 左侧：站点信息 */}
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-accent text-xs">—</span>
+              <span className="h-2 w-2 rounded-full bg-primary" />
               <span className="text-text font-medium">© <FooterYear /> {SITE.shortName}</span>
             </div>
             <p className="text-xs text-muted leading-relaxed max-w-xs">
@@ -37,7 +35,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 右侧：资源板块导航 */}
           <div className="flex flex-col gap-3">
             <p className="text-[11px] uppercase tracking-widest text-muted font-medium">
               资源板块
@@ -55,7 +52,6 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* 右侧：法律链接 */}
           <div className="flex flex-col gap-3">
             <p className="text-[11px] uppercase tracking-widest text-muted font-medium">
               更多
@@ -71,10 +67,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* 底部条 */}
         <div className="mx-auto max-w-6xl px-6 pb-5">
           <p className="text-[11px] text-muted">
-            个人博客 · 长期维护 · 由 coolin 用 ❤️ 构建
+            个人博客 · 长期维护 · 由 coolin 构建
           </p>
         </div>
       </div>

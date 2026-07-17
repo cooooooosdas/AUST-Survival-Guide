@@ -54,11 +54,9 @@ export default function Header({ user }: { user: HeaderUser }) {
 
   const linkClass = (active: boolean, muted = false) =>
     [
-      "relative px-1.5 py-1 transition-colors duration-200 whitespace-nowrap text-[13px]",
+      "relative rounded-full px-2.5 py-1.5 transition-colors duration-200 whitespace-nowrap text-[13px]",
       muted ? "text-muted" : "text-text-secondary",
-      active ? "text-primary font-medium" : "hover:text-primary",
-      "after:absolute after:left-0 after:right-0 after:-bottom-1 after:h-[1.5px] after:bg-accent after:transition-transform after:duration-300 after:origin-left",
-      active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
+      active ? "bg-primary-light text-primary font-medium" : "hover:bg-primary-ghost hover:text-primary",
     ].join(" ");
 
   const isActive = (href: string) =>
@@ -69,11 +67,11 @@ export default function Header({ user }: { user: HeaderUser }) {
       className={[
         "sticky top-0 z-30 border-b transition-all duration-300",
         scrolled
-          ? "border-border bg-bg/80 backdrop-blur-lg shadow-sm"
-          : "border-transparent bg-bg/60 backdrop-blur-md",
+          ? "border-border bg-bg/86 backdrop-blur-xl shadow-sm"
+          : "border-transparent bg-bg/72 backdrop-blur-lg",
       ].join(" ")}
     >
-      <div className="mx-auto flex h-14 items-center gap-3 px-4 md:px-6 max-w-6xl">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-6">
         <Link
           href="/"
           className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
@@ -83,7 +81,7 @@ export default function Header({ user }: { user: HeaderUser }) {
 
         <nav
           aria-label="主导航"
-          className="hidden lg:flex items-center gap-4 text-[13px]"
+          className="hidden items-center gap-1.5 rounded-full border border-border bg-surface/58 px-2 py-1 text-[13px] shadow-sm lg:flex"
         >
           {MAIN_SECTIONS.map((s) => (
             <Link
@@ -95,7 +93,7 @@ export default function Header({ user }: { user: HeaderUser }) {
               {s.title}
             </Link>
           ))}
-          <span className="h-3.5 w-px shrink-0 bg-border" />
+          <span className="mx-1 h-4 w-px shrink-0 bg-border" />
           {EXTRA_SECTIONS.map((s) => (
             <Link
               key={s.slug}

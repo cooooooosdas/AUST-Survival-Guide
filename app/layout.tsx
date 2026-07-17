@@ -135,32 +135,32 @@ export default async function RootLayout({
     <html
       lang="zh-CN"
       className={`${inter.variable} ${notoSerif.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      {/* 预连接外部域名，加速资源加载 */}
-      {sbUrl && (
-        <>
-          <link rel="preconnect" href={sbUrl} crossOrigin="anonymous" />
-          <link rel="preconnect" href={`${sbUrl}/storage/v1`} crossOrigin="anonymous" />
-        </>
-      )}
-      {/* AI 与 Embedding API 预连接（聊天/搜索功能用） */}
-      <link rel="preconnect" href="https://api.siliconflow.cn" />
-      <link rel="preconnect" href="https://dashscope.aliyuncs.com" />
-      {/* 防止深色模式闪烁：在首屏渲染前读取 localStorage */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              try {
-                var t = localStorage.getItem('theme');
-                if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                  document.documentElement.classList.add('dark');
-                }
-              } catch(e) {}
-            })();
-          `,
-        }}
-      />
+      <head>
+        {sbUrl && (
+          <>
+            <link rel="preconnect" href={sbUrl} crossOrigin="anonymous" />
+            <link rel="preconnect" href={`${sbUrl}/storage/v1`} crossOrigin="anonymous" />
+          </>
+        )}
+        <link rel="preconnect" href="https://api.siliconflow.cn" />
+        <link rel="preconnect" href="https://dashscope.aliyuncs.com" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var t = localStorage.getItem('theme');
+                  if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-bg text-text">
         <ThemeProvider>
         <SceneEffects />

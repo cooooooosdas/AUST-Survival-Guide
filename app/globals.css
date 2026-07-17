@@ -1,54 +1,62 @@
 @import "tailwindcss";
 
 /* ============================================================
-   温暖编辑风 + 现代技术风 融合设计系统
-   Warm Editorial Tech — Typography is Design
+   校园索引风 + 可信工具站设计系统
+   Campus Index — calm, legible, useful
    ============================================================ */
 @theme {
   /* ---------- 背景层 ---------- */
-  --color-bg: #FAF9F6;
-  --color-bg-alt: #F5F3EF;
+  --color-bg: #F6FAF8;
+  --color-bg-alt: #EEF5F1;
   --color-surface: #FFFFFF;
 
   /* ---------- 文字层级 ---------- */
-  --color-text: #1C1917;
-  --color-text-secondary: #78716C;
-  --color-muted: #A8A29E;
+  --color-text: #13231F;
+  --color-text-secondary: #52665F;
+  --color-muted: #82958E;
+  --color-text-muted: #82958E;
+  --color-border: #D8E5DF;
+  --color-border-hover: #AFC9BE;
 
-  /* ---------- 主色（天空蓝紫，用于交互与默认强调） ---------- */
-  --color-primary: #7B8CDE;
-  --color-primary-hover: #6478C8;
-  --color-primary-light: #EEF1FB;
-  --color-primary-ghost: rgba(123, 140, 222, 0.08);
-  --color-primary-ring: rgba(123, 140, 222, 0.3);
+  /* ---------- 主色（校园绿，用于主要交互） ---------- */
+  --color-primary: #147A64;
+  --color-primary-hover: #0F6754;
+  --color-primary-light: #E3F5EF;
+  --color-primary-ghost: rgba(20, 122, 100, 0.09);
+  --color-primary-ring: rgba(20, 122, 100, 0.32);
 
-  /* ---------- 辅色（樱花粉，用于社区 / 温暖强调） ---------- */
-  --color-secondary: #FF9EB5;
-  --color-secondary-hover: #F489A5;
-  --color-secondary-light: #FFF0F4;
-  --color-secondary-ghost: rgba(255, 158, 181, 0.1);
-  --color-secondary-ring: rgba(255, 158, 181, 0.3);
+  /* ---------- 辅色（蓝图蓝，用于资料与导航） ---------- */
+  --color-secondary: #2F6FED;
+  --color-secondary-hover: #245AC4;
+  --color-secondary-light: #E7F0FF;
+  --color-secondary-ghost: rgba(47, 111, 237, 0.09);
+  --color-secondary-ring: rgba(47, 111, 237, 0.26);
 
-  /* ---------- 三色（薄荷绿，用于工具 / 完成状态） ---------- */
-  --color-tertiary: #7DD4B8;
-  --color-tertiary-hover: #5CC4A5;
-  --color-tertiary-light: #EDFBF6;
-  --color-tertiary-ghost: rgba(125, 212, 184, 0.1);
-  --color-tertiary-ring: rgba(125, 212, 184, 0.3);
+  /* ---------- 三色（琥珀黄，用于提示与人情味） ---------- */
+  --color-tertiary: #D89122;
+  --color-tertiary-hover: #B97816;
+  --color-tertiary-light: #FFF4DC;
+  --color-tertiary-ghost: rgba(216, 145, 34, 0.11);
+  --color-tertiary-ring: rgba(216, 145, 34, 0.3);
+  --color-accent: #D89122;
+  --color-accent-hover: #B97816;
+  --color-accent-light: #FFF4DC;
+  --color-accent-ghost: rgba(216, 145, 34, 0.12);
+  --color-accent-ring: rgba(216, 145, 34, 0.3);
 
   /* ---------- 装饰 ---------- */
   --color-deco-envelope: #FFFFFF;
-  --color-deco-stroke: #1C1917;
-  --color-deco-stroke-light: #E7E5E4;
-  --color-deco-plane: #FEF3C7;
-  --color-deco-plane-accent: #FDE68A;
-  --color-deco-dash: #D6D3D1;
+  --color-deco-stroke: #13231F;
+  --color-deco-stroke-light: #CFE0D8;
+  --color-deco-plane: #E3F5EF;
+  --color-deco-plane-accent: #B8E3D5;
+  --color-deco-dash: #AFC9BE;
 
   /* ---------- 阴影 ---------- */
-  --shadow-xs: 0 1px 2px rgba(28, 25, 23, 0.04);
-  --shadow-sm: 0 2px 8px rgba(28, 25, 23, 0.06);
-  --shadow-md: 0 4px 16px rgba(28, 25, 23, 0.08);
-  --shadow-lg: 0 8px 32px rgba(28, 25, 23, 0.1);
+  --shadow-xs: 0 1px 2px rgba(19, 35, 31, 0.04);
+  --shadow-sm: 0 4px 12px rgba(19, 35, 31, 0.06);
+  --shadow-md: 0 12px 28px rgba(19, 35, 31, 0.08);
+  --shadow-lg: 0 24px 56px rgba(19, 35, 31, 0.12);
 
   /* ---------- 动画曲线 ---------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
@@ -120,7 +128,14 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   line-height: 1.75;
-  letter-spacing: 0.01em;
+  letter-spacing: 0;
+  background:
+    linear-gradient(90deg, rgba(216, 229, 223, 0.32) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(216, 229, 223, 0.32) 1px, transparent 1px),
+    radial-gradient(circle at 18% 8%, rgba(20, 122, 100, 0.08), transparent 28rem),
+    radial-gradient(circle at 88% 18%, rgba(47, 111, 237, 0.07), transparent 26rem),
+    var(--color-bg);
+  background-size: 44px 44px, 44px 44px, auto, auto, auto;
 }
 
 a {
@@ -197,11 +212,11 @@ select:focus-visible {
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(24px) saturate(1.6);
-  -webkit-backdrop-filter: blur(24px) saturate(1.6);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  background: color-mix(in srgb, var(--color-surface) 86%, transparent);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
 }
 
 /* 暗色模式玻璃 */
@@ -234,7 +249,7 @@ select:focus-visible {
 .card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: 10px;
   box-shadow: var(--shadow-xs);
   transition: box-shadow 0.3s var(--ease-out-soft),
               border-color 0.3s var(--ease-out-soft);
@@ -246,7 +261,7 @@ select:focus-visible {
 }
 
 .card-interactive {
-  composes: card-hover;
+  box-shadow: var(--shadow-xs);
 }
 
 .card-interactive:hover {
@@ -376,43 +391,90 @@ select:focus-visible {
 /* ============================================================
    极光 Hero 区背景
    ============================================================ */
-.aurora-bg {
+.aurora-bg,
+.guide-hero {
   position: relative;
   overflow: hidden;
 }
-.aurora-bg::before {
+.aurora-bg::before,
+.guide-hero::before {
   content: "";
   position: absolute;
-  inset: -50%;
+  inset: -35%;
   background:
-    radial-gradient(ellipse 70% 60% at 15% 35%, rgba(123, 140, 222, 0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 70% at 85% 25%, rgba(255, 158, 181, 0.18) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 50% 85%, rgba(125, 212, 184, 0.14) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 50% at 50% 50%, rgba(251, 246, 241, 0.35) 0%, transparent 70%);
-  filter: blur(50px);
+    radial-gradient(ellipse 55% 48% at 18% 34%, rgba(20, 122, 100, 0.16) 0%, transparent 64%),
+    radial-gradient(ellipse 46% 58% at 86% 22%, rgba(47, 111, 237, 0.13) 0%, transparent 58%),
+    radial-gradient(ellipse 42% 36% at 64% 90%, rgba(216, 145, 34, 0.13) 0%, transparent 58%);
+  filter: blur(28px);
   animation: aurora-drift 24s ease-in-out infinite;
   background-size: 200% 200%;
   pointer-events: none;
   z-index: 0;
 }
 /* 文字区域底下额外一层淡暖径向渐变，确保可读性但不形成"框" */
-.aurora-bg::after {
+.aurora-bg::after,
+.guide-hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 55% at 30% 50%, rgba(251, 246, 241, 0.45) 0%, transparent 70%);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.64), transparent 46%),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.76), transparent 72%);
   pointer-events: none;
   z-index: 0;
 }
-.dark .aurora-bg::before {
+.dark .aurora-bg::before,
+.dark .guide-hero::before {
   background:
-    radial-gradient(ellipse 70% 60% at 15% 35%, rgba(123, 140, 222, 0.28) 0%, transparent 60%),
-    radial-gradient(ellipse 55% 70% at 85% 25%, rgba(255, 158, 181, 0.22) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 50% 85%, rgba(125, 212, 184, 0.16) 0%, transparent 50%),
-    radial-gradient(ellipse 80% 50% at 50% 50%, rgba(28, 25, 23, 0.5) 0%, transparent 70%);
+    radial-gradient(ellipse 55% 48% at 18% 34%, rgba(91, 216, 188, 0.18) 0%, transparent 64%),
+    radial-gradient(ellipse 46% 58% at 86% 22%, rgba(116, 166, 255, 0.14) 0%, transparent 58%),
+    radial-gradient(ellipse 42% 36% at 64% 90%, rgba(245, 183, 80, 0.12) 0%, transparent 58%);
 }
-.dark .aurora-bg::after {
-  background: radial-gradient(ellipse 70% 55% at 30% 50%, rgba(28, 25, 23, 0.55) 0%, transparent 70%);
+.dark .aurora-bg::after,
+.dark .guide-hero::after {
+  background:
+    linear-gradient(180deg, rgba(12, 25, 22, 0.7), transparent 46%),
+    linear-gradient(90deg, rgba(12, 25, 22, 0.78), transparent 72%);
+}
+
+.campus-stamp {
+  border: 1px solid var(--color-border);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.48)),
+    linear-gradient(90deg, rgba(20, 122, 100, 0.09), rgba(47, 111, 237, 0.08));
+  box-shadow: var(--shadow-sm);
+}
+
+.index-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82)),
+    var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.index-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(20, 122, 100, 0.08) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(20, 122, 100, 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out-soft);
+  pointer-events: none;
+}
+
+.index-card:hover::before {
+  opacity: 1;
+}
+
+.dark .index-card,
+.dark .campus-stamp {
+  background:
+    linear-gradient(180deg, rgba(26, 44, 39, 0.94), rgba(20, 34, 30, 0.84)),
+    var(--color-surface);
 }
 
 /* ============================================================
@@ -477,46 +539,47 @@ select:focus-visible {
    深色模式（夜读暖调）
    ============================================================ */
 .dark {
-  --color-bg: #1C1917;
-  --color-bg-alt: #211F1C;
-  --color-surface: #292524;
-  --color-text: #FAFAF9;
-  --color-text-secondary: #A8A29E;
-  --color-muted: #78716C;
+  --color-bg: #0C1916;
+  --color-bg-alt: #11221E;
+  --color-surface: #172B26;
+  --color-text: #F2FBF7;
+  --color-text-secondary: #B4C8BF;
+  --color-muted: #789087;
+  --color-text-muted: #789087;
 
-  --color-accent: #F59E0B;
-  --color-accent-hover: #D97706;
-  --color-accent-light: #451A03;
-  --color-accent-ghost: rgba(245, 158, 11, 0.1);
-  --color-accent-ring: rgba(245, 158, 11, 0.3);
+  --color-accent: #F5B750;
+  --color-accent-hover: #D89A2A;
+  --color-accent-light: #392716;
+  --color-accent-ghost: rgba(245, 183, 80, 0.12);
+  --color-accent-ring: rgba(245, 183, 80, 0.3);
 
-  --color-primary: #A5B4FC;
-  --color-primary-hover: #8B9BF0;
-  --color-primary-light: #1E2040;
-  --color-primary-ghost: rgba(165, 180, 252, 0.1);
-  --color-primary-ring: rgba(165, 180, 252, 0.35);
+  --color-primary: #5BD8BC;
+  --color-primary-hover: #41BFA4;
+  --color-primary-light: #123C34;
+  --color-primary-ghost: rgba(91, 216, 188, 0.12);
+  --color-primary-ring: rgba(91, 216, 188, 0.35);
 
-  --color-secondary: #FFB8CC;
-  --color-secondary-hover: #F8A0B8;
-  --color-secondary-light: #3A1D28;
-  --color-secondary-ghost: rgba(255, 184, 204, 0.12);
-  --color-secondary-ring: rgba(255, 184, 204, 0.3);
+  --color-secondary: #74A6FF;
+  --color-secondary-hover: #5C8FE9;
+  --color-secondary-light: #172D52;
+  --color-secondary-ghost: rgba(116, 166, 255, 0.12);
+  --color-secondary-ring: rgba(116, 166, 255, 0.3);
 
-  --color-tertiary: #9EE8CF;
-  --color-tertiary-hover: #7ED4B8;
-  --color-tertiary-light: #132B23;
-  --color-tertiary-ghost: rgba(158, 232, 207, 0.1);
-  --color-tertiary-ring: rgba(158, 232, 207, 0.3);
+  --color-tertiary: #F5B750;
+  --color-tertiary-hover: #D89A2A;
+  --color-tertiary-light: #392716;
+  --color-tertiary-ghost: rgba(245, 183, 80, 0.12);
+  --color-tertiary-ring: rgba(245, 183, 80, 0.3);
 
-  --color-border: #44403C;
-  --color-border-hover: #57534E;
+  --color-border: #24463E;
+  --color-border-hover: #3E695E;
 
-  --color-deco-envelope: #292524;
-  --color-deco-stroke: #FAFAF9;
-  --color-deco-stroke-light: #44403C;
-  --color-deco-plane: #451A03;
-  --color-deco-plane-accent: #92400E;
-  --color-deco-dash: #57534E;
+  --color-deco-envelope: #172B26;
+  --color-deco-stroke: #F2FBF7;
+  --color-deco-stroke-light: #31584E;
+  --color-deco-plane: #123C34;
+  --color-deco-plane-accent: #5BD8BC;
+  --color-deco-dash: #3E695E;
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
