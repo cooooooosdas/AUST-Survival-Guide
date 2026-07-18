@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import { Geist_Mono } from "next/font/google";
 import { Inter } from "next/font/google";
 import { Noto_Serif_SC } from "next/font/google";
@@ -8,6 +9,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import SceneEffects from "@/components/SceneEffects";
+import ReadingProgress from "@/components/ReadingProgress";
 import { createClient } from "@/lib/supabase/server";
 import { SITE, siteUrl } from "@/lib/site";
 
@@ -78,8 +80,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#FFFFFF" },
-    { media: "(prefers-color-scheme: dark)", color: "#1E3A5F" },
+    { media: "(prefers-color-scheme: light)", color: "#F6FAF8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0C1916" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -142,7 +144,9 @@ export default async function RootLayout({
         )}
         <link rel="preconnect" href="https://api.siliconflow.cn" />
         <link rel="preconnect" href="https://dashscope.aliyuncs.com" />
-        <script
+        <Script
+          id="theme-initializer"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
@@ -159,19 +163,20 @@ export default async function RootLayout({
       </head>
       <body className="min-h-full flex flex-col bg-bg text-text">
         <ThemeProvider>
-        <SceneEffects />
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-white"
-        >
-          跳到正文
-        </a>
-        <Header user={user} />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <Footer />
-        <Analytics />
+          <SceneEffects />
+          <ReadingProgress />
+          <a
+            href="#main-content"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-white"
+          >
+            跳到正文
+          </a>
+          <Header user={user} />
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

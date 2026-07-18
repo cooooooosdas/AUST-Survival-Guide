@@ -83,6 +83,32 @@
   50%      { transform: translateY(-8px); }
 }
 
+@keyframes route-enter {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes reveal-enter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes click-ink-spread {
+  0%   { opacity: 0.34; transform: translate(-50%, -50%) scale(0.2); }
+  70%  { opacity: 0.12; }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes menu-enter {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes theme-icon-enter {
+  from { opacity: 0; transform: rotate(-18deg) scale(0.8); }
+  to   { opacity: 1; transform: rotate(0) scale(1); }
+}
+
 /* 极光呼吸 —— hero 区背景渐变缓慢流动 */
 @keyframes aurora-drift {
   0%, 100% { background-position: 0% 50%; }
@@ -113,6 +139,7 @@
 html {
   background-color: var(--color-bg);
   color: var(--color-text);
+  color-scheme: light;
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
@@ -262,12 +289,21 @@ select:focus-visible {
 
 .card-interactive {
   box-shadow: var(--shadow-xs);
+  transition:
+    transform 0.28s var(--ease-out-soft),
+    box-shadow 0.28s var(--ease-out-soft),
+    border-color 0.28s var(--ease-out-soft);
 }
 
 .card-interactive:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
   border-color: var(--color-border-hover);
+}
+
+.card-interactive:active {
+  transform: translateY(-1px) scale(0.992);
+  box-shadow: var(--shadow-sm);
 }
 
 /* 键盘可聚焦的卡片要有可见的焦点环 */
@@ -372,11 +408,18 @@ select:focus-visible {
 /* 淡入上升初始状态 */
 .reveal-init {
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(16px);
+}
+
+.reveal-init.is-revealed {
+  animation: reveal-enter 0.68s var(--ease-out-soft) var(--reveal-delay, 0ms) both;
 }
 
 /* 减少动效偏好 */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .reveal-init {
     opacity: 1;
     transform: none;
@@ -385,6 +428,130 @@ select:focus-visible {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+/* ============================================================
+   全站动效：索引翻阅感 + 轻量交互反馈
+   ============================================================ */
+.route-shell {
+  min-height: 100%;
+  animation: route-enter 0.46s var(--ease-out-soft) both;
+}
+
+.hero-copy-enter {
+  animation: fade-up 0.82s var(--ease-out-soft) both;
+}
+
+.hero-note-enter {
+  animation: fade-in 0.92s ease-out 0.14s both;
+}
+
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  height: 2px;
+  pointer-events: none;
+}
+
+.reading-progress-bar {
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+  box-shadow: 0 0 10px var(--color-primary-ring);
+  will-change: transform;
+}
+
+.click-ink {
+  --ink-color: var(--color-primary);
+  position: absolute;
+  width: 88px;
+  aspect-ratio: 1;
+  border: 1px solid color-mix(in srgb, var(--ink-color) 36%, transparent);
+  border-radius: 999px;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--ink-color) 18%, transparent) 0%,
+    color-mix(in srgb, var(--ink-color) 8%, transparent) 48%,
+    transparent 72%
+  );
+  animation: click-ink-spread 0.5s var(--ease-out-soft) forwards;
+  will-change: transform, opacity;
+}
+
+.motion-press,
+.motion-icon-button,
+.aust-logo-link {
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+}
+
+.motion-press:active,
+.motion-icon-button:active {
+  transform: translateY(1px) scale(0.97);
+}
+
+.motion-icon-button {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    transform 0.2s var(--ease-out-soft);
+}
+
+.aust-logo-link {
+  transition:
+    transform 0.28s var(--ease-out-soft),
+    filter 0.28s var(--ease-out-soft);
+}
+
+.aust-logo-link:hover {
+  transform: translateY(-2px) rotate(-0.4deg);
+  filter: drop-shadow(0 6px 10px rgba(20, 122, 100, 0.14));
+}
+
+.aust-logo-link:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.menu-pop {
+  transform-origin: right top;
+  animation: menu-enter 0.2s var(--ease-out-soft) both;
+}
+
+.theme-icon-swap {
+  animation: theme-icon-enter 0.34s var(--ease-spring) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .route-shell,
+  .hero-copy-enter,
+  .hero-note-enter,
+  .menu-pop,
+  .theme-icon-swap {
+    animation: none !important;
+  }
+
+  .route-shell,
+  .hero-copy-enter,
+  .hero-note-enter,
+  .menu-pop {
+    opacity: 1;
+    transform: none;
+  }
+
+  .aust-logo-link:hover,
+  .motion-press:active,
+  .motion-icon-button:active,
+  .card-interactive:hover,
+  .card-interactive:active {
+    transform: none !important;
+  }
+
+  .reading-progress-bar {
+    box-shadow: none;
   }
 }
 
@@ -587,9 +754,10 @@ select:focus-visible {
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 
-.dark html {
+html.dark {
   background-color: var(--color-bg);
   color: var(--color-text);
+  color-scheme: dark;
 }
 
 .dark code,

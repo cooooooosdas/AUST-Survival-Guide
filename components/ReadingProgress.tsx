@@ -1,34 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 
 export default function ReadingProgress() {
-  const [progress, setProgress] = useState(0);
+  const bar = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
-    function onScroll() {
-      const h = document.documentElement;
-      const scrollTop = h.scrollTop || document.body.scrollTop;
-      const scrollHeight = h.scrollHeight - h.clientHeight;
-      if (scrollHeight <= 0) {
-        setProgress(0);
-        return;
-      }
-      setProgress(Math.min(100, Math.round((scrollTop / scrollHeight) * 100)));
-    }
-    onScroll();
+    const element = bar.current;
+    if (!element) return;
+
+    let frame = 0;
+    const update = () => {
+      const root = document.documentElement;
+      const available = root.scrollHeight - root.clientHeight;
+      const progress = available > 0 ? Math.min(root.scrollTop / available, 1) : 0;
+      element.style.transform = `scaleX(${progress})`;
+      frame = 0;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+
+    update();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    window.addEventListener("resize", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [pathname]);
 
   return (
-    <div
-      className="fixed top-0 left-0 right-0 z-40 h-1 bg-border"
-      aria-hidden="true"
-    >
+    <div className="reading-progress" aria-hidden="true">
       <div
-        className="h-full bg-accent transition-[width] duration-150"
-        style={{ width: `${progress}%` }}
+        ref={bar}
+        className="reading-progress-bar"
       />
     </div>
   );

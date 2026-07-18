@@ -54,7 +54,7 @@ export default function Header({ user }: { user: HeaderUser }) {
 
   const linkClass = (active: boolean, muted = false) =>
     [
-      "relative rounded-full px-2.5 py-1.5 transition-colors duration-200 whitespace-nowrap text-[13px]",
+      "motion-press relative rounded-full px-2.5 py-1.5 transition-colors duration-200 whitespace-nowrap text-[13px]",
       muted ? "text-muted" : "text-text-secondary",
       active ? "bg-primary-light text-primary font-medium" : "hover:bg-primary-ghost hover:text-primary",
     ].join(" ");
@@ -65,7 +65,7 @@ export default function Header({ user }: { user: HeaderUser }) {
   return (
     <header
       className={[
-        "sticky top-0 z-30 border-b transition-all duration-300",
+        "sticky top-0 z-30 border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300",
         scrolled
           ? "border-border bg-bg/86 backdrop-blur-xl shadow-sm"
           : "border-transparent bg-bg/72 backdrop-blur-lg",
@@ -74,7 +74,7 @@ export default function Header({ user }: { user: HeaderUser }) {
       <div className="mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 md:px-6">
         <Link
           href="/"
-          className="shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 rounded-sm"
+          className="aust-logo-link motion-press shrink-0 rounded-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2"
         >
           <AustLogo />
         </Link>
@@ -110,6 +110,7 @@ export default function Header({ user }: { user: HeaderUser }) {
           <div className="hidden md:flex items-center gap-0.5">
             <TagsLink />
             <SearchLink />
+            <LibraryLink />
             <BoardLink />
             <ThemeToggle />
           </div>
@@ -124,7 +125,7 @@ export default function Header({ user }: { user: HeaderUser }) {
             aria-expanded={isMobileOpen}
             aria-controls="mobile-nav"
             onClick={toggleMobile}
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+            className="motion-icon-button md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg text-text-secondary transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
           >
             <svg
               viewBox="0 0 24 24"
@@ -173,7 +174,7 @@ export default function Header({ user }: { user: HeaderUser }) {
                     href={s.href}
                     aria-current={active ? "page" : undefined}
                     className={[
-                      "block rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
+                      "motion-press block rounded-lg px-3 py-2.5 text-sm transition-[color,background-color,transform] duration-200",
                       active
                         ? "bg-primary text-white font-medium shadow-sm"
                         : "text-text-secondary hover:bg-primary-ghost hover:text-primary",
@@ -198,7 +199,7 @@ export default function Header({ user }: { user: HeaderUser }) {
                     href={s.href}
                     aria-current={active ? "page" : undefined}
                     className={[
-                      "block rounded-lg px-3 py-2.5 text-sm transition-all duration-200",
+                      "motion-press block rounded-lg px-3 py-2.5 text-sm transition-[color,background-color,transform] duration-200",
                       active
                         ? "bg-accent-light text-accent font-medium"
                         : "text-muted hover:bg-accent-ghost hover:text-accent",
@@ -211,8 +212,24 @@ export default function Header({ user }: { user: HeaderUser }) {
             })}
             <li>
               <Link
+                href="/library"
+                className="motion-press block rounded-lg px-3 py-2.5 text-sm text-muted transition-colors duration-200 hover:bg-primary-ghost hover:text-primary"
+              >
+                阅读中心
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/contribute"
+                className="motion-press block rounded-lg px-3 py-2.5 text-sm text-muted transition-colors duration-200 hover:bg-primary-ghost hover:text-primary"
+              >
+                投稿中心
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/search"
-                className="block rounded-lg px-3 py-2.5 text-sm text-muted transition-all duration-200 hover:bg-primary-ghost hover:text-primary"
+                className="motion-press block rounded-lg px-3 py-2.5 text-sm text-muted transition-all duration-200 hover:bg-primary-ghost hover:text-primary"
               >
                 搜索
               </Link>
@@ -231,11 +248,26 @@ export default function Header({ user }: { user: HeaderUser }) {
   );
 }
 
+function LibraryLink() {
+  return (
+    <Link
+      href="/library"
+      className="motion-icon-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      aria-label="阅读中心"
+      title="阅读中心"
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z" />
+      </svg>
+    </Link>
+  );
+}
+
 function SearchLink() {
   return (
     <Link
       href="/search"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="motion-icon-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       aria-label="搜索"
       title="搜索"
     >
@@ -251,7 +283,7 @@ function TagsLink() {
   return (
     <Link
       href="/tags"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="motion-icon-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       aria-label="标签云"
       title="标签云"
     >
@@ -267,7 +299,7 @@ function BoardLink() {
   return (
     <Link
       href="/board"
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="motion-icon-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
       aria-label="留言区"
       title="留言区"
     >
@@ -288,10 +320,10 @@ function ThemeToggle() {
       onClick={toggle}
       aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
       title={isDark ? "切换到浅色模式" : "切换到深色模式"}
-      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+      className="motion-icon-button inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-bg-alt hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
     >
       {isDark ? (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" className="theme-icon-swap h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="5" />
           <line x1="12" y1="1" x2="12" y2="3" />
           <line x1="12" y1="21" x2="12" y2="23" />
@@ -303,7 +335,7 @@ function ThemeToggle() {
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
         </svg>
       ) : (
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg viewBox="0 0 24 24" className="theme-icon-swap h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       )}
@@ -320,7 +352,7 @@ function MobileThemeToggle() {
       type="button"
       onClick={toggle}
       aria-label={isDark ? "切换到浅色模式" : "切换到深色模式"}
-      className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-text-secondary transition-all duration-200 hover:bg-primary-ghost hover:text-primary active:scale-[0.98]"
+      className="motion-press flex w-full items-center gap-3 rounded-lg px-3 py-3 text-sm text-text-secondary transition-[color,background-color,transform] duration-200 hover:bg-primary-ghost hover:text-primary"
     >
       {isDark ? (
         <>

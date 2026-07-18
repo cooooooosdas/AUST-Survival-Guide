@@ -1,0 +1,99 @@
+import { redirect } from "next/navigation";
+import ContributionForm from "./ContributionForm";
+import { createClient } from "@/lib/supabase/server";
+import type { ContentSubmission, SubmissionStatus } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
+export const metadata = { title: "投稿中心" };
+
+const DATE_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+});
+
+const STATUS_META: Record<SubmissionStatus, { label: string; className: string }> = {
+  submitted: { label: "等待审核", className: "bg-secondary-light text-secondary" },
+  reviewing: { label: "编辑处理中", className: "bg-tertiary-light text-tertiary" },
+  accepted: { label: "已采纳", className: "bg-primary-light text-primary" },
+  rejected: { label: "需要修改", className: "bg-red-50 text-red-700" },
+};
+
+export default async function ContributePage() {
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+    redirect("/login?next=/contribute");
+  }
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/contribute");
+
+  const { data, error } = await supabase
+    .from("content_submissions")
+    .select("id, user_id, title, excerpt, category, tags, body, status, reviewer_note, submitted_at, updated_at")
+    .eq("user_id", user.id)
+    .order("submitted_at", { ascending: false })
+    .limit(20);
+  const submissions = (data ?? []) as ContentSubmission[];
+
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 md:py-16">
+      <header className="max-w-3xl border-b border-border pb-8">
+        <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Contribute</p>
+        <h1 className="mt-2 text-balance font-serif text-3xl font-semibold text-text md:text-4xl">把你的经验留给下一届</h1>
+        <p className="mt-4 text-pretty text-sm leading-7 text-text-secondary md:text-base">
+          欢迎校园生活、学习方法、工具资源和项目复盘。编辑会核对隐私、时效与可操作性，再决定是否收录到站内栏目。
+        </p>
+      </header>
+
+      <div className="mt-10 grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <section aria-labelledby="submission-form-title">
+          <h2 id="submission-form-title" className="font-serif text-2xl font-semibold text-text">新投稿</h2>
+          <p className="mt-2 text-sm text-muted">写清背景、过程和结果，比“应该怎么做”更有帮助。</p>
+          <div className="mt-6 rounded-md border border-border bg-surface p-5 shadow-sm sm:p-7">
+            <ContributionForm />
+          </div>
+        </section>
+
+        <aside aria-labelledby="submission-history-title">
+          <h2 id="submission-history-title" className="font-serif text-xl font-semibold text-text">我的稿件</h2>
+          <p className="mt-2 text-sm leading-6 text-muted">审核意见和稿件状态会保留在这里。</p>
+
+          {error ? (
+            <div className="mt-5 rounded-md border border-tertiary/40 bg-tertiary-light p-4 text-sm leading-6 text-tertiary">
+              投稿数据库尚未初始化，请执行 `0012_publication_workflow.sql`。
+            </div>
+          ) : submissions.length > 0 ? (
+            <ol className="mt-5 space-y-3">
+              {submissions.map((submission) => {
+                const status = STATUS_META[submission.status];
+                return (
+                  <li key={submission.id} className="rounded-md border border-border bg-surface p-4">
+                    <div className="flex items-center justify-between gap-3">
+                      <span className={`rounded px-2 py-0.5 text-xs font-medium ${status.className}`}>{status.label}</span>
+                      <time dateTime={submission.submitted_at} className="text-xs text-muted">
+                        {DATE_FORMATTER.format(new Date(submission.submitted_at))}
+                      </time>
+                    </div>
+                    <h3 className="mt-3 break-words text-sm font-semibold text-text">{submission.title}</h3>
+                    <p className="mt-2 line-clamp-2 text-xs leading-5 text-muted">{submission.excerpt}</p>
+                    {submission.reviewer_note && (
+                      <p className="mt-3 border-l-2 border-tertiary pl-3 text-xs leading-5 text-text-secondary">
+                        编辑意见：{submission.reviewer_note}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          ) : (
+            <div className="mt-5 border-y border-dashed border-border py-8 text-center text-sm text-muted">
+              还没有投稿记录。
+            </div>
+          )}
+        </aside>
+      </div>
+    </div>
+  );
+}

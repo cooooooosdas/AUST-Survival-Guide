@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 type Props = {
   targetType: string;
@@ -50,7 +50,7 @@ export default function LikeButton({
       disabled={loading}
       aria-pressed={liked}
       className={[
-        "inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-all duration-200",
+        "motion-press inline-flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm transition-[color,background-color,border-color,transform] duration-200",
         liked
           ? "border-accent bg-accent-light text-accent"
           : "border-border bg-surface text-muted hover:border-accent hover:text-accent",

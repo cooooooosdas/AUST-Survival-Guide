@@ -57,6 +57,15 @@ export default function Footer() {
               更多
             </p>
             <div className="flex flex-col gap-1.5">
+              <Link href="/library" className="text-xs text-text-secondary transition-colors hover:text-primary">
+                阅读中心
+              </Link>
+              <Link href="/contribute" className="text-xs text-text-secondary transition-colors hover:text-primary">
+                投稿中心
+              </Link>
+              <a href="/feed.xml" className="text-xs text-text-secondary transition-colors hover:text-primary">
+                RSS 订阅
+              </a>
               <Link href="/privacy" className="text-xs text-text-secondary transition-colors hover:text-primary">
                 隐私政策
               </Link>

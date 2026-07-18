@@ -7,7 +7,7 @@ export default function PrivacyPage() {
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">隐私政策</h1>
       <p className="mt-2 text-xs text-muted">
-        生效日期：2026-06-27 · 最后更新：2026-06-27
+        生效日期：2026-06-27 · 最后更新：2026-07-19
       </p>
 
       <div className="mt-10 space-y-8 leading-relaxed text-text">
@@ -24,21 +24,25 @@ export default function PrivacyPage() {
           <ul className="mt-3 list-disc space-y-2 pl-5 text-sm">
             <li>
               <strong className="text-text">浏览器本地存储（localStorage）</strong>：本站使用 localStorage
-              记录你的主题偏好（亮色 / 暗色模式）以及访客计数器（仅记录访问次数，不包含任何个人身份信息）。
-              你可随时在浏览器设置中清除。
+              记录你的主题偏好，并使用 sessionStorage 避免同一浏览会话重复计数。
+              这些数据可随时在浏览器设置中清除。
             </li>
             <li>
               <strong className="text-text">Supabase Auth 会话</strong>：当你登录后，Supabase
               会在浏览器中存储一个会话令牌，用于识别你的身份。令牌不包含密码，过期后自动失效。
             </li>
             <li>
-              <strong className="text-text">用户提交内容</strong>：留言、匿名提问、评论、上传的头像等由你主动提交的内容
-              会存储在 Supabase 数据库中，关联你的用户 ID（若已登录）或匿名会话。
+              <strong className="text-text">账户与互动内容</strong>：留言、提问、评论、点赞、稍后读、头像和投稿等由你主动提交的内容
+              会存储在 Supabase 数据库中；需要登录的功能会关联你的用户 ID。
             </li>
             <li>
-              <strong className="text-text">访问日志</strong>：Vercel（本站托管方）会自动记录请求的 IP
-              地址、User-Agent、访问时间等，用于安全审计和流量统计。本站在服务端不会主动收集这些数据，
-              但托管商保留这些日志。
+              <strong className="text-text">阅读与访问记录</strong>：本站会记录内容类型、内容 ID、访问时间，
+              并使用登录用户 ID 或请求 IP 区分访问者，用于生成聚合访问人数、热门内容及个人最近浏览。
+              原始记录不向其他访客公开；登录用户可在阅读中心清除自己的阅读历史。
+            </li>
+            <li>
+              <strong className="text-text">托管日志</strong>：Vercel（本站托管方）可能记录请求 IP、User-Agent
+              和访问时间，用于安全审计与服务运维。
             </li>
             <li>
               <strong className="text-text">Vercel Analytics</strong>：本站使用 Vercel Analytics
@@ -117,11 +121,14 @@ export default function PrivacyPage() {
               <strong className="text-text">清除数据</strong>：你可以在账户设置中删除自己发布的留言、提问、头像等。
             </li>
             <li>
+              <strong className="text-text">管理阅读数据</strong>：你可以从阅读中心移除稍后读内容，并清除自己的最近浏览记录。
+            </li>
+            <li>
               <strong className="text-text">注销账号</strong>：通过「个人主页」可注销账号，相关数据将被永久删除。
             </li>
             <li>
               <strong className="text-text">清除本地数据</strong>：在浏览器开发者工具 → Application → Local Storage
-              中删除本站相关条目即可清除主题偏好和计数器数据。
+              中删除本站相关条目即可清除主题偏好和会话去重数据。
             </li>
           </ul>
         </section>

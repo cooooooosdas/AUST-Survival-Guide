@@ -119,5 +119,33 @@ export type FaqItem = {
   updated_at: string;
 };
 
+export type SubmissionCategory =
+  | "campus"
+  | "study"
+  | "tools"
+  | "experience"
+  | "project"
+  | "other";
+
+export type SubmissionStatus =
+  | "submitted"
+  | "reviewing"
+  | "accepted"
+  | "rejected";
+
+export type ContentSubmission = {
+  id: number;
+  user_id: string;
+  title: string;
+  excerpt: string;
+  category: SubmissionCategory;
+  tags: string[];
+  body: string;
+  status: SubmissionStatus;
+  reviewer_note: string | null;
+  submitted_at: string;
+  updated_at: string;
+};
+
 export const COMMENT_TAGS = ["高数问题", "选课疑问", "软件安装", "AI工具使用"] as const;
 export type CommentTag = typeof COMMENT_TAGS[number];

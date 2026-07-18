@@ -5,7 +5,6 @@ import { LETTERS, getLetter, readingTimeMinutes } from "@/lib/letters";
 import CommentBoard from "@/components/CommentBoard";
 import LikeButton from "@/components/LikeButton";
 import FavoriteButton from "@/components/FavoriteButton";
-import ReadingProgress from "@/components/ReadingProgress";
 import LetterToc from "@/components/LetterToc";
 import ViewTracker from "@/components/ViewTracker";
 import ShareButton from "@/components/ShareButton";
@@ -53,9 +52,14 @@ export async function generateMetadata({
   };
 }
 
+const DATE_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
 function formatDate(iso: string) {
-  const d = new Date(iso);
-  return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
+  return DATE_FORMATTER.format(new Date(`${iso}T00:00:00Z`));
 }
 
 function extractHeadings(text: string): { id: string; text: string; level: 2 | 3 }[] {
@@ -142,16 +146,31 @@ export default async function LetterPage({
   };
 
   const headings = extractHeadings(rawText);
+  const currentTags = new Set(letter.tags ?? []);
+  const relatedLetters = LETTERS
+    .filter((entry) => entry.slug !== slug)
+    .map((entry) => ({
+      entry,
+      score: (entry.tags ?? []).reduce(
+        (total, tag) => total + (currentTags.has(tag) ? 1 : 0),
+        0
+      ),
+    }))
+    .sort((a, b) => b.score - a.score || b.entry.date.localeCompare(a.entry.date))
+    .slice(0, 2)
+    .map(({ entry }) => entry);
 
-  // 加载点赞数据
+  // 点赞与收藏互相独立，并行读取，避免文章页产生额外等待链。
   let likeCount = 0;
   let userLiked = false;
+  let userFavorited = false;
   if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
     try {
       const supabase = await createClient();
       const [
         { count: lc },
         { data: myLike },
+        { data: myFavorite },
       ] = await Promise.all([
         supabase
           .from("likes")
@@ -167,9 +186,19 @@ export default async function LetterPage({
               .eq("user_id", userId)
               .maybeSingle()
           : Promise.resolve({ data: null }),
+        userId
+          ? supabase
+              .from("favorites")
+              .select("id")
+              .eq("target_type", "letter")
+              .eq("target_id", slug)
+              .eq("user_id", userId)
+              .maybeSingle()
+          : Promise.resolve({ data: null }),
       ]);
       likeCount = lc ?? 0;
       userLiked = !!myLike?.id;
+      userFavorited = !!myFavorite?.id;
     } catch {
       // 点赞查询失败不影响页面
     }
@@ -177,7 +206,6 @@ export default async function LetterPage({
 
   return (
     <>
-      <ReadingProgress />
       <LetterToc headings={headings} />
       <ViewTracker targetType="letter" targetId={slug} />
       <article className="mx-auto max-w-2xl px-6 py-16">
@@ -194,7 +222,7 @@ export default async function LetterPage({
 
       <header className="mt-8 border-b border-border pb-8">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
-          <time>{formatDate(letter.date)}</time>
+          <time dateTime={letter.date}>{formatDate(letter.date)}</time>
           <span>{letter.author}</span>
           <span>· 约 {minutes} 分钟</span>
         </div>
@@ -223,7 +251,7 @@ export default async function LetterPage({
           <FavoriteButton
             targetType="letter"
             targetId={slug}
-            initialFavorited={false}
+            initialFavorited={userFavorited}
           />
           <ShareButton
             targetType="letter"
@@ -245,6 +273,39 @@ export default async function LetterPage({
         <span className="text-amber-300 text-sm select-none">— — —</span>
         <div className="flex-1 h-px bg-gradient-to-l from-amber-200 to-transparent" />
       </div>
+
+      {relatedLetters.length > 0 && (
+        <section className="mb-16" aria-labelledby="related-letters-title">
+          <div className="flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-medium uppercase tracking-[0.16em] text-accent">Keep reading</p>
+              <h2 id="related-letters-title" className="mt-1 font-serif text-2xl font-semibold text-text">继续阅读</h2>
+            </div>
+            <Link href="/letters" className="text-sm text-primary transition-colors hover:text-primary-hover">
+              所有来信
+            </Link>
+          </div>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {relatedLetters.map((related) => (
+              <Link
+                key={related.slug}
+                href={`/letters/${related.slug}`}
+                className="card card-interactive group flex min-h-48 flex-col p-5"
+              >
+                <div className="flex items-center justify-between gap-3 text-xs text-muted">
+                  <time dateTime={related.date}>{formatDate(related.date)}</time>
+                  <span>约 {related.readingTime ?? 5} 分钟</span>
+                </div>
+                <h3 className="mt-3 text-pretty font-serif text-lg font-semibold leading-snug text-text transition-colors group-hover:text-primary">
+                  {related.title}
+                </h3>
+                <p className="mt-2 line-clamp-3 text-sm leading-6 text-text-secondary">{related.excerpt}</p>
+                <span className="mt-auto pt-4 text-sm font-medium text-primary">继续读 <span aria-hidden="true">→</span></span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section>
         <h2 className="text-2xl font-serif font-semibold text-text mt-0">读完想说点什么？</h2>

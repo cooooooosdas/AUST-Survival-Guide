@@ -4,6 +4,7 @@ import HeroDecoration from "@/components/HeroDecoration";
 import ScrollReveal from "@/components/ScrollReveal";
 import Leaderboard from "@/components/Leaderboard";
 import CommentBoard from "@/components/CommentBoard";
+import EditorialShelf from "@/components/EditorialShelf";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
@@ -38,11 +39,6 @@ type HomeStat = {
   value: string;
 };
 
-type ViewRow = {
-  viewer_ip: string | null;
-  viewer_id: string | null;
-};
-
 const FALLBACK_HOME_STATS: HomeStat[] = [
   { label: "访问人次", value: "统计中" },
   { label: "访问人数", value: "统计中" },
@@ -62,28 +58,19 @@ async function loadHomeStats(): Promise<HomeStat[]> {
 
   try {
     const supabase = await createClient();
-    const { data, error, count } = await supabase
-      .from("content_views")
-      .select("viewer_ip, viewer_id", { count: "exact" })
-      .limit(5000);
+    const { data, error } = await supabase
+      .from("site_visit_stats")
+      .select("total_views, unique_visitors")
+      .maybeSingle();
 
     if (error) {
       console.error("Failed to load home stats:", error);
       return FALLBACK_HOME_STATS;
     }
 
-    const uniqueVisitors = new Set<string>();
-    for (const row of (data ?? []) as ViewRow[]) {
-      if (row.viewer_id) {
-        uniqueVisitors.add(`user:${row.viewer_id}`);
-      } else if (row.viewer_ip) {
-        uniqueVisitors.add(`ip:${row.viewer_ip}`);
-      }
-    }
-
     return [
-      { label: "访问人次", value: formatStatCount(count ?? data?.length ?? 0) },
-      { label: "访问人数", value: formatStatCount(uniqueVisitors.size) },
+      { label: "访问人次", value: formatStatCount(Number(data?.total_views ?? 0)) },
+      { label: "访问人数", value: formatStatCount(Number(data?.unique_visitors ?? 0)) },
       { label: "维护状态", value: "长期" },
     ];
   } catch (e) {
@@ -128,7 +115,7 @@ export default async function HomePage() {
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
       <section className="guide-hero relative -mx-4 border-b border-border px-4 py-14 sm:-mx-6 sm:px-6 md:py-20 lg:py-24">
         <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div style={{ animation: "fade-up 0.9s var(--ease-out-soft) forwards" }}>
+          <div className="hero-copy-enter">
             <div className="campus-stamp mb-7 inline-flex items-center gap-3 rounded-full px-3 py-1.5 text-xs font-medium text-text-secondary">
               <span className="h-2 w-2 rounded-full bg-primary" />
               <span>AUST Survival Guide</span>
@@ -157,7 +144,7 @@ export default async function HomePage() {
                   key={link.href}
                   href={link.href}
                   className={[
-                    "inline-flex h-11 items-center rounded-full border px-4 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
+                    "motion-press inline-flex h-11 items-center rounded-full border px-4 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
                     index === 0
                       ? "border-primary bg-primary text-white shadow-md shadow-primary/15 hover:bg-primary-hover"
                       : "border-border bg-surface/80 text-text-secondary hover:border-primary hover:text-primary",
@@ -169,7 +156,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <div className="relative hidden lg:block" style={{ animation: "fade-in 1.2s ease-out 0.2s both" }}>
+          <div className="hero-note-enter relative hidden lg:block">
             <div className="index-card relative z-10 overflow-hidden rounded-2xl p-5">
               <div className="mb-4 flex items-center justify-between border-b border-border pb-4">
                 <div>
@@ -185,7 +172,7 @@ export default async function HomePage() {
                 {homeStats.map((item) => (
                   <div key={item.label} className="flex items-center justify-between rounded-xl border border-border bg-bg/70 px-4 py-3">
                     <span className="text-sm text-text-secondary">{item.label}</span>
-                    <span className="font-serif text-lg font-semibold text-text">{item.value}</span>
+                    <span className="font-serif text-lg font-semibold tabular-nums text-text">{item.value}</span>
                   </div>
                 ))}
               </div>
@@ -201,6 +188,8 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <EditorialShelf />
 
       <section className={SECTION_Y}>
         <Leaderboard />
@@ -226,7 +215,7 @@ export default async function HomePage() {
               <ScrollReveal key={s.slug} delay={60 + i * 50} className={span}>
                 <Link
                   href={s.href}
-                  className="index-card card-interactive group relative flex min-h-40 flex-col gap-3 overflow-hidden rounded-2xl p-5 transition-all duration-200 ease-out hover:-translate-y-1 active:translate-y-0 active:scale-[0.985]"
+                  className="index-card card-interactive group relative flex min-h-40 flex-col gap-3 overflow-hidden rounded-2xl p-5"
                 >
                   <span className={`absolute inset-x-0 top-0 h-1 ${barClass} opacity-80 transition-all duration-200 group-hover:h-1.5`} />
 

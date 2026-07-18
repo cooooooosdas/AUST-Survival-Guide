@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 
 type Props = {
   children: React.ReactNode;
@@ -16,21 +16,19 @@ export default function ScrollReveal({
   threshold = 0.12,
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     if (typeof IntersectionObserver === "undefined") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setShown(true);
+      el.classList.add("is-revealed");
       return;
     }
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
-            setShown(true);
+            el.classList.add("is-revealed");
             io.disconnect();
             break;
           }
@@ -42,9 +40,7 @@ export default function ScrollReveal({
     return () => io.disconnect();
   }, [threshold]);
 
-  const style: CSSProperties = shown
-    ? { animation: `fade-up 0.7s var(--ease-out-soft) ${delay}ms forwards` }
-    : {};
+  const style = { "--reveal-delay": `${delay}ms` } as CSSProperties;
 
   return (
     <div

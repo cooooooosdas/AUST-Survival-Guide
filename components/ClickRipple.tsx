@@ -1,44 +1,44 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+
+const INTERACTIVE_SELECTOR = [
+  "a[href]",
+  "button:not([disabled])",
+  '[role="button"]:not([aria-disabled="true"])',
+  "summary",
+  'input[type="button"]:not([disabled])',
+  'input[type="submit"]:not([disabled])',
+].join(",");
 
 export default function ClickRipple() {
   const container = useRef<HTMLDivElement>(null);
 
-  const spawn = useCallback((x: number, y: number) => {
-    const el = document.createElement("span");
-    el.style.cssText = `
-      position: fixed;
-      left: ${x}px;
-      top: ${y}px;
-      width: 0; height: 0;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(123,140,222,0.3) 0%, rgba(255,158,181,0.15) 50%, rgba(125,212,184,0.05) 100%);
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 9999;
-      animation: austin-ripple 0.9s ease-out forwards;
-    `;
-    container.current?.appendChild(el);
-    setTimeout(() => el.remove(), 1000);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const host = container.current;
+    if (!host) return;
+
+    const onPointerDown = (event: PointerEvent) => {
+      if (!event.isPrimary || event.button !== 0) return;
+      if (!(event.target instanceof Element)) return;
+
+      const target = event.target.closest<HTMLElement>(INTERACTIVE_SELECTOR);
+      if (!target || target.dataset.ripple === "off") return;
+
+      const ink = document.createElement("span");
+      ink.className = "click-ink";
+      ink.style.left = `${event.clientX}px`;
+      ink.style.top = `${event.clientY}px`;
+      ink.style.setProperty("--ink-color", getComputedStyle(target).color);
+      ink.addEventListener("animationend", () => ink.remove(), { once: true });
+      host.appendChild(ink);
+    };
+
+    document.addEventListener("pointerdown", onPointerDown, { passive: true });
+    return () => document.removeEventListener("pointerdown", onPointerDown);
   }, []);
 
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.textContent = `
-      @keyframes austin-ripple {
-        0%   { width: 0;   height: 0;   opacity: 0.9; }
-        100% { width: 320px; height: 320px; opacity: 0; }
-      }
-    `;
-    document.head.appendChild(style);
-    const onClick = (e: MouseEvent) => spawn(e.clientX, e.clientY);
-    window.addEventListener("click", onClick);
-    return () => {
-      window.removeEventListener("click", onClick);
-      style.remove();
-    };
-  }, [spawn]);
-
-  return <div ref={container} aria-hidden className="pointer-events-none fixed inset-0 z-[9998]" />;
+  return <div ref={container} aria-hidden className="pointer-events-none fixed inset-0 z-[9998] overflow-hidden" />;
 }

@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useSyncExternalStore,
+} from "react";
 
 type Theme = "light" | "dark";
 
@@ -15,6 +21,8 @@ const ThemeContext = createContext<ThemeContextValue>({
   toggle: () => {},
   setTheme: () => {},
 });
+
+const THEME_CHANGE_EVENT = "aust-theme-change";
 
 function readStoredTheme(): Theme | null {
   if (typeof window === "undefined") return null;
@@ -34,36 +42,63 @@ function getInitialTheme(): Theme {
   return readStoredTheme() ?? getSystemTheme();
 }
 
+function applyTheme(theme: Theme) {
+  const root = document.documentElement;
+  root.classList.toggle("dark", theme === "dark");
+  try {
+    localStorage.setItem("theme", theme);
+  } catch {}
+  window.dispatchEvent(new Event(THEME_CHANGE_EVENT));
+}
+
+function subscribeToTheme(onStoreChange: () => void) {
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const syncTheme = () => {
+    const theme = getInitialTheme();
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    onStoreChange();
+  };
+  const syncSystemTheme = () => {
+    if (!readStoredTheme()) syncTheme();
+  };
+
+  window.addEventListener(THEME_CHANGE_EVENT, onStoreChange);
+  window.addEventListener("storage", syncTheme);
+  media.addEventListener("change", syncSystemTheme);
+  return () => {
+    window.removeEventListener(THEME_CHANGE_EVENT, onStoreChange);
+    window.removeEventListener("storage", syncTheme);
+    media.removeEventListener("change", syncSystemTheme);
+  };
+}
+
 export function useTheme() {
   return useContext(ThemeContext);
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState(getInitialTheme);
+  const theme = useSyncExternalStore(
+    subscribeToTheme,
+    getInitialTheme,
+    (): Theme => "light"
+  );
 
-  // 只做副作用：把主题同步到 DOM class 和 localStorage
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    return () => {
-      root.classList.remove("dark");
-    };
-  }, [theme]);
+  const setTheme = useCallback((nextTheme: Theme) => {
+    applyTheme(nextTheme);
+  }, []);
 
-  useEffect(() => {
-    try {
-      localStorage.setItem("theme", theme);
-    } catch {}
-  }, [theme]);
+  const toggle = useCallback(() => {
+    const currentTheme = getInitialTheme();
+    applyTheme(currentTheme === "light" ? "dark" : "light");
+  }, []);
 
-  const toggle = () => setTheme((t) => (t === "light" ? "dark" : "light"));
+  const value = useMemo(
+    () => ({ theme, toggle, setTheme }),
+    [theme, toggle, setTheme]
+  );
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );

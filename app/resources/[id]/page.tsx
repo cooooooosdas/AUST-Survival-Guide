@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ViewTracker from "@/components/ViewTracker";
+import FavoriteButton from "@/components/FavoriteButton";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase/server";
 
@@ -39,6 +40,22 @@ async function getDownloadUrl(storagePath: string) {
   return url;
 }
 
+async function getFavoriteState(id: string) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return false;
+  const { data } = await supabase
+    .from("favorites")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("target_type", "resource")
+    .eq("target_id", id)
+    .maybeSingle();
+  return Boolean(data);
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const r = await getResource(id);
@@ -59,12 +76,6 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
           资源可能已被删除、下架，或链接有误。你可以返回列表看看其他文件。
         </p>
         <div className="mt-6 flex items-center justify-center gap-3">
-          <button
-            onClick={() => window.history.back()}
-            className="rounded-lg border border-border px-4 py-2 text-sm text-muted transition-colors hover:border-primary hover:text-primary"
-          >
-            返回上一页
-          </button>
           <Link
             href="/resources"
             className="rounded-lg bg-primary px-5 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
@@ -76,7 +87,10 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
     );
   }
 
-  const downloadUrl = await getDownloadUrl(resource.storage_path);
+  const [downloadUrl, userFavorited] = await Promise.all([
+    getDownloadUrl(resource.storage_path),
+    getFavoriteState(String(resource.id)),
+  ]);
   const isPDF = resource.file_type === "application/pdf" || resource.file_name.endsWith(".pdf");
   const isMD = resource.file_type === "text/markdown" || resource.file_name.endsWith(".md");
 
@@ -102,6 +116,13 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
           <span>{formatSize(resource.file_size)}</span>
           <span>{resource.file_name}</span>
           <span>↓ {resource.download_count ?? 0} 次下载</span>
+        </div>
+        <div className="mt-5">
+          <FavoriteButton
+            targetType="resource"
+            targetId={String(resource.id)}
+            initialFavorited={userFavorited}
+          />
         </div>
       </header>
 
