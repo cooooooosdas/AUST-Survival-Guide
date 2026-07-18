@@ -465,6 +465,24 @@ select:focus-visible {
   will-change: transform;
 }
 
+.cursor-glow {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-primary) 28%, transparent) 0%,
+    color-mix(in srgb, var(--color-secondary) 15%, transparent) 45%,
+    transparent 70%
+  );
+}
+
+.dark .cursor-glow {
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--color-primary) 36%, transparent) 0%,
+    color-mix(in srgb, var(--color-secondary) 22%, transparent) 45%,
+    transparent 70%
+  );
+}
+
 .click-ink {
   --ink-color: var(--color-primary);
   position: absolute;
