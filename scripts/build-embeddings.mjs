@@ -159,7 +159,7 @@ async function main() {
   for (let i = 0; i < index.length; i++) {
     const item = index[i];
     const text = `${item.title} ${item.text} ${(item.tags || []).join(" ")}`;
-    // @ts-ignore
+    // @ts-expect-error embedder type from Transformers.js lacks pooling/normalize overload
     const output = await embedder(text, { pooling: "mean", normalize: true });
     records.push({ ...item, vector: Array.from(output.data) });
 

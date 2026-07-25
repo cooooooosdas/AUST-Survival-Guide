@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { MAIN_SECTIONS, EXTRA_SECTIONS, type Section } from "@/lib/sections";
 
 const ACCENT_CLASS: Record<Section["accent"], string> = {
@@ -13,25 +13,23 @@ const ACCENT_CLASS: Record<Section["accent"], string> = {
 
 export default function SectionSidebar() {
   const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const mounted = useSyncExternalStore(
+    () => () => true,
+    () => true,
+    () => false
+  );
+  const activeIndex = useMemo(
+    () => MAIN_SECTIONS.findIndex((s) => {
+      if (pathname === s.href) return true;
+      return pathname?.startsWith(s.href + "/") ?? false;
+    }),
+    [pathname]
+  );
   const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    const idx = MAIN_SECTIONS.findIndex((s) => {
-      if (pathname === s.href) return true;
-      return pathname?.startsWith(s.href + "/") ?? false;
-    });
-    setActiveIndex(idx >= 0 ? idx : 0);
-  }, [pathname]);
-
-  useEffect(() => {
-    const el = itemRefs.current[activeIndex];
+    const el = itemRefs.current[activeIndex >= 0 ? activeIndex : 0];
     if (!el) return;
 
     const isMobile = window.innerWidth < 768;

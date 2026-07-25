@@ -5,12 +5,12 @@ import Link from "next/link";
 import { postComment, replyToComment, deleteComment } from "@/app/comments/actions";
 import { moderateComment, pinComment } from "@/app/comments/actions";
 import Avatar from "@/components/Avatar";
-import type { Comment, CommentStatus } from "@/lib/types";
+import type { Comment, CommentStatus, CommentTargetType } from "@/lib/types";
 import { COMMENT_TAGS } from "@/lib/types";
 
 type Props = {
   initial: Comment[];
-  targetType: string;
+  targetType: CommentTargetType;
   targetId: string;
   currentUserId: string | null;
 };
@@ -96,7 +96,7 @@ export default function CommentBoard({
     setSubmitting(true);
     const res = await postComment({
       content: trimmed,
-      target_type: targetType as any,
+      target_type: targetType,
       target_id: targetId,
       parent_id: null,
       tags: selectedTags,
@@ -115,7 +115,7 @@ export default function CommentBoard({
       {
         id: Date.now(),
         user_id: currentUserId ?? "",
-        target_type: targetType as any,
+        target_type: targetType,
         target_id: targetId,
         content: trimmed,
         created_at: new Date().toISOString(),
@@ -137,7 +137,7 @@ export default function CommentBoard({
     setReplying(true);
     const res = await replyToComment({
       content: trimmed,
-      target_type: targetType as any,
+      target_type: targetType,
       target_id: targetId,
       parent_id: parentId,
     });
@@ -154,7 +154,7 @@ export default function CommentBoard({
       {
         id: Date.now(),
         user_id: currentUserId ?? "",
-        target_type: targetType as any,
+        target_type: targetType,
         target_id: targetId,
         content: trimmed,
         created_at: new Date().toISOString(),

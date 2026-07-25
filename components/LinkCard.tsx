@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import {
   inferLinkKind,
   LINK_KIND_META,
@@ -73,15 +73,9 @@ function HostFallbackIcon({ host }: { host: string }) {
 }
 
 function LazyFavicon({ host, title }: { host: string; title: string }) {
-  const [src, setSrc] = useState<string>(FAVICON_SERVICES[0](host));
+  const src = useMemo(() => FAVICON_SERVICES[0](host), [host]);
   const [idx, setIdx] = useState(0);
   const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    setSrc(FAVICON_SERVICES[0](host));
-    setIdx(0);
-    setFailed(false);
-  }, [host]);
 
   if (failed) {
     return <HostFallbackIcon host={title || host} />;

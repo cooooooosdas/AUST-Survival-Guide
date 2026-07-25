@@ -25,7 +25,7 @@ async function resolveTaskId(
   return 1;
 }
 
-export async function GET(req: NextRequest) {
+export async function GET(_req: NextRequest) {
   const supabase = await createClient();
   const {
     data: { user },

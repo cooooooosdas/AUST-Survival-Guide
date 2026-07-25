@@ -62,7 +62,7 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
     setSeed(s);
   }
 
-  function useDicebear() {
+  function generateDicebear() {
     const s = seed.trim();
     if (!s) return;
     setAvatarUrl(`${DICEBEAR_BASE}?seed=${encodeURIComponent(s)}`);
@@ -191,13 +191,13 @@ export default function ProfileClient({ initialAvatarUrl, initialDisplayName, us
             type="text"
             value={seed}
             onChange={(e) => setSeed(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), useDicebear())}
+            onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), generateDicebear())}
             placeholder="输入任意文字生成独特头像"
             className="flex-1 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
           />
           <button
             type="button"
-            onClick={useDicebear}
+            onClick={generateDicebear}
             disabled={!seed.trim()}
             className="rounded-xl bg-primary px-5 py-2.5 text-sm font-medium text-white transition-all duration-200 hover:bg-primary-hover active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
           >

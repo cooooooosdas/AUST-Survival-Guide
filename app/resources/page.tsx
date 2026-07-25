@@ -177,7 +177,7 @@ function EmptyState({ hasCategory }: { hasCategory: boolean }) {
   );
 }
 
-function ResourceCard({ resource }: { resource: any }) {
+function ResourceCard({ resource }: { resource: { id: string | number; file_type: string; file_name: string; title: string; description: string | null; category: string; file_size: number | null; download_count: number | null } }) {
   const typeIcon =
     FILE_TYPE_ICON[resource.file_type] ||
     (resource.file_name.endsWith(".pdf")

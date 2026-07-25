@@ -82,7 +82,7 @@ export default function SearchClient({ initialQ }: { initialQ: string }) {
       const json = await res.json();
       setResults(json.results ?? []);
     } catch (err) {
-      if ((err as any)?.name !== "AbortError") {
+      if (err instanceof Error && err.name !== "AbortError") {
         setError(err instanceof Error ? err.message : "搜索失败");
         setResults([]);
       }

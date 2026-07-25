@@ -87,7 +87,6 @@ export async function POST(req: NextRequest) {
       apiUrl.includes("api.moonshot") ||
       apiUrl.includes("api.siliconflow");
 
-    const ragPrompt = buildRagPrompt(lastUserMsg, ragContext);
     const recentMessages = messages.slice(-10);
 
     if (isOpenAICompat) {

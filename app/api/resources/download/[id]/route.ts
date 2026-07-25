@@ -1,15 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-const CATEGORY_LABEL: Record<string, string> = {
-  "high-math": "高数笔记",
-  "cs-courseware": "计算机课件",
-  software: "软件安装包",
-  review: "期末复习",
-  latex: "LaTeX模板",
-  other: "其他",
-};
-
 function bad(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
 }

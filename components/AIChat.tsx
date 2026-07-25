@@ -121,9 +121,11 @@ export default function AIChat() {
   const inputElRef = useRef<HTMLInputElement>(null);
   const [, startTransition] = useTransition();
 
-  // Sync refs with state (synchronous, no extra render)
-  inputRef.current = input;
-  messagesRef.current = messages;
+  // Sync refs with state via useEffect to avoid ref access during render
+  useEffect(() => {
+    inputRef.current = input;
+    messagesRef.current = messages;
+  }, [input, messages]);
 
   useEffect(() => {
     if (open && inputElRef.current) {

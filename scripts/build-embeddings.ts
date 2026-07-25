@@ -52,7 +52,7 @@ async function main() {
   console.log(`Indexing ${FULL_INDEX.length} content items...`);
 
   // Load existing embeddings to avoid re-embedding unchanged items
-  let existing: Record<string, { vector: number[] }> = {};
+  const existing: Record<string, { vector: number[] }> = {};
   try {
     const raw = readFileSync(OUT_FILE, "utf8");
     const arr = JSON.parse(raw) as Array<{ id: string; vector: number[] }>;
