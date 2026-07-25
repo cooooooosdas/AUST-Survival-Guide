@@ -1,10 +1,10 @@
 # 安理大生存指南 · AUST Survival Guide
 
-> 写给安徽理工大学新生的学长来信 × 资源导航 × 社区互动，长期维护。
+> 给安徽理工大学新生准备的学长经验、资源导航和社区讨论，一直在更新。
 
 **在线访问 → [aust.asia](https://aust.asia)**
 
-</br>
+<br>
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.2.9-000000?logo=nextdotjs)
 ![React](https://img.shields.io/badge/React-19.2.4-61dafb?logo=react)
@@ -13,7 +13,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-Latest-3ecf8e?logo=supabase)
 ![Vercel](https://img.shields.io/badge/Vercel-Edge-000000?logo=vercel)
 
-</br>
+<br>
 
 ![静态生成](https://img.shields.io/badge/SSG-静态导出-green)
 ![MDX](https://img.shields.io/badge/MDX-来信源文件-blue)
@@ -22,38 +22,31 @@
 
 ---
 
-## ✨ 功能一览
+## 网站有什么
 
-| 模块 | 说明 |
+| 板块 | 说明 |
 |------|------|
-| 📝 **学长来信** | MDX 长文，带 Aside、Takeaways、脚注、阅读进度条、目录 |
-| 📂 **工具导航** | 按板块分类的外部链接卡片（AI / 软件 / 学习 / 微服务 / 工具），支持复制与失效反馈 |
-| 📚 **资源下载** | Supabase Storage 托管，分类筛选，下载计数 |
-| 💬 **社区互动** | 留言楼中楼、回复、置顶、审核、标签、匿名提问、FAQ |
-| 🔥 **热门推荐** | 按全站阅读量排行的 Leaderboard（来信 / 资源） |
-| 🔍 **全文搜索** | 本地索引优先，命中不足时 AI fallback，支持 OpenAI + Anthropic 格式 |
-| 🤖 **AI 助手** | 浮动聊天窗，本地搜索 → 兜底回复 → AI 流式输出 |
-| 📊 **运营统计** | 内容阅读量、分享次数、访问量、热门搜索词 |
-| 🎨 **视觉系统** | 天空蓝紫 / 樱花粉 / 薄荷绿三主题色，毛玻璃卡片，滚动动画，暗色模式 |
-| ⭐ **收藏 / 点赞 / 分享** | 针对来信与资源的互动 |
-
-</br>
-
-![GitHub stars](https://img.shields.io/github/stars/cooooooosdas/AUST-Survival-Guide?style=social)
-![GitHub forks](https://img.shields.io/github/forks/cooooooosdas/AUST-Survival-Guide?style=social)
+| 📝 **学长来信** | 几篇亲笔长文，从报到流程到大学四年避坑，再到怎么用 AI 辅助学习 |
+| 📂 **工具导航** | AI 工具、软件、学习网站、学校微服务入口，分类整理，点击直达 |
+| 📚 **资源下载** | 笔记、课件、安装包，Supabase 托管，支持分类筛选和下载统计 |
+| 💬 **留言板** | 树形回复、置顶、审核、标签，有问题直接问学长学姐 |
+| 🔍 **搜索** | 站内全文检索，支持语义搜索，找内容不用翻页 |
+| 🤖 **AI 问答** | 基于网站内容做智能问答，有问题随时问 |
+| 📊 **学习打卡** | 每日任务 + 刷题练习，坚持下来不容易 |
+| ⭐ **互动** | 点赞、收藏、分享，觉得有用的内容标记一下 |
 
 ---
 
-## 🚀 快速开始
+## 自己搭一个
 
-### 前置要求
+### 前置条件
 
 - Node.js ≥ 20
 - npm ≥ 10
-- Supabase 账号（用于评论、资源、用户认证、统计）
-- （可选）OpenAI / Anthropic API Key，用于 AI 助手
+- Supabase 账号（评论、资源、用户登录用）
+- 可选：大模型 API Key，让 AI 问答更聪明
 
-### 克隆 & 安装
+### 克隆安装
 
 ```bash
 git clone https://github.com/cooooooosdas/AUST-Survival-Guide.git
@@ -63,53 +56,51 @@ npm install
 
 ### 环境变量
 
-在项目根目录创建 `.env.local`：
+项目根目录建一个 `.env.local`：
 
 ```env
 # Supabase（必填）
-NEXT_PUBLIC_SUPABASE_URL=https://<project>.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://你的项目.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=<anon_key>
-SUPABASE_SERVICE_ROLE_KEY=<service_role_key>  # 仅在服务端 API 路由中使用
+SUPABASE_SERVICE_ROLE_KEY=<service_role_key>  # 只在服务端用
 
-# 站点地址（可选，用于友链 API 等绝对路径拼接）
-NEXT_PUBLIC_SITE_URL=https://aust.asia
+# 站点地址
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
 
-# AI 助手（二选一，留空则走本地搜索 + 兜底）
+# AI 问答（可选）
 OPENAI_API_KEY=sk-...
 OPENAI_BASE_URL=https://api.openai.com/v1
 OPENAI_MODEL=gpt-4o-mini
 
-# 或 Anthropic
+# 或者用 Anthropic
 ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-### Supabase 数据库初始化
+### 数据库初始化
 
-在 [Supabase Dashboard → SQL Editor](https://supabase.com/dashboard/project/_/sql/new) 中依次执行 `supabase/migrations/` 目录下的 SQL 文件：
+在 [Supabase Dashboard → SQL Editor](https://supabase.com/dashboard/project/_/sql/new) 里依次执行 `supabase/migrations/` 目录下的 SQL 文件：
 
 ```
-0001_init.sql        — 用户资料 / 留言基础表 / 视图
+0001_init.sql         — 用户资料、留言基础表
 0002_storage_avatars.sql
 0003_link_reports.sql
 0004_likes_favorites.sql
 0005_search_logs.sql
-0006_resources.sql  — 资源表 + Storage bucket
-0007_community.sql  — 留言升级（楼中楼、审核、标签）+ 匿名提问 + FAQ
-0008_content_ops.sql — 阅读量 / 分享 / 更新日志
+0006_resources.sql    — 资源表 + 文件存储
+0007_community.sql    — 留言升级（楼中楼、审核）+ 匿名提问 + FAQ
+0008_content_ops.sql  — 阅读量、分享、更新日志
 0009_friend_links.sql
-0010_checkins.sql
+0010_checkins.sql     — 每日打卡
 ```
-
-配置 Storage bucket 允许的 MIME 类型在 `0006_resources.sql` 中以注释形式列出。
 
 ### 本地运行
 
 ```bash
 npm run dev
-# → http://localhost:3000
+# 打开 http://localhost:3000
 ```
 
-### 构建 & 生产启动
+### 构建上线
 
 ```bash
 npm run build
@@ -118,71 +109,69 @@ npm run start
 
 ---
 
-## 📁 目录结构
+## 目录结构
 
 ```
 ├── app/
-│   ├── (sections)/         # 路由组：共享侧边栏布局（board / resources / faq / tools / ai）
-│   ├── letters/            # 学长来信列表 / 单封信件页
-│   ├── api/                # 服务端 API 路由（chat / search / stats / friend-links / ...）
-│   ├── layout.tsx          # 根布局：ThemeProvider / Header / Footer / AIChat
-│   └── page.tsx            # 首页
+│   ├── (sections)/           # 共享侧边栏的页面组（工具、资源、FAQ 等）
+│   ├── letters/              # 学长来信列表和详情页
+│   ├── api/                  # 后端接口（AI 对话、搜索、评论、打卡等）
+│   ├── layout.tsx            # 全局布局
+│   └── page.tsx              # 首页
 ├── components/
-│   ├── Header.tsx          # 顶部导航（桌面 + 移动端抽屉）
-│   ├── Footer.tsx          # 页脚
-│   ├── Leaderboard.tsx     # 热门推荐
-│   ├── SidebarInfoPanel.tsx # 侧栏信息卡（时钟、访问量、一言）
-│   ├── SectionSidebar.tsx  # 板块侧边栏导航
-│   ├── AIChat.tsx          # AI 助手浮动窗
-│   ├── CommentBoard.tsx    # 留言板（树形评论 + 审核 + 置顶）
-│   ├── LetterToc.tsx       # 来信目录（TOC，IntersectionObserver 追踪）
-│   ├── LinkCard.tsx        # 链接卡片（复制 / 反馈失效）
+│   ├── Header.tsx            # 顶部导航
+│   ├── Footer.tsx            # 页脚
+│   ├── AIChat.tsx            # AI 助手浮窗
+│   ├── CommentBoard.tsx      # 留言板
+│   ├── Leaderboard.tsx       # 热门排行
+│   ├── LetterToc.tsx         # 来信目录
+│   ├── LinkCard.tsx          # 链接卡片
 │   └── ...
 ├── content/
-│   ├── letters/            # MDX 来信源文件（含自定义 Aside / Takeaways 组件）
-│   ├── links/              # 链接数据文件（AI / 软件 / 工具 / 学习 / 微服务）
-│   └── quotes.ts           # 侧栏一言库
+│   ├── letters/              # 来信 MDX 源文件
+│   ├── links/                # 链接数据（AI / 软件 / 学习 / 微服务 / 工具）
+│   └── quotes.ts             # 侧栏一言
 ├── lib/
-│   ├── site.ts             # 站点元信息
-│   ├── letters.ts          # 来信元数据 + readingTime 估算
-│   ├── sections.ts         # 板块配置
-│   ├── supabase/           # 服务端 / 客户端 Supabase 客户端
-│   ├── comments.ts         # 留言规范化
-│   ├── types.ts            # 共享类型
-│   └── utils.ts            # 通用工具（cn 拼接等）
-├── supabase/migrations/    # 数据库迁移 SQL
-├── next.config.ts          # MDX / CSP 头配置
-└── mdx-components.tsx      # MDX 自定义组件映射
+│   ├── site.ts               # 站点信息
+│   ├── letters.ts            # 来信列表和阅读时间估算
+│   ├── sections.ts           # 板块配置
+│   ├── supabase/             # Supabase 客户端
+│   ├── comments.ts           # 评论数据处理
+│   └── types.ts              # 类型定义
+├── supabase/migrations/      # 数据库迁移 SQL
+├── next.config.ts            # 项目配置 + 安全头
+└── mdx-components.tsx        # 来信自定义组件
 ```
 
 ---
 
-## 🛠 技术栈
+## 用到的技术
 
-| 领域 | 选型 |
-|------|------|
-| 框架 | Next.js 16 App Router（静态导出 + 服务端组件） |
-| 语言 | TypeScript 5 |
-| 样式 | Tailwind CSS v4（`@theme` CSS 设计令牌 + 暗色模式变量覆盖） |
-| 内容 | MDX（`@next/mdx` + `rehype-slug` + `remark-gfm`） |
-| 数据库 | Supabase Postgres（Auth + RLS + Storage + 服务端视图） |
-| 分析 | Vercel Analytics |
-| 部署 | Vercel（推荐，零配置） |
-| AI | 本地搜索优先 → 兜底文案 → 流式 AI（兼容 OpenAI + Anthropic Messages） |
-
----
-
-## 🎨 设计系统
-
-- **主题色**：天空蓝紫 `#7B8CDE` / 樱花粉 `#FF9EB5` / 薄荷绿 `#7DD4B8`
-- **组件语言**：毛玻璃（`.glass` / `.glass-card` / `.glass-strong`）、滚动入场动画、`prefers-reduced-motion` 降级、`prefers-contrast` 高对比适配
-- **响应式**：移动优先，`lg:` 以上显示侧栏目录
+| 方面 | 用的什么 |
+|------|---------|
+| 框架 | Next.js 16，静态生成 + 服务端组件 |
+| 语言 | TypeScript |
+| 样式 | Tailwind CSS v4，CSS 变量做主题色和暗色模式 |
+| 内容 | MDX，支持自定义组件和脚注 |
+| 数据库 | Supabase PostgreSQL，带用户认证和文件存储 |
+| 部署 | Vercel，代码 push 自动上线 |
+| AI | 本地语义搜索优先，不够再用大模型补 |
 
 ---
 
-## 📝 如何写一封来信
+## 设计
 
-1. 在 `content/letters/` 下新建 `your-slug.mdx`：
+- 三套主题色：天空蓝紫、樱花粉、薄荷绿
+- 毛玻璃卡片 + 滚动动画
+- 暗色模式，自动跟随系统
+- 字体：Inter（正文）+ Noto Serif SC（中文标题）+ Geist Mono（代码）
+- 手机、平板、电脑都适配
+
+---
+
+## 写一封来信
+
+1. 在 `content/letters/` 下新建一个 `.mdx` 文件：
 
 ```mdx
 export const metadata = {
@@ -190,41 +179,41 @@ export const metadata = {
   date: "2026-06-27",
   author: "coolin",
   tags: ["新生", "实用"],
-  readingTime: 10,   // 可选，未填则自动估算
+  readingTime: 10,  // 不写会自动估算
 };
 ```
 
-2. 在 `lib/letters.ts` 的 `LETTERS` 数组顶部追加一项（`load` 指向新 mdx 文件）
-3. 可用 `<Aside tone="info|warn|tip" title="标题">` 与 `<Takeaways title="血的教训">` 组件
+2. 在 `lib/letters.ts` 的 `LETTERS` 数组里加一条
+3. 写正文，可以用 `<Aside>` 提示框和 `<Takeaways>` 要点总结
 
-> `readingTimeMinutes` 按 400 字/分钟（中文）+ 200 词/分钟（英文）估算。
+阅读时间按 400 字/分钟（中文）+ 200 词/分钟（英文）估算。
 
 ---
 
-## 🤝 贡献
+## 参与贡献
 
 欢迎提 PR。几个约定：
 
-- 来信请基于真实经历，带时间节点与出处
-- 资源文件统一走 Supabase Storage，不要直接提交二进制到 Git
-- 链接数据放在 `content/links/` 对应文件，按板块组织
-- 数据库变更请写迁移文件放到 `supabase/migrations/`
-- 提交信息遵循 [Conventional Commits](https://www.conventionalcommits.org/)
+- 来信请写真实经历，带具体时间节点
+- 资源文件走 Supabase Storage，不要直接提交二进制文件到 Git
+- 链接数据放在 `content/links/` 对应的文件里
+- 数据库改动用迁移文件，放到 `supabase/migrations/`
+- 提交信息用 Conventional Commits 格式
 
 ---
 
-## 📄 许可证
+## 开源协议
 
-[MIT](./LICENSE) — 自由使用、修改、二次分发，但请保留原作者署名。
+[MIT](./LICENSE) — 随便用、随便改，保留原作者署名就行。
 
 ---
 
-## ⭐ 如果这个项目对你有用
+## 觉得有用？
 
 给个 [Star](https://github.com/cooooooosdas/AUST-Survival-Guide) 就是最好的支持。
 
-**给新生的最后一句话**：
+给新生的最后一句话：
 
 > 报道那两天会很乱，但你来对地方了。收藏这一页，按时间顺序每天对一遍，少走弯路。
 
-有问题？[留言区](/board) 见。
+有问题去 [留言区](/board)。
