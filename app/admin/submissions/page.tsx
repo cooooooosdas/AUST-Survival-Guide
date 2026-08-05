@@ -1,7 +1,8 @@
-import { notFound, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import ReviewButton from "./ReviewButton";
 import { reviewSubmission } from "./actions";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminPage } from "@/lib/admin-guard";
 import type { ContentSubmission } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -13,19 +14,9 @@ export default async function AdminSubmissionsPage() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     redirect("/login?next=/admin/submissions");
   }
+  await requireAdminPage();
+
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login?next=/admin/submissions");
-
-  const { data: admin } = await supabase
-    .from("site_admins")
-    .select("user_id")
-    .eq("user_id", user.id)
-    .maybeSingle();
-  if (!admin) notFound();
-
   const { data } = await supabase
     .from("content_submissions")
     .select("id, user_id, title, excerpt, category, tags, body, status, reviewer_note, submitted_at, updated_at")

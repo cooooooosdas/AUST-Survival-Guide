@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/admin-guard";
 
 function bad(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
@@ -10,6 +11,9 @@ export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const err = await requireAdminApi();
+  if (err) return err;
+
   const { id } = await params;
   let body: unknown;
   try {
@@ -45,9 +49,12 @@ export async function PATCH(
 
 // DELETE = remove a question
 export async function DELETE(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const err = await requireAdminApi();
+  if (err) return err;
+
   const { id } = await params;
   const supabase = await createClient();
   const { error } = await supabase

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/admin-guard";
 
 function bad(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
@@ -15,12 +16,10 @@ const CATEGORY_LABEL: Record<string, string> = {
 
 // GET = list all FAQ items (admin)
 export async function GET() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return bad(401, "未登录");
+  const err = await requireAdminApi();
+  if (err) return err;
 
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("faq_items")
     .select("*")
@@ -39,11 +38,8 @@ export async function GET() {
 
 // POST = create FAQ item (admin)
 export async function POST(request: NextRequest) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return bad(401, "未登录");
+  const err = await requireAdminApi();
+  if (err) return err;
 
   let body: unknown;
   try {
@@ -65,6 +61,7 @@ export async function POST(request: NextRequest) {
   const allowed = ["general", "high-math", "course-select", "software", "ai-tools"];
   const category = allowed.includes(input.category ?? "") ? input.category : "general";
 
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("faq_items")
     .insert({
@@ -86,11 +83,8 @@ export async function POST(request: NextRequest) {
 
 // PATCH = update FAQ item (admin)
 export async function PATCH(request: NextRequest) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return bad(401, "未登录");
+  const err = await requireAdminApi();
+  if (err) return err;
 
   let body: unknown;
   try {
@@ -120,6 +114,7 @@ export async function PATCH(request: NextRequest) {
   if (input.sort_order !== undefined) update.sort_order = input.sort_order;
   if (input.is_published !== undefined) update.is_published = input.is_published;
 
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("faq_items")
     .update(update)
@@ -136,16 +131,14 @@ export async function PATCH(request: NextRequest) {
 
 // DELETE = delete FAQ item (admin)
 export async function DELETE(request: NextRequest) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return bad(401, "未登录");
+  const err = await requireAdminApi();
+  if (err) return err;
 
   const { searchParams } = new URL(request.url);
   const id = Number(searchParams.get("id"));
   if (!id) return bad(400, "缺少 id");
 
+  const supabase = await createClient();
   const { error } = await supabase.from("faq_items").delete().eq("id", id);
   if (error) return bad(500, error.message);
 

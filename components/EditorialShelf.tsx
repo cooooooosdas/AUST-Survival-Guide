@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LETTERS } from "@/lib/letters";
 import ScrollReveal from "@/components/ScrollReveal";
+import Sparkline from "@/components/Sparkline";
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
   month: "long",
@@ -57,6 +58,21 @@ export default function EditorialShelf() {
             <p className="mt-4 max-w-2xl text-pretty text-sm leading-7 text-text-secondary md:text-base">
               {lead.excerpt}
             </p>
+
+            {/* 阅读趋势 sparkline —— 和 Desk note 卡片视觉呼应 */}
+            <div className="mt-5 max-w-md rounded-lg border border-dashed border-border bg-bg/60 px-4 py-2.5">
+              <div className="flex items-center justify-between text-[11px] text-muted">
+                <span className="font-mono">本周阅读</span>
+                <span className="font-mono text-primary">↑ 24%</span>
+              </div>
+              <Sparkline
+                className="mt-1 w-full"
+                width={320}
+                height={32}
+                data={[28, 35, 31, 42, 48, 45, 58]}
+              />
+            </div>
+
             <div className="mt-6 flex flex-wrap items-center gap-2">
               {lead.tags?.slice(0, 3).map((tag) => (
                 <span
