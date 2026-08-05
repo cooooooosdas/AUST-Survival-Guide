@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { ChevronDown, List } from "lucide-react";
 
 type Heading = {
   id: string;
@@ -42,26 +43,28 @@ export default function LetterToc({ headings }: Props) {
   if (headings.length === 0) return null;
 
   return (
-    <div
-      ref={rootRef}
-      className="hidden lg:block"
-    >
+    <div ref={rootRef} className="hidden lg:block">
       <div className="fixed right-6 top-32 w-52 max-h-[calc(100vh-12rem)] overflow-y-auto rounded-xl border border-border bg-bg-alt p-3 shadow-sm">
         <button
           type="button"
           onClick={() => setCollapsed((v) => !v)}
           aria-expanded={!collapsed}
           aria-controls="toc-list"
-          className="flex w-full items-center justify-between text-xs font-medium text-muted uppercase tracking-widest"
+          className="flex w-full items-center justify-between text-[11px] font-medium uppercase tracking-widest text-muted"
         >
-          <span>目录</span>
-          <span className="transition-transform duration-200" style={{
-            transform: collapsed ? "rotate(-90deg)" : "rotate(0)",
-          }}>▼</span>
+          <span className="flex items-center gap-1.5">
+            <List className="h-3 w-3" strokeWidth={2} />
+            目录
+          </span>
+          <ChevronDown
+            className="h-3 w-3 transition-transform duration-200"
+            style={{ transform: collapsed ? "rotate(-90deg)" : "rotate(0)" }}
+            strokeWidth={2}
+          />
         </button>
 
         {!collapsed && (
-          <ul id="toc-list" className="mt-2 space-y-1 border-t border-border pt-2">
+          <ul id="toc-list" className="mt-2 space-y-0.5 border-t border-border pt-2">
             {headings.map((h) => {
               const isActive = activeId === h.id;
               const indent = h.level === 3 ? "pl-3 text-xs" : "text-sm";
@@ -77,11 +80,11 @@ export default function LetterToc({ headings }: Props) {
                       window.scrollTo({ top: y, behavior: "smooth" });
                     }}
                     className={[
-                      "block truncate rounded-md px-2 py-1 transition-colors",
+                      "block truncate rounded-md px-2 py-1.5 transition-colors duration-150",
                       indent,
                       isActive
-                        ? "bg-primary-light text-primary"
-                        : "text-muted hover:bg-bg hover:text-primary",
+                        ? "bg-primary-light font-medium text-primary"
+                        : "text-text-secondary hover:bg-bg hover:text-primary",
                     ].join(" ")}
                   >
                     {h.text}

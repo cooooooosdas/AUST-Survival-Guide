@@ -13,7 +13,7 @@ const components: MDXComponents = {
   ),
   h2: (props) => (
     <h2
-      className="mt-12 scroll-mt-24 border-b border-border pb-2 text-2xl font-semibold text-primary"
+      className="mt-12 scroll-mt-24 border-b border-border pb-2 text-2xl font-semibold text-text"
       {...props}
     />
   ),
@@ -30,7 +30,7 @@ const components: MDXComponents = {
     />
   ),
   p: (props) => (
-    <p className="mt-5 leading-[1.85] text-text" {...props} />
+    <p className="mt-5 text-[16px] leading-[1.85] text-text" {...props} />
   ),
   a: ({ href, children, ...rest }: ComponentPropsWithoutRef<"a">) => {
     const isExternal = href && /^https?:\/\//.test(href);

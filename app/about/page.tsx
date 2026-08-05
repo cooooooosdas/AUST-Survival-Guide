@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AlertTriangle, Code2, Link2 } from "lucide-react";
 
 export const metadata = { title: "关于我" };
 
@@ -9,7 +10,10 @@ export default function AboutPage() {
 
       {/* 非官方声明 */}
       <div className="mt-6 rounded-xl border border-amber-200 bg-accent-light px-5 py-4 text-sm leading-relaxed text-text">
-        <p className="font-medium text-accent">&#x26A0;&#xFE0F; 非官方声明</p>
+        <p className="flex items-center gap-2 font-medium text-accent">
+          <AlertTriangle className="h-4 w-4" strokeWidth={2} />
+          非官方声明
+        </p>
         <p className="mt-2">
           本站为站长<strong className="text-text">个人项目</strong>，与安徽理工大学（AUST）及任何学院、部门
           （包括但不限于计算机学院、教务处、网络中心）<strong className="text-text">无任何隶属或合作关系</strong>。
@@ -83,20 +87,32 @@ export default function AboutPage() {
             href="/projects"
             className="group card card-hover p-5 flex items-center gap-4"
           >
-            <span className="text-2xl shrink-0">💻</span>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-light text-primary">
+              <Code2 className="h-5 w-5" strokeWidth={2} />
+            </span>
             <div>
-              <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">项目展示</p>
-              <p className="text-xs text-muted mt-0.5">网站作品、AI 应用及课程大作业</p>
+              <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">
+                项目展示
+              </p>
+              <p className="text-xs text-muted mt-0.5">
+                网站作品、AI 应用及课程大作业
+              </p>
             </div>
           </Link>
           <Link
             href="/friends"
             className="group card card-hover p-5 flex items-center gap-4"
           >
-            <span className="text-2xl shrink-0">🔗</span>
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary-light text-secondary">
+              <Link2 className="h-5 w-5" strokeWidth={2} />
+            </span>
             <div>
-              <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">友链交换</p>
-              <p className="text-xs text-muted mt-0.5">与学长博客、技术站点交换友情链接</p>
+              <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">
+                友链交换
+              </p>
+              <p className="text-xs text-muted mt-0.5">
+                与学长博客、技术站点交换友情链接
+              </p>
             </div>
           </Link>
         </div>

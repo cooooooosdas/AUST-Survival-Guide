@@ -70,6 +70,13 @@ export default function LettersIndexPage() {
           </ScrollReveal>
         ))}
       </ul>
+
+      {/* 个人印记 —— 克制的小标记 */}
+      <div className="mt-16 flex items-center justify-center gap-2 text-[11px] text-muted">
+        <span className="font-mono uppercase tracking-[0.2em]">by coolin</span>
+        <span className="h-1 w-1 rounded-full bg-border" />
+        <span className="font-mono">第 7 期 · 长期更新</span>
+      </div>
     </div>
   );
 }

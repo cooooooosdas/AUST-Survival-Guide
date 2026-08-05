@@ -11,7 +11,7 @@ export default function DisclaimerPage() {
       </p>
       <div className="mt-6 mb-10 h-[2px] w-12 bg-text" />
 
-      <div className="space-y-10 leading-[1.8] text-text-secondary">
+      <div className="space-y-10 leading-[1.9] text-text-secondary text-[15px]">
         <section>
           <h2 className="text-lg font-serif font-semibold text-text">本站性质</h2>
           <p className="mt-3 text-sm text-text">
