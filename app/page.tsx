@@ -1,3 +1,4 @@
+import Sparkline from "@/components/Sparkline";
 import Link from "next/link";
 import { SECTIONS, type Section } from "@/lib/sections";
 import {
@@ -234,6 +235,22 @@ export default async function HomePage() {
                       </span>
                     </div>
                   ))}
+                </div>
+
+                {/* 14 天访问趋势 —— mock 数据，等真实历史接入再换 */}
+                <div className="mt-5 rounded-lg border border-border bg-bg/60 px-3 py-2.5">
+                  <div className="flex items-center justify-between text-[11px] text-muted">
+                    <span className="font-mono">近 14 天</span>
+                    <span className="font-mono text-primary">↑ 12%</span>
+                  </div>
+                  <Sparkline
+                    className="mt-1 w-full"
+                    width={228}
+                    height={36}
+                    data={[
+                      42, 38, 51, 47, 60, 55, 49, 64, 58, 71, 68, 75, 72, 81,
+                    ]}
+                  />
                 </div>
 
                 <div className="mt-5 flex items-start gap-2 rounded-lg border-l-2 border-primary bg-bg-alt px-3 py-2.5 text-sm leading-relaxed text-text-secondary">

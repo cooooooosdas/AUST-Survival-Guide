@@ -707,9 +707,9 @@ select:focus-visible {
   --color-bg-alt: #11221E;
   --color-surface: #172B26;
   --color-text: #F2FBF7;
-  --color-text-secondary: #B4C8BF;
-  --color-muted: #789087;
-  --color-text-muted: #789087;
+  --color-text-secondary: #C8D8D0;
+  --color-muted: #8FA9A1;
+  --color-text-muted: #8FA9A1;
 
   --color-accent: #F5B750;
   --color-accent-hover: #D89A2A;

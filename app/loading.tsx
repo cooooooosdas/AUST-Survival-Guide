@@ -1,19 +1,38 @@
 export default function Loading() {
   return (
-    <div className="mx-auto flex max-w-3xl items-center gap-3 px-6 py-24">
-      <span
+    <div
+      className="mx-auto flex max-w-3xl items-center justify-center gap-4 px-6 py-24"
+      role="status"
+      aria-label="正在加载"
+    >
+      <svg
+        viewBox="0 0 32 32"
+        className="h-7 w-7 animate-spin text-accent"
         aria-hidden
-        className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent"
-      />
-      <span
-        aria-hidden
-        className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent [animation-delay:120ms]"
-      />
-      <span
-        aria-hidden
-        className="inline-block h-2 w-2 animate-pulse rounded-full bg-accent [animation-delay:240ms]"
-      />
-      <span className="ml-3 text-sm text-muted">正在加载…</span>
+      >
+        <circle
+          cx="16"
+          cy="16"
+          r="13"
+          fill="none"
+          stroke="currentColor"
+          strokeOpacity="0.15"
+          strokeWidth="2"
+        />
+        <path
+          d="M16 3 a13 13 0 0 1 13 13"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+        />
+      </svg>
+      <div className="flex flex-col gap-1">
+        <p className="text-sm font-medium text-text">正在加载…</p>
+        <p className="font-mono text-[11px] text-muted">
+          稍等片刻
+        </p>
+      </div>
     </div>
   );
 }
