@@ -9,7 +9,7 @@ export default function DisclaimerPage() {
       <p className="mt-2 text-xs text-muted">
         生效日期：2026-06-27 · 最后更新：2026-06-27
       </p>
-      <div className="mt-6 mb-10 h-[2px] w-12 bg-gradient-to-r from-amber-400 to-transparent" />
+      <div className="mt-6 mb-10 h-[2px] w-12 bg-text" />
 
       <div className="space-y-10 leading-[1.8] text-text-secondary">
         <section>

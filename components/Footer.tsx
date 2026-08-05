@@ -1,37 +1,46 @@
 import { SITE } from "@/lib/site";
 import { MAIN_SECTIONS } from "@/lib/sections";
 import Link from "next/link";
+import { Mail, Rss, ShieldCheck, Sparkles } from "lucide-react";
 import FooterYear from "./FooterYear";
 
 export default function Footer() {
   return (
-    <footer className="relative mt-16">
-      <div className="accent-bar opacity-60" />
-
+    <footer className="relative mt-20">
       <div className="border-t border-border bg-surface/82 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 md:flex-row md:items-start md:justify-between">
-          <div className="flex flex-col gap-2">
+        <div className="mx-auto flex max-w-6xl flex-col gap-10 px-6 py-10 md:flex-row md:items-start md:justify-between">
+          <div className="flex flex-col gap-3 max-w-sm">
             <div className="flex items-center gap-2 text-sm">
-              <span className="h-2 w-2 rounded-full bg-primary" />
-              <span className="text-text font-medium">© <FooterYear /> {SITE.shortName}</span>
+              <Sparkles className="h-3.5 w-3.5 text-accent" />
+              <span className="text-text font-medium">
+                © <FooterYear /> {SITE.shortName}
+              </span>
             </div>
-            <p className="text-xs text-muted leading-relaxed max-w-xs">
+            <p className="text-xs text-muted leading-relaxed">
               {SITE.description}
             </p>
-            <div className="flex items-center gap-3 mt-1">
+            <div className="flex items-center gap-1.5 mt-1">
               {SITE.github && (
                 <a
                   href={SITE.github}
-                  className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-primary-ghost hover:text-primary"
+                  className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:bg-primary-ghost hover:text-primary"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
                 >
-                  <svg viewBox="0 0 16 16" className="h-4 w-4" fill="currentColor">
-                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
+                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795.735-4.035-1.305-.135-.345-.72-1.305-1.23-1.575-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z" />
                   </svg>
                 </a>
               )}
+              <a
+                href="/feed.xml"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:bg-primary-ghost hover:text-primary"
+                aria-label="RSS 订阅"
+                title="RSS 订阅"
+              >
+                <Rss className="h-4 w-4" />
+              </a>
             </div>
           </div>
 
@@ -57,29 +66,44 @@ export default function Footer() {
               更多
             </p>
             <div className="flex flex-col gap-1.5">
-              <Link href="/library" className="text-xs text-text-secondary transition-colors hover:text-primary">
+              <Link
+                href="/library"
+                className="text-xs text-text-secondary transition-colors hover:text-primary"
+              >
                 阅读中心
               </Link>
-              <Link href="/contribute" className="text-xs text-text-secondary transition-colors hover:text-primary">
+              <Link
+                href="/contribute"
+                className="text-xs text-text-secondary transition-colors hover:text-primary"
+              >
                 投稿中心
               </Link>
-              <a href="/feed.xml" className="text-xs text-text-secondary transition-colors hover:text-primary">
-                RSS 订阅
-              </a>
-              <Link href="/privacy" className="text-xs text-text-secondary transition-colors hover:text-primary">
+              <Link
+                href="/privacy"
+                className="text-xs text-text-secondary transition-colors hover:text-primary"
+              >
                 隐私政策
               </Link>
-              <Link href="/disclaimer" className="text-xs text-text-secondary transition-colors hover:text-primary">
+              <Link
+                href="/disclaimer"
+                className="text-xs text-text-secondary transition-colors hover:text-primary"
+              >
                 免责声明
               </Link>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto max-w-6xl px-6 pb-5">
-          <p className="text-[11px] text-muted">
-            个人博客 · 长期维护 · 由 coolin 构建
-          </p>
+        <div className="border-t border-border">
+          <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-6 py-4 text-[11px] text-muted">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="h-3 w-3" />
+              个人项目 · 长期维护 · 由 coolin 构建
+            </span>
+            <span className="font-mono opacity-70">
+              coolin © AUST
+            </span>
+          </div>
         </div>
       </div>
     </footer>

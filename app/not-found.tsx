@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Search } from "lucide-react";
 
 export const metadata = { title: "找不到页面" };
 
@@ -25,10 +26,7 @@ export default function NotFound() {
           href="/search"
           className="flex items-center gap-3 rounded-xl border border-border bg-bg-alt px-4 py-3 text-sm text-muted transition-all duration-200 hover:border-primary hover:text-primary"
         >
-          <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
+          <Search className="h-5 w-5 shrink-0" strokeWidth={2} />
           <span>搜索全站内容…</span>
           <kbd className="ml-auto hidden sm:inline-block rounded border border-border bg-bg px-1.5 py-0.5 text-[10px] font-mono text-muted">/</kbd>
         </Link>

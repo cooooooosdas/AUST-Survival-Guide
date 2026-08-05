@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { LETTERS } from "@/lib/letters";
 import ScrollReveal from "@/components/ScrollReveal";
 
@@ -21,7 +22,7 @@ export default function LettersIndexPage() {
         <h1 className="mt-3 text-3xl md:text-4xl font-serif font-bold text-text tracking-tight">
           学长来信
         </h1>
-        <div className="mt-4 mb-6 h-[2px] w-12 bg-gradient-to-r from-amber-400 to-transparent" />
+        <div className="mt-4 mb-6 h-[2px] w-12 bg-text" />
         <p className="max-w-prose text-muted text-[15px] leading-relaxed">
           挑几个我和你这个时候真的想问明白的问题，慢慢写。不定期更新——你可以直接在每封信下面留言。
         </p>
@@ -62,10 +63,7 @@ export default function LettersIndexPage() {
                 )}
                 <span className="mt-2 inline-flex items-center gap-1 text-sm text-primary opacity-0 transition-opacity group-hover:opacity-100">
                   读这封
-                  <svg viewBox="0 0 16 16" className="h-3 w-3 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="3" y1="8" x2="13" y2="8" />
-                    <polyline points="9 4 13 8 9 12" />
-                  </svg>
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
                 </span>
               </Link>
             </li>

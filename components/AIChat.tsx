@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition, useCallback } from "react";
+import { Bot, X, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type MsgRole = "user" | "assistant" | "system";
@@ -297,11 +298,7 @@ export default function AIChat() {
           title="AI 助手"
           className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg shadow-primary/25 transition-all duration-300 hover:bg-primary-hover hover:scale-105 active:scale-95"
         >
-          <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2a2 2 0 0 1 2 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 0 1 7 7h1a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1H2a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h1a7 7 0 0 1 7-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 0 1 2-2z" />
-            <circle cx="8" cy="14" r="1" />
-            <circle cx="16" cy="14" r="1" />
-          </svg>
+          <Bot className="h-6 w-6" strokeWidth={2} />
         </button>
       )}
 
@@ -320,10 +317,7 @@ export default function AIChat() {
               aria-label="关闭对话"
               className="flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-bg-alt hover:text-text"
             >
-              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
+              <X className="h-4 w-4" strokeWidth={2} />
             </button>
           </div>
 
@@ -434,10 +428,7 @@ export default function AIChat() {
                 aria-label="发送"
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-white transition-colors hover:bg-primary-hover disabled:opacity-40 active:scale-95"
               >
-                <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="22" y1="2" x2="11" y2="13" />
-                  <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                </svg>
+                <Send className="h-4 w-4" strokeWidth={2} />
               </button>
             </div>
           </div>

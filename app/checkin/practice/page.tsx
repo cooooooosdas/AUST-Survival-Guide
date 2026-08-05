@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { PRACTICE_LINKS, DIFFICULTY_COLOR, PLATFORM_LABEL, getDailyQuestionIndex } from "@/lib/practice-links";
 
 type Difficulty = "easy" | "medium" | "hard";
@@ -44,10 +45,7 @@ export default function PracticePage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
       <Link href="/checkin" className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary">
-        <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12" />
-          <polyline points="12 19 5 12 12 5" />
-        </svg>
+        <ArrowLeft className="h-4 w-4" strokeWidth={2} />
         返回打卡
       </Link>
 
@@ -58,7 +56,7 @@ export default function PracticePage() {
       </div>
 
       {/* ===== 每日一题 ===== */}
-      <section className="mt-8 rounded-xl border border-accent/20 bg-gradient-to-br from-accent/5 via-bg-alt to-primary/5 p-5 md:p-6">
+      <section className="mt-8 rounded-xl border border-border bg-surface p-5 md:p-6">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-xl">🎯</span>
           <div>
@@ -94,11 +92,7 @@ export default function PracticePage() {
                 ))}
               </div>
             </div>
-            <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-muted/40 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-              <polyline points="15 3 21 3 21 9" />
-              <line x1="10" y1="14" x2="21" y2="3" />
-            </svg>
+            <ArrowUpRight className="h-5 w-5 shrink-0 text-muted/40 group-hover:text-primary transition-colors" strokeWidth={2} />
           </a>
         ) : dailyDiff ? (
           <div className="py-8 text-center text-sm text-muted">该难度暂无题目</div>
@@ -190,11 +184,7 @@ export default function PracticePage() {
                           rel="noopener noreferrer"
                           className="group flex items-start gap-3 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
                         >
-                          <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-muted/40 transition-colors group-hover:text-primary mt-0.5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                            <polyline points="15 3 21 3 21 9" />
-                            <line x1="10" y1="14" x2="21" y2="3" />
-                          </svg>
+                          <ArrowUpRight className="h-5 w-5 shrink-0 text-muted/40 transition-colors group-hover:text-primary mt-0.5" strokeWidth={2} />
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-text group-hover:text-primary transition-colors">
                               {q.title}

@@ -156,13 +156,7 @@ body {
   text-rendering: optimizeLegibility;
   line-height: 1.75;
   letter-spacing: 0;
-  background:
-    linear-gradient(90deg, rgba(216, 229, 223, 0.32) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(216, 229, 223, 0.32) 1px, transparent 1px),
-    radial-gradient(circle at 18% 8%, rgba(20, 122, 100, 0.08), transparent 28rem),
-    radial-gradient(circle at 88% 18%, rgba(47, 111, 237, 0.07), transparent 26rem),
-    var(--color-bg);
-  background-size: 44px 44px, 44px 44px, auto, auto, auto;
+  background: var(--color-bg);
 }
 
 a {
@@ -358,9 +352,9 @@ select:focus-visible {
   font-weight: 700;
 }
 
-/* 渐变文字 */
+/* 渐变文字 —— 仅作为少量装饰使用，保持整体克制 */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-tertiary) 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -380,29 +374,33 @@ select:focus-visible {
   -webkit-text-fill-color: transparent;
 }
 
-/* 顶部渐变条 */
+/* 顶部渐变条 —— 弱化为单色 + 副色，避免三色 AI 风 */
 .accent-bar {
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
+  height: 1px;
+  background: var(--color-border);
 }
 
 .accent-bar-primary {
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--color-primary), transparent);
+  height: 2px;
+  background: var(--color-primary);
 }
 
 .accent-bar-secondary {
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--color-secondary), transparent);
+  height: 2px;
+  background: var(--color-secondary);
 }
 
 .accent-bar-tertiary {
-  height: 3px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, var(--color-tertiary), transparent);
+  height: 2px;
+  background: var(--color-accent);
+}
+
+/* === 兼容旧类的空实现 === */
+.accent-bar,
+.accent-bar-primary,
+.accent-bar-secondary,
+.accent-bar-tertiary {
+  display: block;
 }
 
 /* 淡入上升初始状态 */
@@ -460,25 +458,24 @@ select:focus-visible {
   height: 100%;
   transform: scaleX(0);
   transform-origin: left center;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary), var(--color-tertiary));
-  box-shadow: 0 0 10px var(--color-primary-ring);
+  background: var(--color-primary);
   will-change: transform;
 }
 
 .click-ink {
   --ink-color: var(--color-primary);
   position: absolute;
-  width: 88px;
+  width: 56px;
   aspect-ratio: 1;
-  border: 1px solid color-mix(in srgb, var(--ink-color) 36%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ink-color) 24%, transparent);
   border-radius: 999px;
   background: radial-gradient(
     circle,
-    color-mix(in srgb, var(--ink-color) 18%, transparent) 0%,
-    color-mix(in srgb, var(--ink-color) 8%, transparent) 48%,
+    color-mix(in srgb, var(--ink-color) 14%, transparent) 0%,
+    color-mix(in srgb, var(--ink-color) 6%, transparent) 48%,
     transparent 72%
   );
-  animation: click-ink-spread 0.5s var(--ease-out-soft) forwards;
+  animation: click-ink-spread 0.4s var(--ease-out-soft) forwards;
   will-change: transform, opacity;
 }
 
@@ -556,68 +553,70 @@ select:focus-visible {
 }
 
 /* ============================================================
-   极光 Hero 区背景
+   Hero 区轻量装饰 —— 不用极光，改为印刷感极淡的图案
    ============================================================ */
-.aurora-bg,
 .guide-hero {
   position: relative;
   overflow: hidden;
 }
-.aurora-bg::before,
+
+/* 极淡的几何背景图案（替代原极光），符合"校刊封面"基调 */
 .guide-hero::before {
   content: "";
   position: absolute;
-  inset: -35%;
-  background:
-    radial-gradient(ellipse 55% 48% at 18% 34%, rgba(20, 122, 100, 0.16) 0%, transparent 64%),
-    radial-gradient(ellipse 46% 58% at 86% 22%, rgba(47, 111, 237, 0.13) 0%, transparent 58%),
-    radial-gradient(ellipse 42% 36% at 64% 90%, rgba(216, 145, 34, 0.13) 0%, transparent 58%);
-  filter: blur(28px);
-  animation: aurora-drift 24s ease-in-out infinite;
-  background-size: 200% 200%;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(20, 122, 100, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20, 122, 100, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
   pointer-events: none;
   z-index: 0;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 30%, transparent 80%);
 }
-/* 文字区域底下额外一层淡暖径向渐变，确保可读性但不形成"框" */
-.aurora-bg::after,
+
+/* 顶部一条印刷感边线，替代原三色渐变 accent-bar */
 .guide-hero::after {
   content: "";
   position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.64), transparent 46%),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.76), transparent 72%);
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: var(--color-border);
   pointer-events: none;
   z-index: 0;
 }
-.dark .aurora-bg::before,
+
+/* 暗色模式下的 hero 网格图案 */
 .dark .guide-hero::before {
-  background:
-    radial-gradient(ellipse 55% 48% at 18% 34%, rgba(91, 216, 188, 0.18) 0%, transparent 64%),
-    radial-gradient(ellipse 46% 58% at 86% 22%, rgba(116, 166, 255, 0.14) 0%, transparent 58%),
-    radial-gradient(ellipse 42% 36% at 64% 90%, rgba(245, 183, 80, 0.12) 0%, transparent 58%);
+  background-image:
+    linear-gradient(rgba(91, 216, 188, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91, 216, 188, 0.04) 1px, transparent 1px);
 }
-.dark .aurora-bg::after,
-.dark .guide-hero::after {
-  background:
-    linear-gradient(180deg, rgba(12, 25, 22, 0.7), transparent 46%),
-    linear-gradient(90deg, rgba(12, 25, 22, 0.78), transparent 72%);
+
+/* 保留 aurora-bg 类（向后兼容）但默认不再渲染 */
+.aurora-bg {
+  position: relative;
+  overflow: hidden;
+}
+.aurora-bg::before {
+  content: none;
+}
+.aurora-bg::after {
+  content: none;
 }
 
 .campus-stamp {
   border: 1px solid var(--color-border);
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.48)),
-    linear-gradient(90deg, rgba(20, 122, 100, 0.09), rgba(47, 111, 237, 0.08));
-  box-shadow: var(--shadow-sm);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-xs);
 }
 
 .index-card {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.82)),
-    var(--color-surface);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-xs);
 }
 
 .index-card::before {
@@ -625,8 +624,8 @@ select:focus-visible {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(20, 122, 100, 0.08) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(20, 122, 100, 0.08) 1px, transparent 1px);
+    linear-gradient(90deg, rgba(20, 122, 100, 0.06) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(20, 122, 100, 0.06) 1px, transparent 1px);
   background-size: 18px 18px;
   opacity: 0;
   transition: opacity 0.25s var(--ease-out-soft);
@@ -639,9 +638,7 @@ select:focus-visible {
 
 .dark .index-card,
 .dark .campus-stamp {
-  background:
-    linear-gradient(180deg, rgba(26, 44, 39, 0.94), rgba(20, 34, 30, 0.84)),
-    var(--color-surface);
+  background: var(--color-surface);
 }
 
 /* ============================================================

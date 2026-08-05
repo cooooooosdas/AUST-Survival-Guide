@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Bookmark } from "lucide-react";
 
 type Props = {
   targetType: string;
@@ -66,21 +67,20 @@ export default function FavoriteButton({
           "disabled:cursor-not-allowed disabled:opacity-50",
         ].join(" ")}
       >
-        <svg
-          viewBox="0 0 24 24"
+        <Bookmark
           className="h-4 w-4"
           fill={favorited ? "currentColor" : "none"}
-          stroke="currentColor"
-          strokeWidth="1.8"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z" />
-        </svg>
-        <span aria-live="polite">{loading ? "处理中…" : favorited ? "已保存" : "稍后读"}</span>
+          strokeWidth={1.8}
+        />
+        <span aria-live="polite">
+          {loading ? "处理中…" : favorited ? "已保存" : "稍后读"}
+        </span>
       </button>
-      {error && <span role="alert" className="text-xs text-red-600">{error}</span>}
+      {error && (
+        <span role="alert" className="text-xs text-red-600">
+          {error}
+        </span>
+      )}
     </div>
   );
 }

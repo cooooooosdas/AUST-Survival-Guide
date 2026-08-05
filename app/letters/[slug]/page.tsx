@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { ArrowLeft, MessageCircle, Sparkles } from "lucide-react";
 import { LETTERS, getLetter, readingTimeMinutes } from "@/lib/letters";
 import CommentBoard from "@/components/CommentBoard";
 import LikeButton from "@/components/LikeButton";
@@ -217,7 +218,8 @@ export default async function LetterPage({
         href="/letters"
         className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
       >
-        ← 所有信件
+        <ArrowLeft className="h-3.5 w-3.5" strokeWidth={2} />
+        所有信件
       </Link>
 
       <header className="mt-8 border-b border-border pb-8">
@@ -234,7 +236,7 @@ export default async function LetterPage({
             {letter.tags.map((t) => (
               <span
                 key={t}
-                className="rounded-full border border-accent/40 bg-accent/10 px-2.5 py-0.5 text-xs text-primary"
+                className="rounded-full border border-border bg-bg-alt px-2.5 py-0.5 text-xs text-text-secondary"
               >
                 {t}
               </span>
@@ -269,9 +271,9 @@ export default async function LetterPage({
       </div>
 
       <div className="my-16 flex items-center gap-4">
-        <div className="flex-1 h-px bg-gradient-to-r from-amber-200 to-transparent" />
-        <span className="text-amber-300 text-sm select-none">— — —</span>
-        <div className="flex-1 h-px bg-gradient-to-l from-amber-200 to-transparent" />
+        <div className="flex-1 h-px bg-border" />
+        <Sparkles className="h-3.5 w-3.5 text-accent" strokeWidth={2} />
+        <div className="flex-1 h-px bg-border" />
       </div>
 
       {relatedLetters.length > 0 && (
@@ -300,7 +302,7 @@ export default async function LetterPage({
                   {related.title}
                 </h3>
                 <p className="mt-2 line-clamp-3 text-sm leading-6 text-text-secondary">{related.excerpt}</p>
-                <span className="mt-auto pt-4 text-sm font-medium text-primary">继续读 <span aria-hidden="true">→</span></span>
+                <span className="mt-auto pt-4 text-sm font-medium text-primary">继续读 →</span>
               </Link>
             ))}
           </div>
@@ -308,7 +310,10 @@ export default async function LetterPage({
       )}
 
       <section>
-        <h2 className="text-2xl font-serif font-semibold text-text mt-0">读完想说点什么？</h2>
+        <h2 className="flex items-center gap-2 text-2xl font-serif font-semibold text-text mt-0">
+          <MessageCircle className="h-5 w-5 text-primary" strokeWidth={2} />
+          读完想说点什么？
+        </h2>
         <p className="mt-2 text-sm text-muted">
           这条留言只在这封信下面显示，作者会看到。
         </p>

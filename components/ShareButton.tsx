@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Share2, MessageCircleMore, Circle, Link2, Check } from "lucide-react";
 
 type Props = {
   targetType: string;
@@ -12,16 +13,27 @@ type Props = {
 
 type Channel = "wechat" | "wechat_moments" | "copy_link";
 
-const CHANNELS: { key: Channel; label: string; icon: string }[] = [
-  { key: "wechat", label: "微信好友", icon: "💬" },
-  { key: "wechat_moments", label: "朋友圈", icon: "⭕" },
-  { key: "copy_link", label: "复制链接", icon: "🔗" },
+const CHANNELS: {
+  key: Channel;
+  label: string;
+  Icon: typeof MessageCircleMore;
+}[] = [
+  { key: "wechat", label: "微信好友", Icon: MessageCircleMore },
+  { key: "wechat_moments", label: "朋友圈", Icon: Circle },
+  { key: "copy_link", label: "复制链接", Icon: Link2 },
 ];
 
-export default function ShareButton({ targetType, targetId, title, excerpt, url }: Props) {
+export default function ShareButton({
+  targetType,
+  targetId,
+  title,
+  excerpt,
+  url,
+}: Props) {
   const [copied, setCopied] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const shareUrl = url || (typeof window !== "undefined" ? window.location.href : "");
+  const shareUrl =
+    url || (typeof window !== "undefined" ? window.location.href : "");
 
   // Escape 关闭下拉菜单
   useEffect(() => {
@@ -69,8 +81,6 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
 
   function handleWechatShare(channel: Channel) {
     trackShare(channel);
-    // WeChat share requires JS-SDK configuration
-    // For now, show a helpful message
     alert(
       "微信分享需要在微信内置浏览器中打开。\n\n请点击右上角「···」→「分享到朋友圈」或「发送给朋友」。\n\n分享文案：\n" +
         `${title}\n${excerpt || ""}\n${shareUrl}`
@@ -88,7 +98,7 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
         aria-expanded={showMenu}
         className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-muted transition-all duration-200 hover:border-primary hover:text-primary"
       >
-        <span aria-hidden="true">📤</span>
+        <Share2 className="h-4 w-4" strokeWidth={2} />
         <span>分享</span>
       </button>
 
@@ -99,21 +109,31 @@ export default function ShareButton({ targetType, targetId, title, excerpt, url 
             onClick={() => setShowMenu(false)}
           />
           <div className="absolute bottom-full right-0 z-50 mb-2 w-48 card overflow-hidden shadow-lg">
-            {CHANNELS.map((ch) => (
-              <button
-                key={ch.key}
-                type="button"
-                onClick={() => {
-                  setShowMenu(false);
-                  if (ch.key === "copy_link") copyLink();
-                  else handleWechatShare(ch.key);
-                }}
-                className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-text transition-colors hover:bg-bg-alt"
-              >
-                <span>{ch.icon}</span>
-                <span>{copied && ch.key === "copy_link" ? "已复制 ✓" : ch.label}</span>
-              </button>
-            ))}
+            {CHANNELS.map((ch) => {
+              const Icon = ch.Icon;
+              return (
+                <button
+                  key={ch.key}
+                  type="button"
+                  onClick={() => {
+                    setShowMenu(false);
+                    if (ch.key === "copy_link") copyLink();
+                    else handleWechatShare(ch.key);
+                  }}
+                  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-text transition-colors hover:bg-bg-alt"
+                >
+                  <Icon className="h-4 w-4 text-muted" strokeWidth={2} />
+                  <span>
+                    {copied && ch.key === "copy_link"
+                      ? "已复制"
+                      : ch.label}
+                  </span>
+                  {copied && ch.key === "copy_link" && (
+                    <Check className="ml-auto h-3.5 w-3.5 text-primary" />
+                  )}
+                </button>
+              );
+            })}
             <div className="border-t border-border px-4 py-2">
               <p className="text-[10px] text-muted break-all">{shareText}</p>
             </div>

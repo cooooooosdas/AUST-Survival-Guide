@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Suspense } from "react";
+import { Download, UploadCloud, ChevronRight } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -165,11 +166,7 @@ function EmptyState({ hasCategory }: { hasCategory: boolean }) {
           href="/resources/upload"
           className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover active:scale-[0.98]"
         >
-          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="17 8 12 3 7 8" />
-            <line x1="12" y1="3" x2="12" y2="15" />
-          </svg>
+          <UploadCloud className="h-4 w-4" strokeWidth={2} />
           上传第一个资源
         </Link>
       )}
@@ -210,18 +207,12 @@ function ResourceCard({ resource }: { resource: { id: string | number; file_type
           <span>{formatSize(resource.file_size)}</span>
           <span className="truncate max-w-[120px]">{resource.file_name}</span>
           <span className="flex items-center gap-0.5">
-            <svg viewBox="0 0 24 24" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
-            </svg>
+            <Download className="h-3 w-3" strokeWidth={2} />
             {resource.download_count ?? 0}
           </span>
         </div>
       </div>
-      <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0 text-muted/40 transition-colors group-hover:text-primary mt-1" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="9 18 15 12 9 6" />
-      </svg>
+      <ChevronRight className="h-5 w-5 shrink-0 text-muted/40 transition-colors group-hover:text-primary mt-1" strokeWidth={2} />
     </Link>
   );
 }
