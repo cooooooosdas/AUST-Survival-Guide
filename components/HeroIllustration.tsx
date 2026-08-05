@@ -62,21 +62,23 @@ export default function HeroIllustration({
           strokeDasharray="3 4"
           strokeLinecap="round"
         />
-        {/* 纸飞机 */}
-        <g transform="translate(146 32) rotate(8)">
-          <path
-            d="M0 0 L24 -10 L14 6 L11 0 L0 0 Z"
-            fill="var(--color-surface)"
-            stroke="var(--color-text-secondary)"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          />
-          <path d="M0 0 L14 6 L11 0 Z" fill="var(--color-bg-alt)" />
+        {/* 纸飞机 —— 缓慢飘过 */}
+        <g transform="translate(146 32)" className="hero-anim-plane">
+          <g transform="rotate(8)">
+            <path
+              d="M0 0 L24 -10 L14 6 L11 0 L0 0 Z"
+              fill="var(--color-surface)"
+              stroke="var(--color-text-secondary)"
+              strokeWidth="1.2"
+              strokeLinejoin="round"
+            />
+            <path d="M0 0 L14 6 L11 0 Z" fill="var(--color-bg-alt)" />
+          </g>
         </g>
       </g>
 
-      {/* 摊开的信纸（主元素） */}
-      <g transform="translate(60 78)" filter="url(#hero-pencil)">
+      {/* 摊开的信纸（主元素） —— 轻微摇晃 */}
+      <g transform="translate(60 78)" className="hero-anim-paper" filter="url(#hero-pencil)">
         {/* 信纸底 */}
         <rect
           x="0"
@@ -136,8 +138,8 @@ export default function HeroIllustration({
         </g>
       </g>
 
-      {/* 邮戳（圆形 + 三色点 + 文字） */}
-      <g transform="translate(208 78)" filter="url(#hero-stamp-grain)">
+      {/* 邮戳（圆形 + 三色点 + 文字） —— 缓慢呼吸 */}
+      <g transform="translate(208 78)" className="hero-anim-stamp" filter="url(#hero-stamp-grain)">
         <circle
           cx="28"
           cy="28"
@@ -227,8 +229,13 @@ export default function HeroIllustration({
         <line x1="2" y1="5" x2="20" y2="6.5" stroke="var(--color-surface)" strokeWidth="0.4" />
       </g>
 
-      {/* 一片树叶（左上角，呼应"新生"） */}
-      <g transform="translate(28 130) rotate(-30)" filter="url(#hero-pencil)" opacity="0.85">
+      {/* 一片树叶（左上角，呼应"新生"） —— 轻微摆动 */}
+      <g
+        transform="translate(28 130) rotate(-30)"
+        className="hero-anim-leaf"
+        filter="url(#hero-pencil)"
+        opacity="0.85"
+      >
         <path
           d="M0 0 C 8 -10, 22 -8, 24 6 C 24 18, 14 26, 0 22 C -2 14, -4 8, 0 0 Z"
           fill="var(--color-primary-light)"

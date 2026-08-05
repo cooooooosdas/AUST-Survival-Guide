@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LETTERS } from "@/lib/letters";
 import ScrollReveal from "@/components/ScrollReveal";
 import Sparkline from "@/components/Sparkline";
+import HandDrawnDivider from "@/components/HandDrawnDivider";
 
 const DATE_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
   month: "long",
@@ -30,6 +31,11 @@ export default function EditorialShelf() {
             >
               本期新刊
             </h2>
+            <HandDrawnDivider
+              width={64}
+              height={10}
+              className="mt-2 text-accent"
+            />
           </div>
           <Link
             href="/letters"

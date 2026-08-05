@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AlertTriangle, Code2, Link2 } from "lucide-react";
+import SkillTree from "@/components/SkillTree";
 
 export const metadata = { title: "关于我" };
 
@@ -46,6 +47,17 @@ export default function AboutPage() {
           长期维护，不定期更新。欢迎 PR、issue、留言。
         </p>
       </div>
+
+      {/* 技能图谱 */}
+      <section className="mt-12">
+        <h2 className="font-serif text-xl font-semibold text-text">技能图谱</h2>
+        <p className="mt-1 text-sm text-muted">
+          当前在用 / 关注的栈，会持续更新。
+        </p>
+        <div className="mt-5 rounded-xl border border-border bg-surface p-5">
+          <SkillTree />
+        </div>
+      </section>
 
       <div className="mt-12 border-t border-border pt-8">
         <h2 className="text-base font-medium text-text">联系方式</h2>

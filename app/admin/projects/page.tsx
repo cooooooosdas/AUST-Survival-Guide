@@ -1,5 +1,14 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import { Star, ExternalLink, Globe, Calendar } from "lucide-react";
+import {
+  Star,
+  ExternalLink,
+  Globe,
+  Calendar,
+  Pencil,
+  Copy,
+  Code2,
+} from "lucide-react";
 import { PROJECTS, ALL_TECH } from "@/lib/projects";
 import { requireAdminPage } from "@/lib/admin-guard";
 import { createClient } from "@/lib/supabase/server";
@@ -11,6 +20,13 @@ const DATE_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
 });
 
 type ViewRow = { target_id: string };
+
+const GITHUB_EDIT_URL =
+  "https://github.com/cooooooosdas/AUST-Survival-Guide/edit/main/lib/projects.ts";
+const GITHUB_NEW_PROJECT_URL =
+  "https://github.com/cooooooosdas/AUST-Survival-Guide/new/main/content/projects";
+const GITHUB_BLOB_URL =
+  "https://github.com/cooooooosdas/AUST-Survival-Guide/blob/main/lib/projects.ts";
 
 export const metadata = { title: "项目管理" };
 
@@ -31,6 +47,22 @@ export default async function AdminProjectsPage() {
     }
   }
 
+  // JSON 快照（方便管理员复制后改）
+  const snapshot = JSON.stringify(
+    PROJECTS.map((p) => ({
+      slug: p.slug,
+      title: p.title,
+      description: p.description,
+      techStack: p.techStack,
+      github: p.github,
+      demo: p.demo,
+      date: p.date,
+      featured: p.featured ?? false,
+    })),
+    null,
+    2
+  );
+
   return (
     <div className="mx-auto max-w-4xl px-6 py-16">
       <header className="border-b border-border pb-6">
@@ -46,6 +78,49 @@ export default async function AdminProjectsPage() {
           ，修改后需重新部署。
         </p>
       </header>
+
+      {/* 快速操作 */}
+      <section className="mt-8 grid gap-3 sm:grid-cols-2">
+        <a
+          href={GITHUB_EDIT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-primary/40"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-primary-light text-primary">
+            <Pencil className="h-4 w-4" strokeWidth={2} />
+          </span>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-text group-hover:text-primary">
+              在 GitHub 上编辑元数据
+            </p>
+            <p className="mt-0.5 font-mono text-[11px] text-muted">
+              lib/projects.ts
+            </p>
+          </div>
+          <ExternalLink className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
+        </a>
+
+        <a
+          href={GITHUB_NEW_PROJECT_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group flex items-center gap-3 rounded-xl border border-border bg-surface p-4 transition-colors hover:border-secondary/40"
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-secondary-light text-secondary">
+            <Code2 className="h-4 w-4" strokeWidth={2} />
+          </span>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-text group-hover:text-secondary">
+              新建项目 MDX
+            </p>
+            <p className="mt-0.5 font-mono text-[11px] text-muted">
+              content/projects/[slug].mdx
+            </p>
+          </div>
+          <ExternalLink className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
+        </a>
+      </section>
 
       {/* 技术栈分布 */}
       <section className="mt-8">
@@ -161,23 +236,48 @@ export default async function AdminProjectsPage() {
         </ul>
       </section>
 
-      {/* 操作说明 */}
-      <section className="mt-10 rounded-lg border border-dashed border-border bg-bg-alt p-5 text-sm text-text-secondary">
-        <h3 className="font-medium text-text">编辑项目</h3>
-        <p className="mt-2 leading-relaxed">
-          新增 / 修改项目：编辑{" "}
-          <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-[12px] text-text">
+      {/* 配置快照 */}
+      <section className="mt-10 rounded-xl border border-dashed border-border bg-bg-alt p-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="flex items-center gap-2 text-sm font-medium text-text">
+              <Code2 className="h-4 w-4 text-primary" strokeWidth={2} />
+              当前配置快照
+            </h3>
+            <p className="mt-1 text-xs text-muted">
+              复制后在 GitHub 粘贴即可，注意缩进和末尾逗号。
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(snapshot);
+                alert("已复制到剪贴板");
+              } catch {
+                alert("复制失败，请手动选择");
+              }
+            }}
+            className="motion-press inline-flex items-center gap-1 rounded-md border border-border bg-surface px-3 py-1.5 text-xs text-text-secondary transition-colors hover:border-primary hover:text-primary"
+          >
+            <Copy className="h-3 w-3" strokeWidth={2} />
+            复制 JSON
+          </button>
+        </div>
+        <pre className="mt-4 max-h-80 overflow-auto rounded-md border border-border bg-surface p-4 font-mono text-[11px] leading-relaxed text-text-secondary">
+          {snapshot}
+        </pre>
+        <p className="mt-3 flex items-center gap-1 font-mono text-[11px] text-muted">
+          <Globe className="h-3 w-3" />
+          源码：
+          <a
+            href={GITHUB_BLOB_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline-offset-2 hover:underline"
+          >
             lib/projects.ts
-          </code>
-          ，在{" "}
-          <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-[12px] text-text">
-            content/projects/
-          </code>{" "}
-          下新增{" "}
-          <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-[12px] text-text">
-            slug.mdx
-          </code>
-          ，然后提交 + 部署即可。
+          </a>
         </p>
       </section>
     </div>
