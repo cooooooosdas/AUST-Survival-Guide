@@ -1,4 +1,5 @@
 import Sparkline from "@/components/Sparkline";
+import HeroIllustration from "@/components/HeroIllustration";
 import Link from "next/link";
 import { SECTIONS, type Section } from "@/lib/sections";
 import {
@@ -147,6 +148,11 @@ export default async function HomePage() {
       <section className="guide-hero relative -mx-4 border-b border-border px-4 py-14 sm:-mx-6 sm:px-6 md:py-20 lg:py-24">
         <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div className="hero-copy-enter">
+            {/* 手绘风 Hero 装饰 —— 信纸 / 钢笔 / 邮戳 / 树叶 */}
+            <div className="mb-6 hidden sm:block">
+              <HeroIllustration className="h-28 w-auto text-text-secondary" />
+            </div>
+
             {/* 顶部一行小标识 —— 印刷感印章 */}
             <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-text-secondary shadow-xs">
               <span className="h-2 w-2 rounded-full bg-primary" />

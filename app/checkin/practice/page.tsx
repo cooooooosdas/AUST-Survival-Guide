@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -14,7 +14,9 @@ import {
   RotateCcw,
   NotebookPen,
   Eraser,
+  TrendingUp,
 } from "lucide-react";
+import Sparkline from "@/components/Sparkline";
 import {
   PRACTICE_LINKS,
   DIFFICULTY_COLOR,
@@ -66,8 +68,10 @@ export default function PracticePage() {
   const [dailyResult, setDailyResult] = useState<
     HistoryEntry["result"] | null
   >(null);
+  const [weeklyStats, setWeeklyStats] = useState<number[]>([]);
+  const [weeklyTotal, setWeeklyTotal] = useState(0);
 
-  // 加载历史
+  // 加载历史 + 服务端周统计
   useEffect(() => {
     try {
       const raw = localStorage.getItem(HISTORY_KEY);
@@ -75,6 +79,28 @@ export default function PracticePage() {
     } catch {
       /* ignore */
     }
+
+    // 拉取服务端最近 7 天统计（未登录返回空）
+    fetch("/api/practice")
+      .then((r) => r.json())
+      .then((json) => {
+        const stats: { day: string; total_attempts: number }[] = json.stats ?? [];
+        // 补齐 7 天（缺失天补 0）
+        const series: number[] = [];
+        let total = 0;
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const key = d.toISOString().slice(0, 10);
+          const found = stats.find((s) => s.day === key);
+          const v = found?.total_attempts ?? 0;
+          series.push(v);
+          total += v;
+        }
+        setWeeklyStats(series);
+        setWeeklyTotal(total);
+      })
+      .catch(() => {});
   }, []);
 
   function recordResult(
@@ -99,6 +125,34 @@ export default function PracticePage() {
       }
       return next;
     });
+
+    // 同步到服务端（登录用户）
+    fetch("/api/practice", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        question_id: q.id,
+        platform: q.platform,
+        difficulty: q.difficulty,
+        result,
+      }),
+    })
+      .then((r) => r.json())
+      .then(() => {
+        // 提交成功后，本地更新对应日期的统计
+        const todayKey = new Date().toISOString().slice(0, 10);
+        const idx = 6 - 0; // 今天在 series 的最后
+        setWeeklyStats((prev) => {
+          if (prev.length !== 7) return prev;
+          const next = [...prev];
+          if (next[6] !== undefined) {
+            next[6] = (next[6] ?? 0) + 1;
+          }
+          return next;
+        });
+        setWeeklyTotal((prev) => prev + 1);
+      })
+      .catch(() => {});
   }
 
   function clearHistory() {
@@ -167,6 +221,24 @@ export default function PracticePage() {
         <p className="mt-2 text-sm text-muted">
           精选洛谷 + LeetCode 题目，选难度后直接跳转。
         </p>
+
+        {/* 近 7 天统计 sparkline —— 登录后服务端数据，未登录空 */}
+        {weeklyStats.length === 7 && (
+          <div className="mt-5 flex items-center justify-between rounded-lg border border-border bg-surface px-4 py-2.5">
+            <div className="flex items-center gap-2 text-xs text-muted">
+              <TrendingUp className="h-3 w-3 text-primary" strokeWidth={2} />
+              <span className="font-mono">近 7 天</span>
+              <span className="text-text">{weeklyTotal} 题</span>
+            </div>
+            <Sparkline
+              data={weeklyStats}
+              width={160}
+              height={28}
+              className="text-primary"
+              ariaLabel="近 7 天做题数量"
+            />
+          </div>
+        )}
       </div>
 
       {/* ===== 每日一题 ===== */}
