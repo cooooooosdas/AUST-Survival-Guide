@@ -6,14 +6,14 @@ export const groups: LinkGroup[] = [
     title: "B 站 · 计算机基础",
     items: [
       {
-        title: "鸿蒙系统的 C 语言（黑马程序员）",
-        url: "https://www.bilibili.com/video/BV1Sf4y1x7TT/",
+        title: "C 语言基础教程（黑马程序员）",
+        url: "https://www.bilibili.com/video/BV1vs411n7TH/",
         description: "C 语言入门，节奏稳，适合大一第一学期",
         tag: "推荐",
       },
       {
         title: "C 语言程序设计 · 翁恺",
-        url: "https://www.bilibili.com/video/BV1KW411P7Et/",
+        url: "https://www.bilibili.com/video/BV1dr4y1n7vA/",
         description: "浙大翁恺老师，公认的国内 C 入门精品",
         tag: "推荐",
       },
@@ -24,7 +24,7 @@ export const groups: LinkGroup[] = [
       },
       {
         title: "操作系统（哈工大 李治军）",
-        url: "https://www.bilibili.com/video/BV1d4411v7u7/",
+        url: "https://www.bilibili.com/video/BV19r4y1b7Aw/",
         description: "和教科书贴得很紧，期末速通可用",
       },
       {
@@ -60,7 +60,7 @@ export const groups: LinkGroup[] = [
       {
         title: "Git & GitHub（GeekHour）",
         url: "https://www.bilibili.com/video/BV1HM411377j/",
-        description: "30 分钟版，新手必看",
+        description: "一小时版，新手必看",
         tag: "推荐",
       },
     ],

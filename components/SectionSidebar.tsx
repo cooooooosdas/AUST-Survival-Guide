@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useState, useEffect, useSyncExternalStore, type CSSProperties } from "react";
 import { MAIN_SECTIONS, EXTRA_SECTIONS, type Section } from "@/lib/sections";
 
 const ACCENT_CLASS: Record<Section["accent"], string> = {
@@ -25,7 +25,7 @@ export default function SectionSidebar() {
     }),
     [pathname]
   );
-  const [indicatorStyle, setIndicatorStyle] = useState<React.CSSProperties>({});
+  const [indicatorStyle, setIndicatorStyle] = useState<CSSProperties>({});
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   useEffect(() => {
