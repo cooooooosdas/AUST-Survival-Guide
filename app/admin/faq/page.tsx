@@ -1,9 +1,17 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import AdminFaqClient from "./AdminFaqClient";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "FAQ 管理" };
 
 export default async function AdminFaqPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/admin/faq");
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">FAQ 管理</h1>

@@ -79,6 +79,10 @@ export async function GET(request: NextRequest) {
     .limit(100);
 
   if (target_type) {
+    const allowed = ["letter", "link_group", "resource"];
+    if (!allowed.includes(target_type)) {
+      return bad(400, "invalid target_type");
+    }
     q = q.eq("target_type", target_type);
   }
 

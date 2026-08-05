@@ -1,9 +1,17 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import AdminQuestionsClient from "./AdminQuestionsClient";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata = { title: "匿名提问管理" };
 
 export default async function AdminQuestionsPage() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/login?next=/admin/questions");
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
       <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">匿名提问管理</h1>
