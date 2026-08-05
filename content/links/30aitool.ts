@@ -200,4 +200,58 @@ export const groups: LinkGroup[] = [
       { title: "电脑问题修复", url: "https://www.huorong.cn/", description: "网络问题系统故障修复思路汇总大全", tag: "教程", tags: ["修复","系统"] },
     ],
   },
+  // ===== AI 进阶 =====
+  {
+    id: "30-ai-prompt",
+    title: "AI 提示词 / 智能体",
+    items: [
+      { title: "Anthropic Prompt Library", url: "https://docs.anthropic.com/en/prompt-library", description: "Anthropic 官方提示词库，跨场景范本", tag: "免费", tags: ["提示词","AI"] },
+      { title: "OpenAI Prompt Examples", url: "https://platform.openai.com/docs/examples", description: "OpenAI 官方示例，GPT 系列最佳实践", tag: "免费", tags: ["提示词","GPT"] },
+      { title: "LangChain Hub", url: "https://smith.langchain.com/hub", description: "社区提示词模板，LangChain 生态", tag: "免费", tags: ["提示词","LangChain"] },
+      { title: "Midjourney 官方提示词", url: "https://docs.midjourney.com/docs/prompts", description: "MJ 官方提示词指南 + 风格参数", tag: "免费", tags: ["提示词","绘画"] },
+      { title: "Prompt Hero", url: "https://prompthero.com/", description: "Midjourney / Stable Diffusion 提示词聚合", tag: "免费", tags: ["提示词","绘画"] },
+      { title: "ChatGPT 提示词示例库", url: "https://github.com/f/awesome-chatgpt-prompts", description: "GitHub 社区维护的高赞提示词集合", tag: "开源", tags: ["提示词","GPT"] },
+    ],
+  },
+  // ===== 开发工具 =====
+  {
+    id: "30-dev-tools",
+    title: "开发 / 调试",
+    items: [
+      { title: "Regex 101", url: "https://regex101.com/", description: "正则在线调试，支持多语言", tag: "免费", tags: ["正则","调试"] },
+      { title: "JSON Crack", url: "https://jsoncrack.com/", description: "JSON 树形 / 图形可视化", tag: "免费", tags: ["JSON","调试"] },
+      { title: "Diffchecker", url: "https://www.diffchecker.com/", description: "文本 / 文件 / 目录在线对比", tag: "免费", tags: ["Diff","调试"] },
+      { title: "Carbon", url: "https://carbon.now.sh/", description: "代码片段生成精美截图", tag: "免费", tags: ["代码","截图"] },
+      { title: "Ray.so", url: "https://ray.so/", description: "代码截图，主题更现代", tag: "免费", tags: ["代码","截图"] },
+      { title: "Hoppscotch", url: "https://hoppscotch.io/", description: "开源 API 调试 / 测试客户端", tag: "开源", tags: ["API","调试"] },
+      { title: "DevDocs", url: "https://devdocs.io/", description: "聚合多语言官方文档，离线可用", tag: "免费", tags: ["文档","开发"] },
+      { title: "Can I Use", url: "https://caniuse.com/", description: "浏览器特性兼容性查询", tag: "免费", tags: ["兼容","前端"] },
+    ],
+  },
+  // ===== 专注 / 学习 =====
+  {
+    id: "30-focus",
+    title: "专注 / 学习效率",
+    items: [
+      { title: "潮汐 · 番茄钟", url: "https://tide.fm/", description: "白噪音 + 番茄钟 + 专注统计", tag: "免费", tags: ["番茄钟","专注"] },
+      { title: "Forest 专注", url: "https://www.forestapp.cc/", description: "种树式专注法，手机桌面联动", tag: "免费", tags: ["番茄钟","手机"] },
+      { title: "Anki 闪卡", url: "https://apps.ankiweb.net/", description: "间隔重复算法，记忆任何知识", tag: "开源", tags: ["记忆","学习"] },
+      { title: "RemNote", url: "https://www.remnote.com/", description: "卡片式笔记，间隔重复自动排程", tag: "免费", tags: ["笔记","记忆"] },
+      { title: "Pomotodo", url: "https://pomotodo.com/", description: "番茄钟 + 任务 + 数据复盘", tag: "免费", tags: ["番茄钟","复盘"] },
+      { title: "Cold Turkey 屏蔽", url: "https://getcoldturkey.com/", description: "学霸级网站 / 应用屏蔽工具", tag: "免费", tags: ["屏蔽","专注"] },
+    ],
+  },
+  // ===== 生活实用 =====
+  {
+    id: "30-utility-misc",
+    title: "生活实用",
+    items: [
+      { title: "国家政务服务平台", url: "https://www.gjzwfw.gov.cn/", description: "国务院客户端，跨省通办", tag: "官方", tags: ["政务","官方"] },
+      { title: "国家税务总局", url: "https://etax.chinatax.gov.cn/", description: "个人所得税年度汇算", tag: "官方", tags: ["税务","官方"] },
+      { title: "学信网", url: "https://www.chsi.com.cn/", description: "学籍 / 学历 / 学位认证", tag: "官方", tags: ["学历","官方"] },
+      { title: "中国法律服务网", url: "https://www.12348.gov.cn/", description: "公共法律服务在线咨询", tag: "官方", tags: ["法律","官方"] },
+      { title: "全国图书馆参考咨询联盟", url: "https://www.ucdrs.superlib.net/", description: "论文 / 文献跨馆互助", tag: "免费", tags: ["文献","学术"] },
+      { title: "全国快递物流查询", url: "https://www.kuaidihelp.com/", description: "一个页面查遍所有快递", tag: "免费", tags: ["快递","查询"] },
+    ],
+  },
 ];
