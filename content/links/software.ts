@@ -16,12 +16,14 @@ export const groups: LinkGroup[] = [
         url: "https://sourceforge.net/projects/orwelldevcpp/",
         description: "打竞赛的同学常用，轻量，C/C++ 入门经典",
         tag: "竞赛",
+        icon: "https://sourceforge.net/favicon.ico",
       },
       {
         title: "Visual Studio",
         url: "https://visualstudio.microsoft.com/zh-hans/",
         description: "C/C++ 主力 IDE，工程化项目必备",
         tag: "C++",
+        icon: "https://visualstudio.microsoft.com/favicon.ico",
       },
       {
         title: "IntelliJ IDEA",
