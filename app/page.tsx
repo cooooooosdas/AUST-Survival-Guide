@@ -196,16 +196,6 @@ export default async function HomePage() {
       <section className="guide-hero relative -mx-4 border-b border-border px-4 py-14 sm:-mx-6 sm:px-6 md:py-20 lg:py-24">
         <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
           <div className="hero-copy-enter">
-            {/* mobile 简化版：手绘风的 chip 标识 */}
-            <div className="mb-5 flex items-center gap-3 sm:hidden">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-light text-primary">
-                <BookOpen className="h-5 w-5" strokeWidth={2} />
-              </span>
-              <p className="text-xs leading-relaxed text-text-secondary">
-                安理大新生的<span className="font-medium text-text">第一本</span>桌面指南
-              </p>
-            </div>
-
             {/* 桌面版：手绘 Hero 装饰 —— 信纸 / 钢笔 / 邮戳 / 树叶 */}
             <div className="mb-6 hidden sm:block">
               <HeroIllustration className="h-28 w-auto text-text-secondary" />

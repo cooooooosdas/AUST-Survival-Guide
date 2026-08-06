@@ -22,6 +22,28 @@ type LetterEntry = LetterMeta & {
 // 按时间倒序排列；新增信件时直接在最上方加一项 + 在 content/letters/ 下放对应 mdx
 export const LETTERS: LetterEntry[] = [
   {
+    slug: "aust-complete-guide",
+    title: "安徽理工大学完全指南",
+    excerpt:
+      "从学校排名到专业选择，从分数线到转专业政策——高考填志愿必看的一份指南。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["高考志愿", "择校", "专业选择", "新生指南"],
+    readingTime: 15,
+    load: () => import("@/content/letters/aust-complete-guide.mdx"),
+  },
+  {
+    slug: "freshman-handbook",
+    title: "大一新生生存手册",
+    excerpt:
+      "开学报到、宿舍选择、军训攻略、社团活动——大一新生必须知道的几件事。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["新生", "入学", "攻略", "宿舍", "军训", "社团"],
+    readingTime: 12,
+    load: () => import("@/content/letters/freshman-handbook.mdx"),
+  },
+  {
     slug: "first-week",
     title: "开学第一周，先把这几件事处理好",
     excerpt:

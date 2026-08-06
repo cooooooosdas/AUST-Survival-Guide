@@ -15,7 +15,7 @@ export const SECTIONS: Section[] = [
   { slug: "ai",         title: "AI 专区",    href: "/ai",           description: "AI 工具与使用方法",     group: "main", accent: "primary" },
   { slug: "resources",  title: "资源中心",   href: "/resources",    description: "常用网址与学习资料",     group: "main", accent: "secondary" },
   { slug: "checkin",    title: "学习打卡",   href: "/checkin",      description: "每日任务打卡 · 刷题练习", group: "main", accent: "tertiary" },
-  { slug: "letters",    title: "学长来信",   href: "/letters",      description: "长文随笔 · 写给即将到来的你", group: "extra", accent: "primary" },
+  { slug: "letters",    title: "学长来信",   href: "/letters",      description: "长文随笔 · 写给即将到来的你", group: "main", accent: "primary" },
   { slug: "about",      title: "关于我",     href: "/about",        description: "coolin · 站长",          group: "extra", accent: "secondary" },
 ];
 

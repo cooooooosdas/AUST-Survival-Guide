@@ -120,6 +120,9 @@ export default function AboutPage() {
 
       <div className="mt-12 border-t border-border pt-8">
         <h2 className="text-base font-medium text-text">联系方式</h2>
+        <p className="mt-1 text-xs text-muted">
+          以下是可点击的超链接，点击直接跳转。
+        </p>
         <ul className="mt-4 space-y-2.5 text-sm text-text">
           <li className="flex items-center gap-2">
             <span className="text-muted w-12 shrink-0">B 站：</span>
@@ -127,7 +130,7 @@ export default function AboutPage() {
               href="https://space.bilibili.com/350016742"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-blue-600 underline decoration-blue-400/40 underline-offset-4 transition-colors hover:text-blue-700 hover:decoration-blue-600"
             >
               space.bilibili.com/350016742
             </a>
@@ -142,7 +145,7 @@ export default function AboutPage() {
               href="https://github.com/cooooooosdas"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-primary underline-offset-4 hover:underline"
+              className="text-blue-600 underline decoration-blue-400/40 underline-offset-4 transition-colors hover:text-blue-700 hover:decoration-blue-600"
             >
               github.com/cooooooosdas
             </a>
