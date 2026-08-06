@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ArrowLeft, MessageCircle, Sparkles } from "lucide-react";
@@ -271,29 +270,6 @@ export default async function LetterPage({
           <Letter />
         </div>
       </div>
-
-      {/* 相关图片展示 */}
-      {letter.images && letter.images.length > 0 && (
-        <section className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 md:gap-4" aria-label="相关图片">
-          {letter.images.slice(0, 8).map((src, i) => (
-            <a
-              key={i}
-              href={src}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative aspect-[4/3] overflow-hidden rounded-lg border border-border bg-bg-alt"
-            >
-              <Image
-                src={src}
-                alt={`相关图片 ${i + 1}`}
-                fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 640px) 50vw, 25vw"
-              />
-            </a>
-          ))}
-        </section>
-      )}
 
       <div className="my-16 flex items-center gap-4">
         <div className="flex-1 h-px bg-border" />
