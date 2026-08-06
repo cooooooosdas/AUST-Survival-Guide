@@ -34,14 +34,69 @@ export const LETTERS: LetterEntry[] = [
   },
   {
     slug: "freshman-handbook",
-    title: "大一新生生存手册",
+    title: "大一新生手册：开学报到与入学清单",
     excerpt:
-      "开学报到、宿舍选择、军训攻略、社团活动——大一新生必须知道的几件事。",
+      "报到流程、证件材料准备、行李策略——入学第一天要做的所有事。",
     date: "2026-08-06",
     author: "coolin",
-    tags: ["新生", "入学", "攻略", "宿舍", "军训", "社团"],
-    readingTime: 12,
+    tags: ["新生", "报到", "入学清单"],
+    readingTime: 10,
     load: () => import("@/content/letters/freshman-handbook.mdx"),
+  },
+  {
+    slug: "dormitory-guide",
+    title: "宿舍攻略：选房抢宿与日常设施",
+    excerpt:
+      "四人间上床下桌，空调阳台。线上选房怎么抢？宿舍设施怎么用？这份攻略帮你搞定。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["新生", "宿舍", "选房", "设施"],
+    readingTime: 8,
+    load: () => import("@/content/letters/dormitory-guide.mdx"),
+  },
+  {
+    slug: "military-training",
+    title: "军训指南：训练节奏与装备避坑",
+    excerpt:
+      "两周军训怎么过？鞋垫、请假条、训练技巧——老生踩过的坑帮你避开。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["新生", "军训", "攻略"],
+    readingTime: 7,
+    load: () => import("@/content/letters/military-training.mdx"),
+  },
+  {
+    slug: "food-map",
+    title: "安理工美食地图：四大食堂与觅食攻略",
+    excerpt:
+      "仁苑、爱苑、义苑、平苑四大食堂怎么选？哪些窗口排队最长？这份美食攻略帮你省时间。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["新生", "食堂", "美食"],
+    readingTime: 8,
+    load: () => import("@/content/letters/food-map.mdx"),
+  },
+  {
+    slug: "clubs-social",
+    title: "社团与社交：百团大战与大一融入",
+    excerpt:
+      "百团大战怎么逛？校级和院级组织怎么选？怎么快速认识新朋友？这份指南帮你融入大学。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["新生", "社团", "社交", "学生会"],
+    readingTime: 7,
+    load: () => import("@/content/letters/clubs-social.mdx"),
+  },
+  {
+    slug: "healthcare",
+    title: "体测与就医：评分标准与医保报销",
+    excerpt:
+      "体测怎么拿高分？校医院能看什么？医保怎么报销？一篇帮你搞定。",
+    date: "2026-08-06",
+    author: "coolin",
+    tags: ["新生", "体测", "就医", "医保"],
+    readingTime: 6,
+    load: () => import("@/content/letters/healthcare.mdx"),
   },
   {
     slug: "first-week",

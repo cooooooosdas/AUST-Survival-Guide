@@ -7,10 +7,7 @@ export const metadata = { title: "资源中心" };
 
 const COMING_SOON = [
   { value: "high-math", label: "高数笔记" },
-  { value: "cs-courseware", label: "计算机课件" },
-  { value: "software", label: "软件安装包" },
   { value: "review", label: "期末复习" },
-  { value: "latex", label: "LaTeX 模板" },
   { value: "other", label: "其他" },
 ] as const;
 
