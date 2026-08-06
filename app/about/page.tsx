@@ -1,8 +1,41 @@
 import Link from "next/link";
 import { AlertTriangle, Code2, Link2 } from "lucide-react";
-import ProjectStack from "@/components/SkillTree";
 
 export const metadata = { title: "关于我" };
+
+type TechGroup = {
+  label: string;
+  tint: string;
+  items: string[];
+};
+
+const TECH_STACK: TechGroup[] = [
+  {
+    label: "框架",
+    tint: "text-primary",
+    items: ["Next.js 16.2", "React 19.2", "TypeScript 5"],
+  },
+  {
+    label: "样式",
+    tint: "text-primary",
+    items: ["Tailwind CSS v4", "CSS 变量主题", "暗色模式"],
+  },
+  {
+    label: "内容",
+    tint: "text-accent",
+    items: ["MDX 来信源文件", "lucide-react 图标", "Inter / Noto Serif SC / Geist Mono"],
+  },
+  {
+    label: "后端",
+    tint: "text-secondary",
+    items: ["Supabase（Auth / DB / Storage）", "API Routes", "RLS 策略"],
+  },
+  {
+    label: "基建",
+    tint: "text-muted",
+    items: ["Vercel Edge 部署", "TypeScript 严格模式", "ESLint"],
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -50,22 +83,39 @@ export default function AboutPage() {
 
       {/* 项目技术栈 */}
       <section className="mt-12">
-        <h2 className="font-serif text-xl font-semibold text-text">本站技术栈</h2>
-        <p className="mt-1 text-sm text-muted">
-          项目本身用了什么 —— 框架、内容、数据库、基建。详细列表见{" "}
+        <div className="flex items-baseline justify-between gap-3">
+          <h2 className="font-serif text-xl font-semibold text-text">本站技术栈</h2>
           <a
             href="https://github.com/cooooooosdas/AUST-Survival-Guide"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-primary underline-offset-2 hover:underline"
+            className="font-mono text-[11px] text-muted underline-offset-2 hover:text-primary hover:underline"
           >
-            GitHub README
+            GitHub README →
           </a>
-          。
-        </p>
-        <div className="mt-5 rounded-xl border border-border bg-surface p-5">
-          <ProjectStack />
         </div>
+        <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+          {TECH_STACK.map((g) => (
+            <div
+              key={g.label}
+              className="rounded-lg border border-border bg-surface p-4"
+            >
+              <dt
+                className={`font-mono text-[11px] uppercase tracking-widest ${g.tint}`}
+              >
+                {g.label}
+              </dt>
+              <dd className="mt-2 space-y-1 text-sm text-text-secondary">
+                {g.items.map((item) => (
+                  <div key={item} className="flex items-start gap-2">
+                    <span className="mt-1.5 inline-block h-1 w-1 shrink-0 rounded-full bg-muted" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </section>
 
       <div className="mt-12 border-t border-border pt-8">
