@@ -21,7 +21,6 @@ import {
   PRACTICE_LINKS,
   DIFFICULTY_COLOR,
   PLATFORM_LABEL,
-  getDailyQuestionIndex,
 } from "@/lib/practice-links";
 
 type Difficulty = "easy" | "medium" | "hard";
@@ -81,26 +80,14 @@ export default function PracticePage() {
       /* ignore */
     }
 
-    // 拉取服务端最近 7 天统计（未登录返回空）
+    // 拉取服务端最近 7 天统计（API 已补齐 7 元素，client 只 display）
     fetch("/api/practice")
       .then((r) => r.json())
       .then((json) => {
         setIsLoggedIn(!!json.loggedIn);
-        const stats: { day: string; total_attempts: number }[] = json.stats ?? [];
-        // 补齐 7 天（缺失天补 0）
-        const series: number[] = [];
-        let total = 0;
-        for (let i = 6; i >= 0; i--) {
-          const d = new Date();
-          d.setDate(d.getDate() - i);
-          const key = d.toISOString().slice(0, 10);
-          const found = stats.find((s) => s.day === key);
-          const v = found?.total_attempts ?? 0;
-          series.push(v);
-          total += v;
-        }
+        const series: number[] = Array.isArray(json.weekly) ? json.weekly : [];
         setWeeklyStats(series);
-        setWeeklyTotal(total);
+        setWeeklyTotal(series.reduce((a, b) => a + b, 0));
       })
       .catch(() => {});
   }, []);
@@ -141,18 +128,13 @@ export default function PracticePage() {
     })
       .then((r) => r.json())
       .then(() => {
-        // 提交成功后，本地更新对应日期的统计
-        const todayKey = new Date().toISOString().slice(0, 10);
-        const idx = 6 - 0; // 今天在 series 的最后
-        setWeeklyStats((prev) => {
-          if (prev.length !== 7) return prev;
-          const next = [...prev];
-          if (next[6] !== undefined) {
-            next[6] = (next[6] ?? 0) + 1;
-          }
-          return next;
-        });
-        setWeeklyTotal((prev) => prev + 1);
+        // 提交成功后 refetch 最新 weekly（避免乐观更新与 server 数据漂移）
+        return fetch("/api/practice").then((r2) => r2.json());
+      })
+      .then((json) => {
+        const series: number[] = Array.isArray(json.weekly) ? json.weekly : [];
+        setWeeklyStats(series);
+        setWeeklyTotal(series.reduce((a, b) => a + b, 0));
       })
       .catch(() => {});
   }
@@ -183,9 +165,14 @@ export default function PracticePage() {
   const dailyQuestion = useMemo(() => {
     if (!dailyDiff) return null;
     const pool = PRACTICE_LINKS.filter((q) => q.difficulty === dailyDiff);
-    const idx = getDailyQuestionIndex(dailyDiff, todayStr());
-    if (idx < 0 || pool.length === 0) return null;
-    return pool[idx];
+    if (pool.length === 0) return null;
+    // 内联 hash（4 行代码不值得一个 lib export）
+    const seed = dailyDiff + todayStr();
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+      hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+    }
+    return pool[Math.abs(hash) % pool.length];
   }, [dailyDiff]);
 
   // 同步每日一题的标记结果（依赖 dailyQuestion，放它后面）

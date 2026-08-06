@@ -83,6 +83,18 @@ export async function GET(request: NextRequest) {
     .gte("day", since.toISOString().slice(0, 10))
     .order("day", { ascending: true });
 
+  // 服务端补齐 7 天——缺天补 0。client 只负责 display。
+  const weekly: number[] = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    const key = d.toISOString().slice(0, 10);
+    const found = (stats ?? []).find(
+      (s: { day: string }) => s.day === key
+    );
+    weekly.push(found?.total_attempts ?? 0);
+  }
+
   const { data: recent } = await supabase
     .from("practice_results")
     .select("id, question_id, platform, difficulty, result, created_at")
@@ -91,7 +103,7 @@ export async function GET(request: NextRequest) {
     .limit(20);
 
   return NextResponse.json({
-    stats: stats ?? [],
+    weekly,
     recent: recent ?? [],
     loggedIn: true,
   });

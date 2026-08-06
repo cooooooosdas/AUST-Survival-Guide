@@ -98,14 +98,3 @@ export const PLATFORM_LABEL: Record<string, string> = {
   leetcode: "LeetCode",
 };
 
-/** 根据日期字符串 + 难度生成确定性的随机索引，保证同一天同一难度题目不变 */
-export function getDailyQuestionIndex(difficulty: string, dateStr: string): number {
-  const pool = PRACTICE_LINKS.filter((q) => q.difficulty === difficulty);
-  if (pool.length === 0) return -1;
-  let hash = 0;
-  const seed = difficulty + dateStr;
-  for (let i = 0; i < seed.length; i++) {
-    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
-  }
-  return Math.abs(hash) % pool.length;
-}
