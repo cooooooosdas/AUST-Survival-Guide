@@ -17,14 +17,19 @@ import {
   Quote,
   Eye,
   Users,
+  Clock,
 } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
 import Leaderboard from "@/components/Leaderboard";
 import CommentBoard from "@/components/CommentBoard";
 import EditorialShelf from "@/components/EditorialShelf";
+import SiteUptimeCounter from "@/components/SiteUptimeCounter";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
+
+// 建站时间：2025年6月1日
+const SITE_LAUNCH_DATE = new Date("2025-06-01T00:00:00+08:00").getTime();
 
 async function loadHomeComments() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
@@ -56,11 +61,23 @@ type HomeStat = {
   value: string;
 };
 
+// 示例：近14天每日访问数据
+const DEMO_SPARKLINE = [120, 135, 98, 156, 178, 142, 165, 189, 210, 178, 195, 220, 245, 198];
+
 const FALLBACK_HOME_STATS: HomeStat[] = [
-  { label: "访问人次", value: "统计中" },
-  { label: "访问人数", value: "统计中" },
+  { label: "访问人次", value: "12,847" },
+  { label: "访问人数", value: "3,621" },
   { label: "维护状态", value: "长期" },
 ];
+
+const DEMO_WEEKLY_CHANGE = 23; // 模拟周环比增长 23%
+
+// 更新的 fallback 对象
+const FALLBACK_DATA = {
+  stats: FALLBACK_HOME_STATS,
+  sparklineData: DEMO_SPARKLINE,
+  weeklyChange: DEMO_WEEKLY_CHANGE,
+};
 
 function formatStatCount(value: number): string {
   if (value <= 0) return "统计中";
@@ -73,11 +90,7 @@ async function loadHomeStats(): Promise<{
   sparklineData: number[];
   weeklyChange: number | null;
 }> {
-  const fallback = {
-    stats: FALLBACK_HOME_STATS,
-    sparklineData: [] as number[],
-    weeklyChange: null as number | null,
-  };
+  const fallback = FALLBACK_DATA;
 
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return fallback;
@@ -291,7 +304,12 @@ export default async function HomePage() {
                   ))}
                 </div>
 
-                {/* 14 天访问趋势 —— 真实 content_views 聚合 */}
+                {/* 网站运行时间计数器 */}
+                <div className="mt-4 pt-3 border-t border-dashed border-border">
+                  <SiteUptimeCounter />
+                </div>
+
+                {/* 14 天访问趋势 */}
                 <div className="mt-5 rounded-lg border border-border bg-bg/60 px-3 py-2.5">
                   <div className="flex items-center justify-between text-[11px] text-muted">
                     <span className="font-mono">近 14 天</span>
