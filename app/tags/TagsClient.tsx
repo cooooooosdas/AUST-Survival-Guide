@@ -96,7 +96,7 @@ export default function TagsClient() {
           )}
         </div>
 
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-3 py-4">
+        <div className="flex flex-wrap items-center gap-2 py-4">
           {cloud.map((t) => {
             const active = selectedTag === t.name;
             return (
@@ -106,14 +106,14 @@ export default function TagsClient() {
                 onClick={() => onTagClick(t.name)}
                 aria-pressed={active}
                 className={[
-                  "motion-press inline-flex items-baseline gap-1.5 transition-all duration-200 hover:scale-105",
+                  "motion-press inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-all duration-200",
                   fontClass(t.scale),
                   active
-                    ? "text-primary underline decoration-2 underline-offset-[6px] decoration-primary"
-                    : "text-text-secondary hover:text-primary",
+                    ? "border-primary bg-primary-light text-primary"
+                    : "border-border bg-surface text-text-secondary hover:border-primary hover:bg-primary-light/30",
                 ].join(" ")}
               >
-                <Hash className="self-center text-xs text-muted/60" strokeWidth={2} />
+                <Hash className="self-center text-[10px] text-muted/60" strokeWidth={2} />
                 <span>{t.name}</span>
                 <span className="font-mono text-[10px] text-muted/70">
                   {t.count}

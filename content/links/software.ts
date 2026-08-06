@@ -215,4 +215,22 @@ export const groups: LinkGroup[] = [
       },
     ],
   },
+  {
+    id: "must-watch",
+    title: "计算机必修课",
+    items: [
+      {
+        title: "计算机教育中缺失的一课",
+        url: "https://missing.csail.mit.edu/",
+        description: "MIT 计算机系课程，讲授命令行、Git、Vim、调试等硬核技能",
+        tag: "必看",
+      },
+      {
+        title: "提问的智慧",
+        url: "https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way",
+        description: "GitHub 开源项目，教你如何正确提问，避免被踢出群聊",
+        tag: "必读",
+      },
+    ],
+  },
 ];
