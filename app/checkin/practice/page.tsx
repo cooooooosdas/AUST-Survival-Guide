@@ -70,6 +70,7 @@ export default function PracticePage() {
   >(null);
   const [weeklyStats, setWeeklyStats] = useState<number[]>([]);
   const [weeklyTotal, setWeeklyTotal] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // 加载历史 + 服务端周统计
   useEffect(() => {
@@ -84,6 +85,7 @@ export default function PracticePage() {
     fetch("/api/practice")
       .then((r) => r.json())
       .then((json) => {
+        setIsLoggedIn(!!json.loggedIn);
         const stats: { day: string; total_attempts: number }[] = json.stats ?? [];
         // 补齐 7 天（缺失天补 0）
         const series: number[] = [];
@@ -222,8 +224,8 @@ export default function PracticePage() {
           精选洛谷 + LeetCode 题目，选难度后直接跳转。
         </p>
 
-        {/* 近 7 天统计 sparkline —— 登录后服务端数据，未登录空 */}
-        {weeklyStats.length === 7 && (
+        {/* 近 7 天统计 sparkline —— 登录后服务端数据，未登录显示登录提示 */}
+        {weeklyStats.length === 7 && weeklyTotal > 0 ? (
           <div className="mt-5 flex items-center justify-between rounded-lg border border-border bg-surface px-4 py-2.5">
             <div className="flex items-center gap-2 text-xs text-muted">
               <TrendingUp className="h-3 w-3 text-primary" strokeWidth={2} />
@@ -237,6 +239,27 @@ export default function PracticePage() {
               className="text-primary"
               ariaLabel="近 7 天做题数量"
             />
+          </div>
+        ) : isLoggedIn === false ? (
+          <div className="mt-5 flex items-center gap-2 rounded-lg border border-dashed border-border bg-bg-alt px-4 py-2.5 text-xs text-muted">
+            <TrendingUp className="h-3 w-3 text-muted" strokeWidth={2} />
+            <span>
+              登录后这里会显示你{" "}
+              <span className="font-mono text-text">近 7 天</span> 的做题统计
+            </span>
+            <Link
+              href="/login"
+              className="ml-auto text-primary transition-colors hover:text-primary-hover"
+            >
+              登录 →
+            </Link>
+          </div>
+        ) : (
+          <div className="mt-5 flex items-center gap-2 rounded-lg border border-dashed border-border bg-bg-alt px-4 py-2.5 text-xs text-muted">
+            <TrendingUp className="h-3 w-3 text-muted" strokeWidth={2} />
+            <span>
+              还没有做题记录，今天做一题就会出现在这里
+            </span>
           </div>
         )}
       </div>

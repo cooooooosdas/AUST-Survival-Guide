@@ -64,7 +64,7 @@ export default async function AdminProjectsPage() {
   );
 
   return (
-    <div className="mx-auto max-w-4xl px-6 py-16">
+    <div>
       <header className="border-b border-border pb-6">
         <p className="text-[11px] uppercase tracking-[0.2em] text-accent">
           Projects · {PROJECTS.length}

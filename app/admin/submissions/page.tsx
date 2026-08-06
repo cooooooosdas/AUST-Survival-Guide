@@ -25,8 +25,8 @@ export default async function AdminSubmissionsPage() {
   const submissions = (data ?? []) as ContentSubmission[];
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-14 sm:px-6 md:py-16">
-      <header className="border-b border-border pb-7">
+    <div>
+      <header className="border-b border-border pb-6">
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">Editorial desk</p>
         <h1 className="mt-2 font-serif text-3xl font-semibold text-text">投稿审核</h1>
         <p className="mt-3 text-sm text-muted">共 {submissions.length} 篇稿件，按提交时间倒序。</p>

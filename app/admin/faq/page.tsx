@@ -8,8 +8,8 @@ export default async function AdminFaqPage() {
   await requireAdminPage();
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">FAQ 管理</h1>
+    <div>
+      <h1 className="text-2xl font-serif font-semibold text-text">FAQ 管理</h1>
       <p className="mt-1 text-sm text-muted">
         添加、编辑、删除 FAQ 条目。新增条目会自动出现在 /faq 页面。
       </p>

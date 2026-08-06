@@ -1,4 +1,5 @@
-import { Sparkles, History, Bug, Megaphone, Layers, ListTodo } from "lucide-react";
+import { Sparkles, History, Bug, Megaphone, Layers, ListTodo, TrendingUp } from "lucide-react";
+import Sparkline from "@/components/Sparkline";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -41,6 +42,25 @@ function groupByMonth(rows: Changelog[]) {
   return Object.entries(groups).sort((a, b) => (a[0] < b[0] ? 1 : -1));
 }
 
+// 按 ISO 周（YYYY-Www）聚合每周发布数
+function buildWeeklySeries(rows: Changelog[], weeks = 12): number[] {
+  const buckets: Record<string, number> = {};
+  for (const row of rows) {
+    const d = new Date(row.created_at);
+    const year = d.getFullYear();
+    // 简单 ISO 周算法
+    const onejan = new Date(year, 0, 1);
+    const week = Math.ceil(
+      ((d.getTime() - onejan.getTime()) / 86400000 + onejan.getDay() + 1) / 7
+    );
+    const key = `${year}-W${String(week).padStart(2, "0")}`;
+    buckets[key] = (buckets[key] ?? 0) + 1;
+  }
+  // 按时间倒序取最近 N 周，再反转为时间正序
+  const sortedKeys = Object.keys(buckets).sort().reverse().slice(0, weeks);
+  return sortedKeys.reverse().map((k) => buckets[k] ?? 0);
+}
+
 export default async function ChangelogPage() {
   let changelogs: Changelog[] = [];
 
@@ -60,6 +80,8 @@ export default async function ChangelogPage() {
   }
 
   const monthGroups = groupByMonth(changelogs);
+  const weeklySeries = buildWeeklySeries(changelogs, 12);
+  const weeklyTotal = weeklySeries.reduce((a, b) => a + b, 0);
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
@@ -72,6 +94,32 @@ export default async function ChangelogPage() {
           记录平台的更新、新增和修复，按月倒序。
         </p>
       </header>
+
+      {/* 周发布密度 sparkline —— 仅在有数据时显示 */}
+      {weeklyTotal > 0 && (
+        <section className="mt-6 rounded-xl border border-border bg-surface p-5">
+          <div className="flex items-center justify-between">
+            <h2 className="flex items-center gap-2 text-sm font-medium text-text">
+              <TrendingUp className="h-4 w-4 text-primary" strokeWidth={2} />
+              近 12 周发布节奏
+            </h2>
+            <span className="font-mono text-[11px] text-muted">
+              共 <span className="text-text">{weeklyTotal}</span> 条 · 平均{" "}
+              <span className="text-text">
+                {(weeklyTotal / Math.max(weeklySeries.length, 1)).toFixed(1)}
+              </span>{" "}
+              条/周
+            </span>
+          </div>
+          <Sparkline
+            data={weeklySeries}
+            width={640}
+            height={56}
+            className="mt-4 w-full text-primary"
+            ariaLabel="近 12 周 changelog 发布量"
+          />
+        </section>
+      )}
 
       {changelogs.length === 0 ? (
         <div className="mt-10 rounded-md border border-dashed border-border bg-bg-alt p-10 text-center">

@@ -21,41 +21,57 @@ type Link = {
 
 const NODES: Node[] = [
   // 中央
-  { id: "center", label: "coolin", x: 400, y: 220, size: 50, primary: true },
+  { id: "center", label: "coolin", x: 440, y: 240, size: 50, primary: true },
 
-  // 4 大领域
-  { id: "frontend", label: "前端", x: 140, y: 100, size: 36, tint: "primary" },
-  { id: "backend", label: "后端", x: 660, y: 100, size: 36, tint: "primary" },
-  { id: "ai", label: "AI / 数据", x: 140, y: 340, size: 36, tint: "accent" },
-  { id: "tools", label: "工具 / 工程", x: 660, y: 340, size: 36, tint: "accent" },
+  // 8 大领域（4 老 + 4 新）
+  { id: "frontend", label: "前端", x: 160, y: 110, size: 34, tint: "primary" },
+  { id: "backend", label: "后端", x: 720, y: 110, size: 34, tint: "primary" },
+  { id: "ai", label: "AI / 数据", x: 160, y: 370, size: 34, tint: "accent" },
+  { id: "tools", label: "工具 / 工程", x: 720, y: 370, size: 34, tint: "accent" },
+  { id: "database", label: "数据库", x: 440, y: 50, size: 32, tint: "secondary" },
+  { id: "os", label: "操作系统", x: 50, y: 240, size: 32, tint: "secondary" },
+  { id: "cloud", label: "云服务", x: 440, y: 430, size: 32, tint: "secondary" },
+  { id: "collab", label: "协作", x: 830, y: 240, size: 32, tint: "secondary" },
 
   // 前端子技能
-  { id: "react", label: "React 19", x: 40, y: 30, size: 24, tint: "muted" },
-  { id: "next", label: "Next.js 16", x: 180, y: 20, size: 26, tint: "muted" },
-  { id: "tailwind", label: "Tailwind v4", x: 260, y: 70, size: 24, tint: "muted" },
+  { id: "react", label: "React 19", x: 50, y: 30, size: 22, tint: "muted" },
+  { id: "next", label: "Next.js 16", x: 200, y: 22, size: 24, tint: "muted" },
+  { id: "tailwind", label: "Tailwind v4", x: 280, y: 70, size: 22, tint: "muted" },
 
   // 后端子技能
-  { id: "ts", label: "TypeScript", x: 540, y: 30, size: 24, tint: "muted" },
-  { id: "supabase", label: "Supabase", x: 720, y: 30, size: 26, tint: "muted" },
-  { id: "mdx", label: "MDX", x: 800, y: 90, size: 22, tint: "muted" },
+  { id: "ts", label: "TypeScript", x: 580, y: 30, size: 22, tint: "muted" },
+  { id: "supabase", label: "Supabase", x: 760, y: 30, size: 24, tint: "muted" },
+  { id: "mdx", label: "MDX", x: 860, y: 90, size: 22, tint: "muted" },
 
   // AI 子技能
-  { id: "deepseek", label: "DeepSeek", x: 40, y: 280, size: 24, tint: "muted" },
-  { id: "rag", label: "RAG 检索", x: 60, y: 410, size: 24, tint: "muted" },
-  { id: "embed", label: "Transformers", x: 220, y: 410, size: 24, tint: "muted" },
+  { id: "deepseek", label: "DeepSeek", x: 50, y: 310, size: 22, tint: "muted" },
+  { id: "rag", label: "RAG 检索", x: 60, y: 450, size: 22, tint: "muted" },
+  { id: "embed", label: "Transformers", x: 260, y: 460, size: 22, tint: "muted" },
 
   // 工具子技能
-  { id: "git", label: "Git", x: 540, y: 280, size: 22, tint: "muted" },
-  { id: "vscode", label: "VS Code", x: 660, y: 420, size: 24, tint: "muted" },
-  { id: "figma", label: "Figma", x: 800, y: 410, size: 22, tint: "muted" },
+  { id: "git", label: "Git", x: 580, y: 320, size: 22, tint: "muted" },
+  { id: "vscode", label: "VS Code", x: 700, y: 460, size: 22, tint: "muted" },
+  { id: "figma", label: "Figma", x: 860, y: 460, size: 22, tint: "muted" },
+
+  // 数据库子技能
+  { id: "postgres", label: "PostgreSQL", x: 360, y: 0, size: 20, tint: "muted" },
+  { id: "redis", label: "Redis", x: 520, y: 0, size: 20, tint: "muted" },
+
+  // OS 子技能
+  { id: "linux", label: "Linux", x: -10, y: 175, size: 22, tint: "muted" },
+  { id: "bash", label: "Bash", x: -10, y: 310, size: 22, tint: "muted" },
 ];
 
 const LINKS: Link[] = [
-  // 中央到 4 大领域
+  // 中央到 8 大领域
   { from: "center", to: "frontend" },
   { from: "center", to: "backend" },
   { from: "center", to: "ai" },
   { from: "center", to: "tools" },
+  { from: "center", to: "database" },
+  { from: "center", to: "os" },
+  { from: "center", to: "cloud" },
+  { from: "center", to: "collab" },
   // 前端
   { from: "frontend", to: "react", dashed: true },
   { from: "frontend", to: "next", dashed: true },
@@ -72,6 +88,12 @@ const LINKS: Link[] = [
   { from: "tools", to: "git", dashed: true },
   { from: "tools", to: "vscode", dashed: true },
   { from: "tools", to: "figma", dashed: true },
+  // 数据库
+  { from: "database", to: "postgres", dashed: true },
+  { from: "database", to: "redis", dashed: true },
+  // OS
+  { from: "os", to: "linux", dashed: true },
+  { from: "os", to: "bash", dashed: true },
 ];
 
 const TINT_BG: Record<NonNullable<Node["tint"]>, string> = {
@@ -87,7 +109,7 @@ export default function SkillTree() {
   return (
     <div className="relative w-full">
       <svg
-        viewBox="0 0 880 460"
+        viewBox="-30 40 940 460"
         preserveAspectRatio="xMidYMid meet"
         className="w-full"
         role="img"
@@ -167,7 +189,7 @@ export default function SkillTree() {
                   textAnchor="middle"
                   dominantBaseline="central"
                   className={`font-serif font-medium ${labelClass}`}
-                  fontSize={n.primary ? 16 : n.size && n.size > 28 ? 13 : 11}
+                  fontSize={n.primary ? 16 : n.size && n.size > 28 ? 12 : 11}
                 >
                   {n.label}
                 </text>
@@ -180,12 +202,12 @@ export default function SkillTree() {
       {/* 图例 */}
       <div className="mt-4 flex flex-wrap items-center justify-center gap-4 font-mono text-[11px] text-muted">
         <span className="flex items-center gap-1.5">
-          <span className="h-0.5 w-6 border-t border-border-hover" /> 主要技能
+          <span className="h-0.5 w-6 border-t border-border-hover" /> 中心辐射
         </span>
         <span className="flex items-center gap-1.5">
           <span className="h-0.5 w-6 border-t border-dashed border-border-hover" /> 相关技术
         </span>
-        <span>持续学习中 · 2026</span>
+        <span>{NODES.length} 个节点 · 持续学习中</span>
       </div>
     </div>
   );

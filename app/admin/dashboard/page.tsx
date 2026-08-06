@@ -218,7 +218,7 @@ export default async function AdminDashboardPage() {
   const { stats, recent } = await loadStats();
 
   return (
-    <div className="mx-auto max-w-5xl px-6 py-12">
+    <div>
       <header className="border-b border-border pb-6">
         <p className="text-[11px] uppercase tracking-[0.2em] text-accent">
           Admin · overview

@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
 // GET = retrieve last 7 days stats (per user)
 export async function GET(request: NextRequest) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    return NextResponse.json({ stats: [], recent: [] });
+    return NextResponse.json({ stats: [], recent: [], loggedIn: false });
   }
 
   const supabase = await createClient();
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return NextResponse.json({ stats: [], recent: [] });
+    return NextResponse.json({ stats: [], recent: [], loggedIn: false });
   }
 
   const since = new Date();
@@ -90,5 +90,9 @@ export async function GET(request: NextRequest) {
     .order("created_at", { ascending: false })
     .limit(20);
 
-  return NextResponse.json({ stats: stats ?? [], recent: recent ?? [] });
+  return NextResponse.json({
+    stats: stats ?? [],
+    recent: recent ?? [],
+    loggedIn: true,
+  });
 }
