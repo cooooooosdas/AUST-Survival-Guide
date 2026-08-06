@@ -54,3 +54,17 @@ export async function requireAdminPage(): Promise<AdminUser> {
   // 非管理员：跳首页（安全考虑不暴露 admin 路径）
   redirect("/");
 }
+
+/**
+ * Server Action 用：返回 user 表示通过，否则抛 Error
+ * 与 requireAdminApi 区别：API 返回 NextResponse，Action 抛 Error（被 form action 捕获）
+ */
+export async function requireAdminAction(): Promise<AdminUser> {
+  const result = await checkAdmin();
+  if (result.ok) return result.user;
+
+  if (result.reason === "unauthenticated") {
+    throw new Error("未登录");
+  }
+  throw new Error("无权操作");
+}

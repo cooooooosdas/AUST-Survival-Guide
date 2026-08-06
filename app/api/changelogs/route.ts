@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/admin-guard";
 
 function bad(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
@@ -23,13 +24,12 @@ export async function GET(request: NextRequest) {
   return NextResponse.json({ changelogs: data ?? [] });
 }
 
-// POST = create changelog (admin)
+// POST = create changelog — 管理员操作
 export async function POST(request: NextRequest) {
+  const guard = await requireAdminApi();
+  if (guard) return guard;
+
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return bad(401, "未登录");
 
   let body: unknown;
   try {

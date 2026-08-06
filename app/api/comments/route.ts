@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminApi } from "@/lib/admin-guard";
 
 function bad(status: number, message: string) {
   return NextResponse.json({ error: message }, { status });
 }
 
-// POST = moderate (approve/reject) or pin/unpin
+// POST = moderate (approve/reject) or pin/unpin — 管理员操作
 export async function POST(request: NextRequest) {
+  const guard = await requireAdminApi();
+  if (guard) return guard;
+
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return bad(401, "未登录");
 
   let body: unknown;
   try {

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminAction } from "@/lib/admin-guard";
 import type { SubmissionStatus } from "@/lib/types";
 
 const REVIEW_STATUSES = new Set<SubmissionStatus>([
@@ -15,18 +16,8 @@ export async function reviewSubmission(id: number, formData: FormData) {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     throw new Error("Supabase 尚未配置");
   }
+  await requireAdminAction();
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("未登录");
-
-  const { data: admin } = await supabase
-    .from("site_admins")
-    .select("user_id")
-    .eq("user_id", user.id)
-    .maybeSingle();
-  if (!admin) throw new Error("无审核权限");
 
   const rawStatus = formData.get("status");
   const status = typeof rawStatus === "string" ? rawStatus as SubmissionStatus : "reviewing";

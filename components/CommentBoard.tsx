@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useCallback, memo } from "react";
+import { useEffect, useMemo, useState, useCallback, memo } from "react";
 import Link from "next/link";
 import { postComment, replyToComment, deleteComment, moderateComment, pinComment } from "@/app/comments/actions";
 import Avatar from "@/components/Avatar";
@@ -58,18 +58,13 @@ function buildTree(comments: Comment[]): TreeNode[] {
   return roots;
 }
 
-function isAdmin(userId: string | null): boolean {
-  const adminId = process.env.NEXT_PUBLIC_ADMIN_USER_ID;
-  return adminId ? userId === adminId : false;
-}
-
 // ============ 独立 CommentNode —— 用 memo 减少不必要的重渲染 ============
 
 type CommentNodeProps = {
   node: TreeNode;
   depth: number;
   currentUserId: string | null;
-  showModeration: boolean;
+  isAdmin: boolean;
   onReply: (parentId: number, content: string) => Promise<void>;
   onDelete: (id: number) => void;
   onModerate: (id: number, status: "approved" | "rejected") => void;
@@ -85,7 +80,7 @@ const CommentNode = memo(function CommentNode({
   node,
   depth,
   currentUserId,
-  showModeration,
+  isAdmin,
   onReply,
   onDelete,
   onModerate,
@@ -97,7 +92,7 @@ const CommentNode = memo(function CommentNode({
   replying,
 }: CommentNodeProps) {
   const isMine = currentUserId !== null && node.user_id === currentUserId;
-  const canModerate = showModeration && node.status !== "approved";
+  const canModerate = isAdmin && node.status !== "approved";
   const isReplying = replyingId === node.id;
 
   const handleSubmitReply = useCallback(
@@ -185,7 +180,7 @@ const CommentNode = memo(function CommentNode({
                     </button>
                   </>
                 )}
-                {showModeration && (
+                {isAdmin && (
                   <button
                     type="button"
                     onClick={() => onPin(node.id, !node.pinned)}
@@ -252,7 +247,24 @@ const CommentNode = memo(function CommentNode({
             {node.children.length > 0 && (
               <ul className="mt-3 space-y-3">
                 {node.children.map((child) => (
-                  <CommentNodeWrapper key={child.id} {...{ node: child, depth: depth + 1, currentUserId, showModeration, onReply, onDelete, onModerate, onPin, replyingId, setReplyingId, replyContent, setReplyContent, replying }} />
+                  <CommentNodeWrapper
+                    key={child.id}
+                    {...{
+                      node: child,
+                      depth: depth + 1,
+                      currentUserId,
+                      isAdmin,
+                      onReply,
+                      onDelete,
+                      onModerate,
+                      onPin,
+                      replyingId,
+                      setReplyingId,
+                      replyContent,
+                      setReplyContent,
+                      replying,
+                    }}
+                  />
                 ))}
               </ul>
             )}
@@ -286,6 +298,19 @@ export default function CommentBoard({
   const [statusFilter, setStatusFilter] = useState<CommentStatus | "all">("all");
   const [submitting, setSubmitting] = useState(false);
   const [replying, setReplying] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // 从 /api/auth/me 拿 isAdmin（数据源：site_admins 表）
+  useEffect(() => {
+    if (!currentUserId) {
+      setIsAdmin(false);
+      return;
+    }
+    fetch("/api/auth/me")
+      .then((r) => r.json())
+      .then((json) => setIsAdmin(!!json.isAdmin))
+      .catch(() => setIsAdmin(false));
+  }, [currentUserId]);
 
   const tree = useMemo(
     () =>
@@ -295,7 +320,7 @@ export default function CommentBoard({
     [comments, statusFilter]
   );
 
-  const showModeration = currentUserId !== null && isAdmin(currentUserId);
+  const showModeration = currentUserId !== null && isAdmin;
 
   // ============ 稳定的回调，避免子组件重渲染 ============
 
@@ -431,7 +456,7 @@ export default function CommentBoard({
         node={node}
         depth={depth}
         currentUserId={currentUserId}
-        showModeration={showModeration}
+        isAdmin={isAdmin}
         onReply={handleReply}
         onDelete={handleDelete}
         onModerate={handleModerate}
