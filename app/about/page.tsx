@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { AlertTriangle, Code2, Link2 } from "lucide-react";
-import SkillTree from "@/components/SkillTree";
+import ProjectStack from "@/components/SkillTree";
 
 export const metadata = { title: "关于我" };
 
@@ -48,14 +48,23 @@ export default function AboutPage() {
         </p>
       </div>
 
-      {/* 技能图谱 */}
+      {/* 项目技术栈 */}
       <section className="mt-12">
-        <h2 className="font-serif text-xl font-semibold text-text">技能图谱</h2>
+        <h2 className="font-serif text-xl font-semibold text-text">本站技术栈</h2>
         <p className="mt-1 text-sm text-muted">
-          当前在用 / 关注的栈，会持续更新。
+          项目本身用了什么 —— 框架、内容、数据库、基建。详细列表见{" "}
+          <a
+            href="https://github.com/cooooooosdas/AUST-Survival-Guide"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-primary underline-offset-2 hover:underline"
+          >
+            GitHub README
+          </a>
+          。
         </p>
         <div className="mt-5 rounded-xl border border-border bg-surface p-5">
-          <SkillTree />
+          <ProjectStack />
         </div>
       </section>
 
