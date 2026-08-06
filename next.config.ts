@@ -38,6 +38,17 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  images: {
+    remotePatterns: [
+      { hostname: "picsum.photos" },
+      { hostname: "images.unsplash.com" },
+      { hostname: "**.bing.net" },
+      { hostname: "**.baidu.com" },
+      { hostname: "**.xhscdn.com" },
+      { hostname: "**.douyinpic.com" },
+      { hostname: "**.hdslb.com" },
+    ],
+  },
   async headers() {
     return [
       {
