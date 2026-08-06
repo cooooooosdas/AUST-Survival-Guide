@@ -148,6 +148,7 @@ export const groups: LinkGroup[] = [
       { title: "AI 语音输入", url: "https://metaso.cn/echo", description: "语音转文字输入法，识别准确率极高", tag: "免费", tags: ["语音","AI"] },
       { title: "DeepSeek+飞书工作流", url: "https://boardmix.cn/", description: "用飞书文档搭建 DeepSeek 工作流", tag: "推荐", tags: ["DeepSeek","效率"] },
       { title: "DeepSeek 知识库", url: "https://xxbum1999yx.feishu.cn/", description: "实用主义 DeepSeek 资源整合大全", tag: "推荐", tags: ["DeepSeek","资源"] },
+      { title: "OpenAI Codex", url: "https://github.com/openai/codex", description: "OpenAI 出的终端 AI 编程助手（CLI）", tag: "推荐", tags: ["Codex","编程"] },
     ],
   },
   // ===== 知识（源自 30aitool.com/zhishi）=====

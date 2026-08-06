@@ -13,7 +13,7 @@ export const SECTIONS: Section[] = [
   { slug: "learn",      title: "学习资源",   href: "/learn",        description: "B 站精选课程与教学文档", group: "main", accent: "tertiary" },
   { slug: "software",   title: "软件资源",   href: "/software",     description: "计算机学生常用软件",     group: "main", accent: "secondary" },
   { slug: "ai",         title: "AI 专区",    href: "/ai",           description: "AI 工具与使用方法",     group: "main", accent: "primary" },
-  { slug: "resources",  title: "资源下载",   href: "/resources",    description: "笔记、课件、软件包",     group: "main", accent: "secondary" },
+  { slug: "resources",  title: "资源中心",   href: "/resources",    description: "常用网址与学习资料",     group: "main", accent: "secondary" },
   { slug: "checkin",    title: "学习打卡",   href: "/checkin",      description: "每日任务打卡 · 刷题练习", group: "main", accent: "tertiary" },
   { slug: "letters",    title: "学长来信",   href: "/letters",      description: "长文随笔 · 写给即将到来的你", group: "extra", accent: "primary" },
   { slug: "about",      title: "关于我",     href: "/about",        description: "coolin · 站长",          group: "extra", accent: "secondary" },

@@ -1,218 +1,128 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { Download, UploadCloud, ChevronRight } from "lucide-react";
-import { createClient } from "@/lib/supabase/server";
+import { ArrowUpRight, Bookmark } from "lucide-react";
+import { USEFUL_WEBSITES } from "@/lib/resource-websites";
 
 export const dynamic = "force-dynamic";
+export const metadata = { title: "资源中心" };
 
-const CATEGORIES = [
-  { value: "", label: "全部", icon: "📂" },
-  { value: "high-math", label: "高数笔记", icon: "📐" },
-  { value: "cs-courseware", label: "计算机课件", icon: "💻" },
-  { value: "software", label: "软件安装包", icon: "📦" },
-  { value: "review", label: "期末复习", icon: "📋" },
-  { value: "latex", label: "LaTeX 模板", icon: "📄" },
-  { value: "other", label: "其他", icon: "📎" },
-];
+const COMING_SOON = [
+  { value: "high-math", label: "高数笔记" },
+  { value: "cs-courseware", label: "计算机课件" },
+  { value: "software", label: "软件安装包" },
+  { value: "review", label: "期末复习" },
+  { value: "latex", label: "LaTeX 模板" },
+  { value: "other", label: "其他" },
+] as const;
 
-const CATEGORY_LABEL: Record<string, string> = {
-  "high-math": "高数笔记",
-  "cs-courseware": "计算机课件",
-  software: "软件安装包",
-  review: "期末复习",
-  latex: "LaTeX模板",
-  other: "其他",
+const TAG_STYLE: Record<string, string> = {
+  推荐: "bg-accent-light text-accent",
+  国内: "bg-primary-light text-primary",
+  学习: "bg-secondary-light text-secondary",
+  社区: "bg-secondary-light text-secondary",
+  工具: "bg-bg-alt text-text-secondary",
 };
 
-const FILE_TYPE_ICON: Record<string, string> = {
-  "application/pdf": "📕",
-  "text/markdown": "📝",
-  "application/zip": "📦",
-  "application/x-zip-compressed": "📦",
-  "application/x-7z-compressed": "📦",
-  "application/x-rar-compressed": "📦",
-  "application/octet-stream": "📎",
-};
-
-function formatSize(bytes: number | null) {
-  if (!bytes) return "未知大小";
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
-}
-
-export default async function ResourcesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string }>;
-}) {
-  const { category } = await searchParams;
-  const supabase = await createClient();
-
-  let q = supabase
-    .from("resources")
-    .select("*")
-    .order("created_at", { ascending: false })
-    .limit(200);
-
-  if (category && CATEGORIES.some((c) => c.value === category)) {
-    q = q.eq("category", category);
-  }
-
-  const { data: resources, error } = await q;
-
-  // 未配置 Supabase 或查询失败时展示友好提示
-  const isNotConfigured = !process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-  if (error || isNotConfigured) {
-    return (
-      <div className="mx-auto max-w-4xl px-6 py-16">
-        <h1 className="text-2xl md:text-3xl font-serif font-semibold text-text">资源下载</h1>
-        <p className="mt-2 text-sm text-muted">
-          正在补充中，敬请期待。
-        </p>
-        <div className="mt-10 rounded-xl border border-dashed border-border bg-bg-alt p-10 text-center">
-          <p className="text-5xl mb-3">📦</p>
-          <p className="text-sm text-muted">资源库正在建设中</p>
-          <p className="mt-2 text-xs text-muted/70">
-            高数笔记、课件、软件安装包等学习资料即将上线。
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  const activeCategory = category || "";
-
+export default function ResourceCenterPage() {
   return (
-    <div className="mx-auto max-w-4xl px-6 py-10">
+    <div className="mx-auto max-w-4xl px-6 py-12">
       {/* 标题区 */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-        <div>
-          <p className="text-sm uppercase tracking-[0.2em] text-accent">Downloads</p>
-          <h1 className="mt-2 text-2xl md:text-3xl font-serif font-semibold text-text">资源下载</h1>
-          <p className="mt-2 text-sm text-muted leading-relaxed">
-            高数笔记、课件、软件安装包、复习提纲等学习资料。
-            {!resources || resources.length === 0
-              ? " 目前还没有资源，欢迎贡献。"
-              : ` 共 ${resources.length} 个文件。`}
-          </p>
-        </div>
-        <Link
-          href="/resources/upload"
-          className="shrink-0 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-primary-hover active:scale-[0.98]"
-        >
-          + 上传资源
-        </Link>
-      </div>
-
-      {/* 分类筛选 */}
-      <div className="mt-6 flex flex-wrap gap-2">
-        {CATEGORIES.map((c) => {
-          const isActive = activeCategory === c.value;
-          return (
-            <Link
-              key={c.value}
-              href={`/resources${c.value ? `?category=${c.value}` : ""}`}
-              className={[
-                "flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-all duration-200",
-                isActive
-                  ? "border-primary bg-primary-light text-primary shadow-sm shadow-primary/10"
-                  : "border-border text-muted hover:border-primary/50 hover:text-primary",
-              ].join(" ")}
-            >
-              <span>{c.icon}</span>
-              <span>{c.label}</span>
-              {isActive && resources && (
-                <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] text-primary">
-                  {resources.length}
-                </span>
-              )}
-            </Link>
-          );
-        })}
-      </div>
-
-      {/* 资源列表或空状态 */}
-      <div className="mt-8">
-        {!resources || resources.length === 0 ? (
-          <EmptyState hasCategory={!!activeCategory} />
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {resources.map((r) => (
-              <ResourceCard key={r.id} resource={r} />
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function EmptyState({ hasCategory }: { hasCategory: boolean }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-16 text-center">
-      <div className="text-6xl mb-4">{hasCategory ? "🔍" : "📭"}</div>
-      <p className="text-base font-medium text-text">
-        {hasCategory ? "该分类下暂无资源" : "还没有任何资源"}
-      </p>
-      <p className="mt-2 text-sm text-muted max-w-sm">
-        {hasCategory
-          ? "这个分类下还没有文件，试试其他分类，或者成为第一个上传的人。"
-          : "资源库空空如也。如果你有笔记、课件或好用的工具，欢迎上传分享给同学们。"}
-      </p>
-      {!hasCategory && (
-        <Link
-          href="/resources/upload"
-          className="mt-5 inline-flex items-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover active:scale-[0.98]"
-        >
-          <UploadCloud className="h-4 w-4" strokeWidth={2} />
-          上传第一个资源
-        </Link>
-      )}
-    </div>
-  );
-}
-
-function ResourceCard({ resource }: { resource: { id: string | number; file_type: string; file_name: string; title: string; description: string | null; category: string; file_size: number | null; download_count: number | null } }) {
-  const typeIcon =
-    FILE_TYPE_ICON[resource.file_type] ||
-    (resource.file_name.endsWith(".pdf")
-      ? "📕"
-      : resource.file_name.endsWith(".md")
-        ? "📝"
-        : resource.file_name.match(/\.(zip|7z|rar)$/i)
-          ? "📦"
-          : "📎");
-
-  return (
-    <Link
-      href={`/resources/${resource.id}`}
-      className="group flex items-start gap-4 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md hover:shadow-primary/5"
-    >
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-bg-alt text-2xl transition-transform duration-200 group-hover:scale-110">
-        {typeIcon}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-text group-hover:text-primary transition-colors truncate">
-          {resource.title}
+      <div className="border-b border-border pb-6">
+        <p className="text-[11px] uppercase tracking-[0.2em] text-accent">
+          Resource Hub
         </p>
-        {resource.description && (
-          <p className="mt-1 text-xs text-muted line-clamp-2">{resource.description}</p>
-        )}
-        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted">
-          <span className="rounded-md border border-border px-1.5 py-0.5">
-            {CATEGORY_LABEL[resource.category] ?? "其他"}
+        <h1 className="mt-2 font-serif text-3xl font-semibold text-text">资源中心</h1>
+        <p className="mt-2 text-sm text-muted">
+          计算机专业学生常用网址与学习资料。第一期上线「常用网址」板块。
+        </p>
+      </div>
+
+      {/* 分类筛选：常用网址 active，其他板块 disabled 显示"即将上线" */}
+      <div className="mt-6 flex flex-wrap items-center gap-2">
+        <span className="rounded-full border border-primary bg-primary-light px-3 py-1.5 text-xs font-medium text-primary">
+          常用网址
+        </span>
+        {COMING_SOON.map((c) => (
+          <span
+            key={c.value}
+            className="rounded-full border border-border bg-bg-alt px-3 py-1.5 text-xs text-muted"
+            title="即将上线"
+          >
+            {c.label}
+            <span className="ml-1.5 text-[10px] opacity-60">即将上线</span>
           </span>
-          <span>{formatSize(resource.file_size)}</span>
-          <span className="truncate max-w-[120px]">{resource.file_name}</span>
-          <span className="flex items-center gap-0.5">
-            <Download className="h-3 w-3" strokeWidth={2} />
-            {resource.download_count ?? 0}
+        ))}
+      </div>
+
+      {/* 常用网址列表 */}
+      <section className="mt-8">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="flex items-center gap-2 font-serif text-lg font-semibold text-text">
+            <Bookmark className="h-4 w-4 text-primary" strokeWidth={2} />
+            常用网址
+            <span className="font-mono text-[11px] font-normal text-muted">
+              {USEFUL_WEBSITES.length} 个
+            </span>
+          </h2>
+          <span className="font-mono text-[11px] text-muted">
+            持续更新中
           </span>
         </div>
-      </div>
-      <ChevronRight className="h-5 w-5 shrink-0 text-muted/40 transition-colors group-hover:text-primary mt-1" strokeWidth={2} />
-    </Link>
+
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          {USEFUL_WEBSITES.map((site) => (
+            <li key={site.url}>
+              <a
+                href={site.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-start gap-3 rounded-xl border border-border bg-surface p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-sm"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-bg-alt text-sm font-mono text-text-secondary">
+                  {site.title.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-text transition-colors group-hover:text-primary">
+                      {site.title}
+                    </span>
+                    {site.tag && (
+                      <span
+                        className={`rounded-md px-1.5 py-0.5 text-[10px] font-medium ${
+                          TAG_STYLE[site.tag] ?? "bg-bg-alt text-muted"
+                        }`}
+                      >
+                        {site.tag}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1 text-[12px] leading-relaxed text-text-secondary">
+                    {site.description}
+                  </p>
+                </div>
+                <ArrowUpRight
+                  className="mt-1 h-4 w-4 shrink-0 text-muted/40 transition-colors group-hover:text-primary"
+                  strokeWidth={2}
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* 未来扩展提示 */}
+      <section className="mt-12 rounded-xl border border-dashed border-border bg-bg-alt/50 p-5 text-sm text-text-secondary">
+        <p className="font-medium text-text">后续会加上</p>
+        <p className="mt-2 leading-relaxed">
+          高数笔记、课件、软件安装包、期末复习、LaTeX 模板等资料——会陆续通过 Supabase
+          Storage 上传。如果你有想分享的资料，<Link
+            href="/board"
+            className="text-primary underline-offset-2 hover:underline"
+          >
+            到留言区
+          </Link>{" "}
+          告诉 coolin。
+        </p>
+      </section>
+    </div>
   );
 }

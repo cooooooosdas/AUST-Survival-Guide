@@ -12,6 +12,30 @@ export const groups: LinkGroup[] = [
         tag: "推荐",
       },
       {
+        title: "Dev C++",
+        url: "https://sourceforge.net/projects/orwelldevcpp/",
+        description: "打竞赛的同学常用，轻量，C/C++ 入门经典",
+        tag: "竞赛",
+      },
+      {
+        title: "Visual Studio",
+        url: "https://visualstudio.microsoft.com/zh-hans/",
+        description: "C/C++ 主力 IDE，工程化项目必备",
+        tag: "C++",
+      },
+      {
+        title: "IntelliJ IDEA",
+        url: "https://www.jetbrains.com/idea/",
+        description: "写 Java 的事实标准，社区版免费",
+        tag: "Java",
+      },
+      {
+        title: "PyCharm",
+        url: "https://www.jetbrains.com/pycharm/",
+        description: "写 Python 主力 IDE，社区版免费",
+        tag: "Python",
+      },
+      {
         title: "JetBrains 学生授权",
         url: "https://www.jetbrains.com/community/education/#students",
         description: "用学校邮箱免费拿 IDEA / PyCharm / CLion 全家桶",
