@@ -68,31 +68,78 @@ function formatStatCount(value: number): string {
   return value.toLocaleString("zh-CN");
 }
 
-async function loadHomeStats(): Promise<HomeStat[]> {
+async function loadHomeStats(): Promise<{
+  stats: HomeStat[];
+  sparklineData: number[];
+  weeklyChange: number | null;
+}> {
+  const fallback = {
+    stats: FALLBACK_HOME_STATS,
+    sparklineData: [] as number[],
+    weeklyChange: null as number | null,
+  };
+
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    return FALLBACK_HOME_STATS;
+    return fallback;
   }
 
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("site_visit_stats")
-      .select("total_views, unique_visitors")
-      .maybeSingle();
+    const since = new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString();
+
+    const [{ data: viewRow, error }, { data: recentViews }] = await Promise.all([
+      supabase
+        .from("site_visit_stats")
+        .select("total_views, unique_visitors")
+        .maybeSingle(),
+      supabase
+        .from("content_views")
+        .select("created_at")
+        .gte("created_at", since)
+        .limit(2000),
+    ]);
 
     if (error) {
       console.error("Failed to load home stats:", error);
-      return FALLBACK_HOME_STATS;
+      return fallback;
     }
 
-    return [
-      { label: "访问人次", value: formatStatCount(Number(data?.total_views ?? 0)) },
-      { label: "访问人数", value: formatStatCount(Number(data?.unique_visitors ?? 0)) },
-      { label: "维护状态", value: "长期" },
-    ];
+    // 按天聚合近 14 天访问量（index 0 = 13 天前, index 13 = 今天）
+    const series = Array(14).fill(0) as number[];
+    for (const v of recentViews ?? []) {
+      const d = new Date(v.created_at);
+      const daysAgo = Math.floor(
+        (Date.now() - d.getTime()) / 86400000
+      );
+      if (daysAgo >= 0 && daysAgo < 14) {
+        series[13 - daysAgo] = (series[13 - daysAgo] ?? 0) + 1;
+      }
+    }
+
+    // 本周 vs 上周变化率
+    const thisWeek = series.slice(7).reduce((a, b) => a + b, 0);
+    const lastWeek = series.slice(0, 7).reduce((a, b) => a + b, 0);
+    const weeklyChange =
+      lastWeek > 0 ? Math.round(((thisWeek - lastWeek) / lastWeek) * 100) : null;
+
+    return {
+      stats: [
+        {
+          label: "访问人次",
+          value: formatStatCount(Number(viewRow?.total_views ?? 0)),
+        },
+        {
+          label: "访问人数",
+          value: formatStatCount(Number(viewRow?.unique_visitors ?? 0)),
+        },
+        { label: "维护状态", value: "长期" },
+      ],
+      sparklineData: series,
+      weeklyChange,
+    };
   } catch (e) {
     console.error("Failed to load home stats:", e);
-    return FALLBACK_HOME_STATS;
+    return fallback;
   }
 }
 
@@ -138,10 +185,11 @@ const QUICK_LINKS: {
 ];
 
 export default async function HomePage() {
-  const [{ comments, userId, ready }, homeStats] = await Promise.all([
+  const [{ comments, userId, ready }, homeResult] = await Promise.all([
     loadHomeComments(),
     loadHomeStats(),
   ]);
+  const { stats: homeStats, sparklineData, weeklyChange } = homeResult;
 
   return (
     <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -253,20 +301,36 @@ export default async function HomePage() {
                   ))}
                 </div>
 
-                {/* 14 天访问趋势 —— mock 数据，等真实历史接入再换 */}
+                {/* 14 天访问趋势 —— 真实 content_views 聚合 */}
                 <div className="mt-5 rounded-lg border border-border bg-bg/60 px-3 py-2.5">
                   <div className="flex items-center justify-between text-[11px] text-muted">
                     <span className="font-mono">近 14 天</span>
-                    <span className="font-mono text-primary">↑ 12%</span>
+                    {weeklyChange === null ? (
+                      <span className="font-mono text-muted">暂无数据</span>
+                    ) : (
+                      <span
+                        className={
+                          weeklyChange >= 0
+                            ? "font-mono text-primary"
+                            : "font-mono text-secondary"
+                        }
+                      >
+                        {weeklyChange >= 0 ? "↑" : "↓"} {Math.abs(weeklyChange)}%
+                      </span>
+                    )}
                   </div>
-                  <Sparkline
-                    className="mt-1 w-full"
-                    width={228}
-                    height={36}
-                    data={[
-                      42, 38, 51, 47, 60, 55, 49, 64, 58, 71, 68, 75, 72, 81,
-                    ]}
-                  />
+                  {sparklineData.length > 0 && sparklineData.some((v) => v > 0) ? (
+                    <Sparkline
+                      className="mt-1 w-full"
+                      width={228}
+                      height={36}
+                      data={sparklineData}
+                    />
+                  ) : (
+                    <p className="mt-1 font-mono text-[11px] text-muted">
+                      暂无访问数据
+                    </p>
+                  )}
                 </div>
 
                 <div className="mt-5 flex items-start gap-2 rounded-lg border-l-2 border-primary bg-bg-alt px-3 py-2.5 text-sm leading-relaxed text-text-secondary">
