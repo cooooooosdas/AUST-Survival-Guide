@@ -1,6 +1,8 @@
 import Sparkline from "@/components/Sparkline";
 import HeroIllustration from "@/components/HeroIllustration";
+import Image from "next/image";
 import Link from "next/link";
+import campusImage from "@/public/images/editorial/aust-campus.webp";
 import { SECTIONS, type Section } from "@/lib/sections";
 import {
   Wrench,
@@ -17,19 +19,14 @@ import {
   Quote,
   Eye,
   Users,
-  Clock,
 } from "lucide-react";
 import ScrollReveal from "@/components/ScrollReveal";
-import Leaderboard from "@/components/Leaderboard";
 import CommentBoard from "@/components/CommentBoard";
 import EditorialShelf from "@/components/EditorialShelf";
 import SiteUptimeCounter from "@/components/SiteUptimeCounter";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
-
-// 建站时间：2025年6月1日
-const SITE_LAUNCH_DATE = new Date("2025-06-01T00:00:00+08:00").getTime();
 
 async function loadHomeComments() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
@@ -266,6 +263,19 @@ export default async function HomePage() {
           {/* Desk note 卡片 —— 重塑视觉 */}
           <div className="hero-note-enter relative hidden lg:block">
             <div className="index-card relative z-10 overflow-hidden rounded-2xl">
+              <div className="relative h-28 overflow-hidden border-b border-border">
+                <Image
+                  src={campusImage}
+                  alt="秋日校园道路上的教学楼、自行车与学生"
+                  fill
+                  sizes="360px"
+                  className="object-cover transition-transform duration-700 hover:scale-[1.03]"
+                  priority
+                />
+                <span className="absolute bottom-2 right-2 rounded-md bg-black/65 px-2 py-1 text-[10px] text-white">
+                  校园场景示意
+                </span>
+              </div>
               <div className="flex items-center gap-3 border-b border-border bg-primary-light/60 px-5 py-3.5">
                 <Compass className="h-4 w-4 text-primary" strokeWidth={2} />
                 <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
@@ -341,7 +351,7 @@ export default async function HomePage() {
                   )}
                 </div>
 
-                <div className="mt-5 flex items-start gap-2 rounded-lg border-l-2 border-primary bg-bg-alt px-3 py-2.5 text-sm leading-relaxed text-text-secondary">
+                <div className="mt-5 flex items-start gap-2 rounded-lg border border-border bg-bg-alt px-3 py-2.5 text-sm leading-relaxed text-text-secondary">
                   <Quote className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2} />
                   <span>
                     从「学校微服务」和「工具箱」开始，通常最快能找到你现在需要的入口。
@@ -439,12 +449,13 @@ export default async function HomePage() {
               currentUserId={userId}
             />
           ) : (
-            <div className="rounded-2xl border border-dashed border-border bg-bg-alt p-10 text-center">
-              <p className="text-sm font-medium text-text">留言区正在准备中</p>
-              <p className="mt-2 text-xs text-muted">
-                等 Supabase 配置好后，这里就会开放留言功能。
-              </p>
-            </div>
+            <CommentBoard
+              initial={[]}
+              targetType="global"
+              targetId="main"
+              currentUserId={null}
+              readOnlyMessage="等 Supabase 恢复后即可登录留言；下方内容为明确标注的版式与气氛示例。"
+            />
           )}
         </ScrollReveal>
       </section>

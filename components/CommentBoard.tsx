@@ -12,6 +12,7 @@ type Props = {
   targetType: CommentTargetType;
   targetId: string;
   currentUserId: string | null;
+  readOnlyMessage?: string;
 };
 
 const COMMENT_TAGS_LIST: readonly string[] = COMMENT_TAGS;
@@ -22,14 +23,67 @@ const STATUS_OPTIONS: { value: CommentStatus | "all"; label: string }[] = [
   { value: "rejected", label: "已驳回" },
 ];
 
+type DisplayComment = Comment & { is_sample?: boolean };
+
+const SAMPLE_COMMENTS: DisplayComment[] = [
+  {
+    id: -101,
+    user_id: "sample-guide",
+    target_type: "global",
+    target_id: "main",
+    content: "开学第一周别急着把所有软件都装一遍。先按课程需要装，遇到校园网或环境配置问题时，把报错截图和电脑系统版本一起发出来，会更容易帮你定位。",
+    created_at: "2026-08-09T19:24:00+08:00",
+    display_name: "迎新留言 · 示例",
+    avatar_url: null,
+    parent_id: null,
+    status: "approved",
+    tags: ["软件安装"],
+    pinned: false,
+    pinned_at: null,
+    is_sample: true,
+  },
+  {
+    id: -102,
+    user_id: "sample-senior",
+    target_type: "global",
+    target_id: "main",
+    content: "刚来时最有用的三件事：把课表存到桌面、提前走一遍教学楼路线、饭点错开十分钟。看起来很小，第一周真的能省不少慌乱。",
+    created_at: "2026-08-08T12:16:00+08:00",
+    display_name: "学长来信 · 示例",
+    avatar_url: null,
+    parent_id: null,
+    status: "approved",
+    tags: [],
+    pinned: false,
+    pinned_at: null,
+    is_sample: true,
+  },
+  {
+    id: -103,
+    user_id: "sample-classmate",
+    target_type: "global",
+    target_id: "main",
+    content: "如果你也在纠结社团，先去百团大战逛一圈再决定。选一两个真正愿意长期参加的，比一次报五六个更轻松。",
+    created_at: "2026-08-07T21:05:00+08:00",
+    display_name: "同学留言 · 示例",
+    avatar_url: null,
+    parent_id: null,
+    status: "approved",
+    tags: [],
+    pinned: false,
+    pinned_at: null,
+    is_sample: true,
+  },
+];
+
 function formatTime(iso: string) {
   const d = new Date(iso);
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-type TreeNode = Comment & { children: TreeNode[] };
+type TreeNode = DisplayComment & { children: TreeNode[] };
 
-function buildTree(comments: Comment[]): TreeNode[] {
+function buildTree(comments: DisplayComment[]): TreeNode[] {
   const map = new Map<number, TreeNode>();
   const roots: TreeNode[] = [];
 
@@ -91,8 +145,9 @@ const CommentNode = memo(function CommentNode({
   setReplyContent,
   replying,
 }: CommentNodeProps) {
+  const isSample = node.is_sample === true;
   const isMine = currentUserId !== null && node.user_id === currentUserId;
-  const canModerate = isAdmin && node.status !== "approved";
+  const canModerate = isAdmin && !isSample && node.status !== "approved";
   const isReplying = replyingId === node.id;
 
   const handleSubmitReply = useCallback(
@@ -110,10 +165,17 @@ const CommentNode = memo(function CommentNode({
           "card p-4 transition-colors",
           node.pinned
             ? "border-amber-200 bg-accent-light"
-            : "hover:border-border-hover",
+            : isSample
+              ? "border-dashed bg-bg-alt/55"
+              : "hover:border-border-hover",
           node.status === "rejected" ? "opacity-50" : "",
         ].join(" ")}
       >
+        {isSample && (
+          <span className="mb-2 inline-flex items-center rounded-full bg-surface px-2 py-0.5 text-[11px] font-medium text-muted">
+            气氛示例 · 非真实用户
+          </span>
+        )}
         {node.pinned && (
           <span className="mb-2 inline-flex items-center gap-1 rounded-full bg-accent-ghost px-2 py-0.5 text-[11px] font-medium text-accent">
             ★ 置顶
@@ -153,7 +215,7 @@ const CommentNode = memo(function CommentNode({
                     删除
                   </button>
                 )}
-                {!isMine && currentUserId && node.status === "approved" && (
+                {!isMine && !isSample && currentUserId && node.status === "approved" && (
                   <button
                     type="button"
                     onClick={() => setReplyingId(isReplying ? null : node.id)}
@@ -180,7 +242,7 @@ const CommentNode = memo(function CommentNode({
                     </button>
                   </>
                 )}
-                {isAdmin && (
+                {isAdmin && !isSample && (
                   <button
                     type="button"
                     onClick={() => onPin(node.id, !node.pinned)}
@@ -288,6 +350,7 @@ export default function CommentBoard({
   targetType,
   targetId,
   currentUserId,
+  readOnlyMessage,
 }: Props) {
   const [comments, setComments] = useState<Comment[]>(initial);
   const [content, setContent] = useState("");
@@ -302,10 +365,7 @@ export default function CommentBoard({
 
   // 从 /api/auth/me 拿 isAdmin（数据源：site_admins 表）
   useEffect(() => {
-    if (!currentUserId) {
-      setIsAdmin(false);
-      return;
-    }
+    if (!currentUserId) return;
     fetch("/api/auth/me")
       .then((r) => r.json())
       .then((json) => setIsAdmin(!!json.isAdmin))
@@ -313,11 +373,20 @@ export default function CommentBoard({
   }, [currentUserId]);
 
   const tree = useMemo(
-    () =>
-      buildTree(
-        comments.filter((c) => statusFilter === "all" || c.status === statusFilter)
-      ),
-    [comments, statusFilter]
+    () => {
+      const filtered = comments.filter(
+        (comment) => statusFilter === "all" || comment.status === statusFilter
+      );
+      const canShowSamples =
+        targetType === "global" &&
+        targetId === "main" &&
+        (statusFilter === "all" || statusFilter === "approved");
+      const samples = canShowSamples
+        ? SAMPLE_COMMENTS.slice(0, Math.max(0, 3 - filtered.length))
+        : [];
+      return buildTree([...filtered, ...samples]);
+    },
+    [comments, statusFilter, targetId, targetType]
   );
 
   const showModeration = currentUserId !== null && isAdmin;
@@ -356,7 +425,7 @@ export default function CommentBoard({
           display_name: "我",
           avatar_url: null,
           parent_id: parentId,
-          status: "approved",
+          status: "pending",
           tags: [],
           pinned: false,
           pinned_at: null,
@@ -369,6 +438,7 @@ export default function CommentBoard({
   const handleDelete = useCallback((id: number) => {
     if (!confirm("确定删除这条留言？")) return;
     void (async () => {
+      setError(null);
       const res = await deleteComment(id);
       if (!res.ok) {
         setError(res.error ?? "删除失败");
@@ -381,6 +451,7 @@ export default function CommentBoard({
   const handleModerate = useCallback(
     (id: number, status: "approved" | "rejected") => {
       void (async () => {
+        setError(null);
         const res = await moderateComment({ id, status });
         if (!res.ok) {
           setError(res.error ?? "操作失败");
@@ -396,6 +467,7 @@ export default function CommentBoard({
 
   const handlePin = useCallback((id: number, pinned: boolean) => {
     void (async () => {
+      setError(null);
       const res = await pinComment(id, pinned);
       if (!res.ok) {
         setError(res.error ?? "操作失败");
@@ -440,7 +512,7 @@ export default function CommentBoard({
         display_name: "我",
         avatar_url: null,
         parent_id: null,
-        status: "approved",
+        status: "pending",
         tags: selectedTags,
         pinned: false,
         pinned_at: null,
@@ -471,8 +543,13 @@ export default function CommentBoard({
 
   return (
     <div className="space-y-6">
-      {currentUserId ? (
-        <form onSubmit={handleSubmit} className="space-y-3">
+      {readOnlyMessage ? (
+        <div className="rounded-2xl border border-dashed border-border bg-bg-alt px-4 py-5 text-center">
+          <p className="text-sm font-medium text-text">真实留言服务正在准备中</p>
+          <p className="mt-1 text-xs leading-5 text-muted">{readOnlyMessage}</p>
+        </div>
+      ) : currentUserId ? (
+        <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-border bg-surface p-4 shadow-sm sm:p-5">
           <div className="flex flex-wrap gap-2">
             {COMMENT_TAGS_LIST.map((tag) => {
               const active = selectedTags.includes(tag);
@@ -511,7 +588,9 @@ export default function CommentBoard({
             className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
           />
           <div className="flex items-center justify-between">
-            <span className="text-xs text-muted">{content.length}/2000</span>
+            <span className="text-xs text-muted">
+              {content.length}/2000 · 发送后进入审核
+            </span>
             <button
               type="submit"
               disabled={submitting || !content.trim()}
@@ -520,11 +599,6 @@ export default function CommentBoard({
               {submitting ? "发送中…" : "发送"}
             </button>
           </div>
-          {error && (
-            <p role="alert" className="text-sm text-red-600">
-              {error}
-            </p>
-          )}
         </form>
       ) : (
         <div className="rounded-xl border border-dashed border-border bg-bg-alt px-4 py-6 text-center text-sm text-muted">
@@ -546,24 +620,32 @@ export default function CommentBoard({
         </div>
       )}
 
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="text-xs text-muted">筛选：</span>
-        {STATUS_OPTIONS.map((opt) => (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setStatusFilter(opt.value)}
-            className={[
-              "rounded-full border px-2.5 py-0.5 text-xs transition-colors",
-              statusFilter === opt.value
-                ? "border-primary bg-primary-light text-primary"
-                : "border-border text-muted hover:border-primary hover:text-primary",
-            ].join(" ")}
-          >
-            {opt.label}
-          </button>
-        ))}
-      </div>
+      {error && (
+        <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
+      {showModeration && (
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-xs text-muted">审核筛选：</span>
+          {STATUS_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setStatusFilter(opt.value)}
+              className={[
+                "rounded-full border px-2.5 py-0.5 text-xs transition-colors",
+                statusFilter === opt.value
+                  ? "border-primary bg-primary-light text-primary"
+                  : "border-border text-muted hover:border-primary hover:text-primary",
+              ].join(" ")}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      )}
 
       <ul>
         {tree.length === 0 && (

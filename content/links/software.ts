@@ -117,6 +117,102 @@ export const groups: LinkGroup[] = [
     ],
   },
   {
+    id: "system-utilities",
+    title: "Windows 实用工具",
+    items: [
+      {
+        title: "7-Zip",
+        url: "https://www.7-zip.org/",
+        description: "免费开源压缩工具，安装包小，格式支持全",
+        tags: ["免费", "开源", "必装"],
+      },
+      {
+        title: "Everything",
+        url: "https://www.voidtools.com/zh-cn/",
+        description: "秒搜 Windows 本地文件，比系统搜索省时间",
+        tag: "推荐",
+      },
+      {
+        title: "Microsoft PowerToys",
+        url: "https://learn.microsoft.com/zh-cn/windows/powertoys/",
+        description: "微软官方效率工具箱：窗口分区、批量重命名、取色等",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "Snipaste",
+        url: "https://zh.snipaste.com/",
+        description: "截图、贴图、标注一体，写报告和改图很顺手",
+        tag: "推荐",
+      },
+      {
+        title: "LocalSend",
+        url: "https://localsend.org/zh-CN",
+        description: "同一局域网内跨平台传文件，不用登录账号",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "QuickLook",
+        url: "https://github.com/QL-Win/QuickLook",
+        description: "在资源管理器按空格快速预览图片、PDF 和文档",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "Geek Uninstaller",
+        url: "https://geekuninstaller.com/",
+        description: "轻量卸载工具，可清理软件卸载后的残留项",
+        tag: "免费",
+      },
+    ],
+  },
+  {
+    id: "media",
+    title: "录屏 / 音视频",
+    items: [
+      {
+        title: "OBS Studio",
+        url: "https://obsproject.com/zh-cn/download",
+        description: "录屏、直播、课程演示都能用，插件生态成熟",
+        tags: ["推荐", "开源", "免费"],
+      },
+      {
+        title: "VLC media player",
+        url: "https://www.videolan.org/vlc/",
+        description: "跨平台播放器，常见音视频格式基本都能直接打开",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "HandBrake",
+        url: "https://handbrake.fr/",
+        description: "视频压缩和转码工具，提交作业前压体积很好用",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "LosslessCut",
+        url: "https://github.com/mifi/lossless-cut",
+        description: "不重新编码就能快速裁剪、合并视频片段",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "Audacity",
+        url: "https://www.audacityteam.org/",
+        description: "免费音频录制与剪辑，处理采访和配音够用",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "FFmpeg",
+        url: "https://ffmpeg.org/download.html",
+        description: "音视频处理底层工具，批量转码、抽帧和压缩必备",
+        tag: "开源",
+      },
+      {
+        title: "ShareX",
+        url: "https://getsharex.com/",
+        description: "高级截图、滚动截屏、GIF 录制和自动化工作流",
+        tags: ["免费", "开源"],
+      },
+    ],
+  },
+  {
     id: "study-write",
     title: "学习 / 笔记 / 写作",
     items: [
@@ -172,6 +268,78 @@ export const groups: LinkGroup[] = [
         title: "Excalidraw",
         url: "https://excalidraw.com/",
         description: "手绘风草图工具，写报告做插图很合适",
+      },
+      {
+        title: "GIMP",
+        url: "https://www.gimp.org/",
+        description: "开源图像编辑器，适合修图、抠图和简单海报",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "Inkscape",
+        url: "https://inkscape.org/",
+        description: "免费矢量绘图工具，画图标和论文示意图很方便",
+        tags: ["免费", "开源"],
+      },
+    ],
+  },
+  {
+    id: "office-reading",
+    title: "文档 / PDF / 阅读",
+    items: [
+      {
+        title: "LibreOffice",
+        url: "https://zh-cn.libreoffice.org/",
+        description: "免费开源办公套件，可离线处理文档、表格和演示",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "PDFgear",
+        url: "https://www.pdfgear.com/zh/",
+        description: "PDF 阅读、批注、转换与基础编辑一体",
+        tag: "免费",
+      },
+      {
+        title: "Sumatra PDF",
+        url: "https://www.sumatrapdfreader.org/free-pdf-reader",
+        description: "启动很快的轻量阅读器，支持 PDF、EPUB、MOBI",
+        tags: ["免费", "开源"],
+      },
+      {
+        title: "calibre",
+        url: "https://calibre-ebook.com/zh_CN",
+        description: "电子书管理与格式转换，适合整理课外阅读资料",
+        tags: ["免费", "开源"],
+      },
+    ],
+  },
+  {
+    id: "remote-security",
+    title: "远程协作 / 安全",
+    items: [
+      {
+        title: "RustDesk",
+        url: "https://rustdesk.com/zh/",
+        description: "开源远程桌面，跨平台协助排查电脑问题",
+        tag: "开源",
+      },
+      {
+        title: "Bitwarden",
+        url: "https://bitwarden.com/",
+        description: "跨平台密码管理器，避免多个账号共用一个密码",
+        tags: ["推荐", "开源"],
+      },
+      {
+        title: "KeePassXC",
+        url: "https://keepassxc.org/",
+        description: "完全本地的密码库，适合更看重离线存储的同学",
+        tags: ["免费", "开源", "本地"],
+      },
+      {
+        title: "VirusTotal",
+        url: "https://www.virustotal.com/gui/home/upload",
+        description: "可疑文件或链接先做多引擎检测，不代替本机防护",
+        tag: "在线",
       },
     ],
   },

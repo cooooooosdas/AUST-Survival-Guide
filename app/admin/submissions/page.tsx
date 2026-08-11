@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import ReviewButton from "./ReviewButton";
-import { reviewSubmission } from "./actions";
+import SubmissionReviewForm from "./SubmissionReviewForm";
 import { createClient } from "@/lib/supabase/server";
 import { requireAdminPage } from "@/lib/admin-guard";
 import type { ContentSubmission } from "@/lib/types";
@@ -35,7 +34,6 @@ export default async function AdminSubmissionsPage() {
       {submissions.length > 0 ? (
         <div className="mt-8 space-y-6">
           {submissions.map((submission) => {
-            const action = reviewSubmission.bind(null, submission.id);
             return (
               <article key={submission.id} className="rounded-md border border-border bg-surface p-5 shadow-sm sm:p-7">
                 <div className="flex flex-wrap items-center gap-2 text-xs text-muted">
@@ -56,35 +54,11 @@ export default async function AdminSubmissionsPage() {
                   <div className="mt-4 whitespace-pre-wrap break-words text-sm leading-7 text-text-secondary">{submission.body}</div>
                 </details>
 
-                <form action={action} className="mt-5 grid gap-4 sm:grid-cols-[12rem_minmax(0,1fr)_auto] sm:items-end">
-                  <div>
-                    <label htmlFor={`status-${submission.id}`} className="block text-xs font-medium text-text">状态</label>
-                    <select
-                      id={`status-${submission.id}`}
-                      name="status"
-                      defaultValue={submission.status}
-                      className="mt-2 w-full rounded-md border border-border bg-bg px-3 py-2 text-sm text-text focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    >
-                      <option value="submitted">等待审核</option>
-                      <option value="reviewing">编辑处理中</option>
-                      <option value="accepted">采纳</option>
-                      <option value="rejected">退回修改</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor={`note-${submission.id}`} className="block text-xs font-medium text-text">编辑意见</label>
-                    <textarea
-                      id={`note-${submission.id}`}
-                      name="reviewer_note"
-                      defaultValue={submission.reviewer_note ?? ""}
-                      maxLength={1000}
-                      rows={2}
-                      placeholder="说明采纳原因或需要修改的具体位置…"
-                      className="mt-2 w-full resize-y rounded-md border border-border bg-bg px-3 py-2 text-sm text-text placeholder:text-muted/70 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    />
-                  </div>
-                  <ReviewButton />
-                </form>
+                <SubmissionReviewForm
+                  submissionId={submission.id}
+                  status={submission.status}
+                  reviewerNote={submission.reviewer_note}
+                />
               </article>
             );
           })}

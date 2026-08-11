@@ -1,4 +1,5 @@
 import type { MDXComponents } from "mdx/types";
+import Image from "next/image";
 import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 import Aside from "@/components/Aside";
@@ -32,6 +33,19 @@ const components: MDXComponents = {
   p: (props) => (
     <p className="mt-5 text-[16px] leading-[1.85] text-text" {...props} />
   ),
+  img: ({ src, alt }) => {
+    if (typeof src !== "string") return null;
+    return (
+      <Image
+        src={src}
+        alt={alt ?? ""}
+        width={1536}
+        height={1024}
+        sizes="(max-width: 768px) 100vw, 760px"
+        className="mt-7 h-auto w-full rounded-2xl object-cover shadow-sm"
+      />
+    );
+  },
   a: ({ href, children, ...rest }: ComponentPropsWithoutRef<"a">) => {
     const isExternal = href && /^https?:\/\//.test(href);
     if (isExternal) {
@@ -71,7 +85,7 @@ const components: MDXComponents = {
   li: (props) => <li className="leading-[1.85]" {...props} />,
   blockquote: (props) => (
     <blockquote
-      className="mt-6 border-l-4 border-accent bg-bg-alt px-5 py-3 text-muted italic"
+      className="mt-6 rounded-xl border border-border bg-bg-alt px-5 py-3 text-muted italic"
       {...props}
     />
   ),

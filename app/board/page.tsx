@@ -53,13 +53,13 @@ export default async function BoardPage() {
             currentUserId={userId}
           />
         ) : (
-          <div className="rounded-xl border border-dashed border-border bg-bg-alt p-10 text-center">
-            <p className="text-4xl mb-3">💬</p>
-            <p className="text-sm font-medium text-text">留言区正在准备中</p>
-            <p className="mt-2 text-xs text-muted">
-              等 Supabase 配置好后，这里就会开放留言功能。
-            </p>
-          </div>
+          <CommentBoard
+            initial={[]}
+            targetType="global"
+            targetId="main"
+            currentUserId={null}
+            readOnlyMessage="等 Supabase 恢复后即可登录留言；下方内容为明确标注的版式与气氛示例。"
+          />
         )}
       </div>
     </div>

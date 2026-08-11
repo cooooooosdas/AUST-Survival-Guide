@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
+import { Check, Copy, ExternalLink, Flag } from "lucide-react";
 import {
   inferLinkKind,
   LINK_KIND_META,
@@ -36,6 +37,8 @@ const FAVICON_SERVICES = [
 function renderItemIcon(url?: string, customIcon?: string, title = "") {
   if (customIcon) {
     return (
+      // 外部站点图标需要原生 onError 降级，不能交给 Next Image 代理。
+      // eslint-disable-next-line @next/next/no-img-element
       <img
         src={customIcon}
         alt=""
@@ -82,6 +85,8 @@ function LazyFavicon({ host, title }: { host: string; title: string }) {
   }
 
   return (
+    // favicon 服务需要按失败顺序切换，保留原生 img 的 onError。
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
       alt=""
@@ -190,35 +195,43 @@ export default function LinkCard({ item, sectionSlug }: Props) {
 
   return (
     <>
-      <a
-        href={item.url || "#"}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`${item.title}（在新标签页打开）`}
+      <article
         className={[
-          "group card card-hover flex flex-col",
+          "group card card-hover flex min-h-36 flex-col overflow-hidden",
           !item.url ? "opacity-60 pointer-events-none" : "",
         ].join(" ")}
       >
-        {/* 图标区 */}
-        <div className="flex justify-center pt-3">
-          {renderItemIcon(item.url, item.icon, item.title)}
-        </div>
-
-        {/* 内容区 */}
-        <div className="flex flex-1 flex-col px-3 pt-2.5">
-          <h3 className="text-[13px] font-medium text-text group-hover:text-primary line-clamp-1">
-            {item.title}
-          </h3>
-          {item.description && (
-            <p className="mt-1 text-[11px] text-muted leading-relaxed line-clamp-2">
-              {item.description}
-            </p>
-          )}
-        </div>
+        <a
+          href={item.url || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${item.title}（在新标签页打开）`}
+          className="flex flex-1 items-start gap-3 px-4 pb-3 pt-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/30"
+        >
+          <div className="mt-0.5 shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5">
+            {renderItemIcon(item.url, item.icon, item.title)}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="line-clamp-1 text-sm font-medium text-text transition-colors group-hover:text-primary">
+                {item.title}
+              </h3>
+              <ExternalLink
+                className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted transition-colors group-hover:text-primary"
+                strokeWidth={1.8}
+                aria-hidden="true"
+              />
+            </div>
+            {item.description && (
+              <p className="mt-1.5 line-clamp-2 text-xs leading-5 text-muted">
+                {item.description}
+              </p>
+            )}
+          </div>
+        </a>
 
         {/* 标签 + 操作 */}
-        <div className="flex items-center justify-between gap-1 px-3 pb-3">
+        <div className="flex items-end justify-between gap-2 border-t border-border/70 px-4 py-2.5">
           <div className="flex flex-wrap gap-1">
             {kindMeta.short !== "外" && (
               <span
@@ -244,28 +257,35 @@ export default function LinkCard({ item, sectionSlug }: Props) {
               </span>
             ))}
           </div>
-          <div className="flex items-center gap-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <div className="flex shrink-0 items-center gap-1">
             <button
               type="button"
               onClick={copyLink}
               title="复制链接"
               aria-label="复制链接"
-              className="inline-flex items-center rounded-md border border-border bg-surface px-1.5 py-0.5 text-[10px] text-muted transition-all duration-200 hover:border-primary hover:text-primary"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-primary-light hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
             >
-              {copied ? "已复制" : "复制"}
+              {copied ? (
+                <Check className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+              ) : (
+                <Copy className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden="true" />
+              )}
             </button>
             <button
               type="button"
               onClick={openReport}
               title="反馈链接失效"
               aria-label="反馈链接失效"
-              className="inline-flex items-center rounded-md border border-border bg-surface px-1.5 py-0.5 text-[10px] text-muted transition-all duration-200 hover:border-secondary hover:text-secondary"
+              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-secondary-light hover:text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary/30"
             >
-              反馈
+              <Flag className="h-3.5 w-3.5" strokeWidth={1.8} aria-hidden="true" />
             </button>
           </div>
         </div>
-      </a>
+        <span className="sr-only" aria-live="polite">
+          {copied ? `${item.title}链接已复制` : ""}
+        </span>
+      </article>
 
       {/* 反馈弹窗 */}
       {reportOpen && (

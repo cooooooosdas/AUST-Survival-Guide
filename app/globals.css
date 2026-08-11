@@ -866,52 +866,23 @@ html.dark {
   100% { transform: scale(1); opacity: 0; }
 }
 
-/* Hero 信纸轻微摇晃 —— 写实的"纸感" */
-@keyframes hero-paper-sway {
-  0%, 100% { transform: rotate(-0.6deg) translateY(0); }
-  50%      { transform: rotate(0.6deg) translateY(-2px); }
+/* Hero 校园路线：只移动一个清晰的矢量导航点。 */
+@keyframes hero-wayfinder-drift {
+  0%, 100% { transform: translate3d(-3px, 8px, 0) rotate(-5deg); }
+  50% { transform: translate3d(18px, -1px, 0) rotate(6deg); }
 }
 
-/* Hero 邮戳呼吸 */
-@keyframes hero-stamp-breath {
-  0%, 100% { transform: scale(1); opacity: 0.9; }
-  50%      { transform: scale(1.04); opacity: 1; }
+.hero-wayfinder-card {
+  box-shadow: 0 8px 24px -18px rgba(15, 66, 54, 0.5);
 }
 
-/* Hero 纸飞机缓慢飘过 */
-@keyframes hero-plane-drift {
-  0%   { transform: translate(0, 0) rotate(-6deg); opacity: 0; }
-  10%  { opacity: 1; }
-  50%  { transform: translate(8px, -3px) rotate(4deg); }
-  90%  { opacity: 1; }
-  100% { transform: translate(16px, -6px) rotate(8deg); opacity: 0; }
+.hero-wayfinder-plane {
+  animation: hero-wayfinder-drift 5.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  will-change: transform;
 }
-
-/* Hero 树叶轻微摆动 */
-@keyframes hero-leaf-sway {
-  0%, 100% { transform: rotate(-3deg); }
-  50%      { transform: rotate(3deg); }
-}
-
-/* SVG 元素围绕自身中心做动画（关键，否则围绕原点） */
-.hero-anim-paper,
-.hero-anim-stamp,
-.hero-anim-plane,
-.hero-anim-leaf {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.hero-anim-paper { animation: hero-paper-sway 6s var(--ease-out-soft) infinite; }
-.hero-anim-stamp { animation: hero-stamp-breath 4s ease-in-out infinite; }
-.hero-anim-plane { animation: hero-plane-drift 10s ease-in-out infinite; }
-.hero-anim-leaf  { animation: hero-leaf-sway 5s var(--ease-out-soft) infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-anim-paper,
-  .hero-anim-stamp,
-  .hero-anim-plane,
-  .hero-anim-leaf {
+  .hero-wayfinder-plane {
     animation: none !important;
   }
 }

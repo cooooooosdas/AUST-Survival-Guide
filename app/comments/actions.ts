@@ -2,10 +2,18 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { requireAdminAction } from "@/lib/admin-guard";
 import type { CommentTargetType } from "@/lib/types";
 
 const VALID_TARGETS: CommentTargetType[] = ["global", "section", "letter"];
 const COMMENT_TAGS = ["高数问题", "选课疑问", "软件安装", "AI工具使用"];
+
+function revalidateCommentTarget(targetType?: CommentTargetType, targetId?: string) {
+  revalidatePath("/");
+  revalidatePath("/board");
+  if (targetType === "letter" && targetId) revalidatePath(`/letters/${targetId}`);
+  if (targetType === "section" && targetId) revalidatePath(`/${targetId}`);
+}
 
 // ============ 基础 CRUD ============
 
@@ -37,7 +45,7 @@ export async function postComment(input: {
     content,
     parent_id: input.parent_id ?? null,
     tags,
-    status: "approved" as const,
+    status: "pending" as const,
   };
   let { error } = await supabase.from("comments").insert(fullPayload);
 
@@ -57,7 +65,7 @@ export async function postComment(input: {
 
   if (error) return { ok: false, error: error.message };
 
-  revalidatePath("/board");
+  revalidateCommentTarget(input.target_type, input.target_id);
   return { ok: true };
 }
 
@@ -78,25 +86,38 @@ export async function replyToComment(input: {
 }
 
 export async function deleteComment(id: number) {
+  if (!Number.isInteger(id) || id <= 0) return { ok: false, error: "无效留言" };
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return { ok: false, error: "请先登录" };
 
-  const { error } = await supabase.from("comments").delete().eq("id", id);
+  const { error } = await supabase
+    .from("comments")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
   if (error) return { ok: false, error: error.message };
 
-  revalidatePath("/board");
+  revalidateCommentTarget();
   return { ok: true };
 }
 
-// ============ 审核（管理员用 service_role key 调用） ============
+// ============ 审核（Server Action 内再次校验管理员身份） ============
 
 export async function moderateComment(input: {
   id: number;
   status: "approved" | "rejected";
 }) {
+  if (!Number.isInteger(input.id) || input.id <= 0) {
+    return { ok: false, error: "无效留言" };
+  }
+  try {
+    await requireAdminAction();
+  } catch {
+    return { ok: false, error: "无权操作" };
+  }
   const supabase = await createClient();
   const { error } = await supabase
     .from("comments")
@@ -104,11 +125,17 @@ export async function moderateComment(input: {
     .eq("id", input.id);
 
   if (error) return { ok: false, error: error.message };
-  revalidatePath("/board");
+  revalidateCommentTarget();
   return { ok: true };
 }
 
 export async function pinComment(id: number, pinned: boolean) {
+  if (!Number.isInteger(id) || id <= 0) return { ok: false, error: "无效留言" };
+  try {
+    await requireAdminAction();
+  } catch {
+    return { ok: false, error: "无权操作" };
+  }
   const supabase = await createClient();
   const { error } = await supabase
     .from("comments")
@@ -119,7 +146,7 @@ export async function pinComment(id: number, pinned: boolean) {
     .eq("id", id);
 
   if (error) return { ok: false, error: error.message };
-  revalidatePath("/board");
+  revalidateCommentTarget();
   return { ok: true };
 }
 
