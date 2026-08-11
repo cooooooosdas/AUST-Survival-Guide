@@ -102,7 +102,7 @@ export default async function LibraryPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect("/login?next=/library");
 
-  const [{ data: favorites }, { data: views }] = await Promise.all([
+  const [favoritesResult, viewsResult] = await Promise.all([
     supabase
       .from("favorites")
       .select("target_type, target_id, created_at")
@@ -116,6 +116,10 @@ export default async function LibraryPage() {
       .order("created_at", { ascending: false })
       .limit(200),
   ]);
+  const favorites = favoritesResult.data;
+  const views = viewsResult.data;
+  const favoritesFailed = Boolean(favoritesResult.error);
+  const viewsFailed = Boolean(viewsResult.error);
 
   const activity = [
     ...((favorites ?? []) as ActivityRow[]),
@@ -131,11 +135,13 @@ export default async function LibraryPage() {
   );
 
   const resourceMap = new Map<string, ResourceRow>();
+  let resourcesFailed = false;
   if (resourceIds.length > 0) {
-    const { data: resources } = await supabase
+    const { data: resources, error: resourcesError } = await supabase
       .from("resources")
       .select("id, title, description, category, file_name")
       .in("id", resourceIds);
+    resourcesFailed = Boolean(resourcesError);
     for (const resource of (resources ?? []) as ResourceRow[]) {
       resourceMap.set(String(resource.id), resource);
     }
@@ -170,9 +176,13 @@ export default async function LibraryPage() {
               收好想稍后看的内容，也从最近浏览接着读。这里仅展示你自己的阅读记录。
             </p>
           </div>
-          <div className="flex gap-5 text-sm text-muted">
-            <span><strong className="mr-1 font-serif text-xl text-text">{savedItems.length}</strong>稍后读</span>
-            <span><strong className="mr-1 font-serif text-xl text-text">{recentItems.length}</strong>最近浏览</span>
+          <div className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-bg-alt text-sm text-muted shadow-sm">
+            <span className="px-4 py-3">
+              <strong className="mr-1 font-serif text-xl text-text">{savedItems.length}</strong>稍后读
+            </span>
+            <span className="border-l border-border px-4 py-3">
+              <strong className="mr-1 font-serif text-xl text-text">{recentItems.length}</strong>最近浏览
+            </span>
           </div>
         </div>
       </header>
@@ -188,7 +198,11 @@ export default async function LibraryPage() {
           </Link>
         </div>
 
-        {savedItems.length > 0 ? (
+        {favoritesFailed || resourcesFailed ? (
+          <div role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
+            稍后读暂时没有完整加载。你的收藏没有丢失，请刷新页面后重试。
+          </div>
+        ) : savedItems.length > 0 ? (
           <ul className="mt-6 divide-y divide-border border-y border-border">
             {savedItems.map((item) => (
               <li key={item.key} className="grid gap-4 py-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
@@ -229,7 +243,11 @@ export default async function LibraryPage() {
           {recentItems.length > 0 && <ClearHistoryForm />}
         </div>
 
-        {recentItems.length > 0 ? (
+        {viewsFailed || resourcesFailed ? (
+          <div role="alert" className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700">
+            最近浏览暂时没有完整加载。新的阅读记录仍会继续尝试保存，请稍后刷新。
+          </div>
+        ) : recentItems.length > 0 ? (
           <ol className="mt-6 grid gap-x-8 gap-y-0 md:grid-cols-2">
             {recentItems.map((item) => (
               <li key={item.key} className="min-w-0 border-t border-border py-5 first:border-t-0 md:first:border-t">

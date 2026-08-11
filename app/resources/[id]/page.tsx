@@ -40,12 +40,12 @@ async function getDownloadUrl(storagePath: string) {
   return url;
 }
 
-async function getFavoriteState(id: string) {
+async function getReaderState(id: string) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) return false;
+  if (!user) return { favorited: false, viewerId: null as string | null };
   const { data } = await supabase
     .from("favorites")
     .select("id")
@@ -53,7 +53,7 @@ async function getFavoriteState(id: string) {
     .eq("target_type", "resource")
     .eq("target_id", id)
     .maybeSingle();
-  return Boolean(data);
+  return { favorited: Boolean(data), viewerId: user.id };
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }) {
@@ -87,16 +87,20 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
     );
   }
 
-  const [downloadUrl, userFavorited] = await Promise.all([
+  const [downloadUrl, readerState] = await Promise.all([
     getDownloadUrl(resource.storage_path),
-    getFavoriteState(String(resource.id)),
+    getReaderState(String(resource.id)),
   ]);
   const isPDF = resource.file_type === "application/pdf" || resource.file_name.endsWith(".pdf");
   const isMD = resource.file_type === "text/markdown" || resource.file_name.endsWith(".md");
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <ViewTracker targetType="resource" targetId={String(resource.id)} />
+      <ViewTracker
+        targetType="resource"
+        targetId={String(resource.id)}
+        viewerId={readerState.viewerId}
+      />
       <Link
         href="/resources"
         className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-primary"
@@ -121,7 +125,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
           <FavoriteButton
             targetType="resource"
             targetId={String(resource.id)}
-            initialFavorited={userFavorited}
+            initialFavorited={readerState.favorited}
           />
         </div>
       </header>

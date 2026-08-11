@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   };
 
   const target_type = input.target_type ?? "letter";
-  const target_id = input.target_id ?? "";
+  const target_id = typeof input.target_id === "string" ? input.target_id.trim() : "";
 
   if (!target_id) {
     return bad(400, "缺少 target_id");
@@ -37,16 +37,21 @@ export async function POST(request: NextRequest) {
     return bad(400, `target_type 必须是 ${allowed.join("/")} 之一`);
   }
 
-  const { data: existing } = await supabase
+  const { data: existing, error: selectError } = await supabase
     .from("favorites")
     .select("id")
     .eq("user_id", user.id)
     .eq("target_type", target_type)
     .eq("target_id", target_id)
     .maybeSingle();
+  if (selectError) return bad(500, "暂时无法读取稍后读状态");
 
   if (existing) {
-    await supabase.from("favorites").delete().eq("id", existing.id);
+    const { error: deleteError } = await supabase
+      .from("favorites")
+      .delete()
+      .eq("id", existing.id);
+    if (deleteError) return bad(500, "未能从稍后读移除，请稍后重试");
     return NextResponse.json({ favorited: false });
   }
 

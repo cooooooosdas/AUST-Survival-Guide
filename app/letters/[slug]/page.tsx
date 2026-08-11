@@ -208,7 +208,7 @@ export default async function LetterPage({
   return (
     <>
       <LetterToc headings={headings} />
-      <ViewTracker targetType="letter" targetId={slug} />
+      <ViewTracker targetType="letter" targetId={slug} viewerId={userId} />
       <article className="mx-auto max-w-2xl px-6 py-16 md:max-w-3xl lg:max-w-4xl">
       <script
         type="application/ld+json"

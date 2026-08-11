@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Bookmark } from "lucide-react";
 
 type Props = {
@@ -18,6 +18,7 @@ export default function FavoriteButton({
   refreshOnChange = false,
 }: Props) {
   const router = useRouter();
+  const pathname = usePathname();
   const [favorited, setFavorited] = useState(() => initialFavorited);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -34,8 +35,8 @@ export default function FavoriteButton({
       });
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
-        if (json.error?.includes("未登录")) {
-          router.push("/login");
+        if (res.status === 401) {
+          router.push(`/login?next=${encodeURIComponent(pathname)}`);
         } else {
           setError(json.error ?? "保存失败，请稍后重试");
         }

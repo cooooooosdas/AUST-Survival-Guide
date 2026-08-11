@@ -20,16 +20,14 @@ export async function POST(request: NextRequest) {
   };
 
   const target_type = input.target_type ?? "letter";
-  const target_id = (input.target_id ?? "").trim();
+  const target_id = typeof input.target_id === "string" ? input.target_id.trim() : "";
 
   if (!target_id) return bad(400, "缺少 target_id");
 
   const allowed = ["letter", "resource", "faq", "question"];
   if (!allowed.includes(target_type)) return bad(400, "无效 target_type");
 
-  // 获取 viewer 信息
   let viewerIp: string | null = null;
-  let viewerId: string | null = null;
 
   try {
     viewerIp = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
@@ -42,16 +40,17 @@ export async function POST(request: NextRequest) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    viewerId = user?.id ?? null;
-
-    await supabase.from("content_views").insert({
+    const { error } = await supabase.from("content_views").insert({
       target_type,
       target_id,
       viewer_ip: viewerIp,
-      viewer_id: viewerId,
+      viewer_id: user?.id ?? null,
     });
+    if (error) {
+      return bad(503, "浏览记录暂时未保存，请稍后重试");
+    }
   } catch {
-    // 记录失败不影响页面
+    return bad(503, "浏览记录服务暂时不可用");
   }
 
   return NextResponse.json({ ok: true });
