@@ -38,6 +38,15 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "md", "mdx"],
+  async redirects() {
+    return [
+      {
+        source: "/letters/first-week",
+        destination: "/letters/freshman-handbook",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

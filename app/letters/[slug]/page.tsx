@@ -209,7 +209,7 @@ export default async function LetterPage({
     <>
       <LetterToc headings={headings} />
       <ViewTracker targetType="letter" targetId={slug} viewerId={userId} />
-      <article className="mx-auto max-w-2xl px-6 py-16 md:max-w-3xl lg:max-w-4xl">
+      <article className="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-14 md:max-w-3xl md:py-16 lg:max-w-4xl">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -222,13 +222,13 @@ export default async function LetterPage({
         所有信件
       </Link>
 
-      <header className="mt-8 border-b border-border pb-8">
+      <header className="mt-6 border-b border-border pb-6 sm:mt-8 sm:pb-8">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted">
           <time dateTime={letter.date}>{formatDate(letter.date)}</time>
           <span>{letter.author}</span>
           <span>· 约 {minutes} 分钟</span>
         </div>
-        <h1 className="mt-3 text-3xl md:text-4xl font-serif font-bold leading-tight text-text tracking-tight">
+        <h1 className="mt-3 text-balance text-3xl font-serif font-bold leading-tight tracking-[-0.025em] text-text md:text-4xl">
           {letter.title}
         </h1>
         {letter.tags && letter.tags.length > 0 && (
@@ -243,7 +243,7 @@ export default async function LetterPage({
             ))}
           </div>
         )}
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        <div className="mt-4 flex flex-wrap items-center gap-2 sm:gap-3">
           <LikeButton
             targetType="letter"
             targetId={slug}
@@ -265,8 +265,8 @@ export default async function LetterPage({
         </div>
       </header>
 
-      <div className="mt-8 card p-6 md:p-10">
-        <div className="prose">
+      <div className="mt-6 min-w-0 overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-xs sm:mt-8 sm:p-6 md:p-10">
+        <div className="prose min-w-0 break-words">
           <Letter />
         </div>
       </div>

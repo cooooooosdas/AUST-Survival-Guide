@@ -34,13 +34,13 @@ export const LETTERS: LetterEntry[] = [
   },
   {
     slug: "freshman-handbook",
-    title: "大一新生手册：开学报到与入学清单",
+    title: "大一新生手册：从报到前到开学第一周",
     excerpt:
-      "报到流程、证件材料准备、行李策略——入学第一天要做的所有事。",
-    date: "2026-08-06",
+      "把报到指南与第一周待办合成一条时间线：证件档案、迎新系统、入住、防骗、课表和校园生活一次讲清。",
+    date: "2026-08-11",
     author: "coolin",
-    tags: ["新生", "报到", "入学清单"],
-    readingTime: 10,
+    tags: ["新生", "报到", "开学第一周", "入学清单"],
+    readingTime: 16,
     load: () => import("@/content/letters/freshman-handbook.mdx"),
   },
   {
@@ -99,25 +99,14 @@ export const LETTERS: LetterEntry[] = [
     load: () => import("@/content/letters/healthcare.mdx"),
   },
   {
-    slug: "first-week",
-    title: "开学第一周，先把这几件事处理好",
-    excerpt:
-      "从查到学号、缴完学费、抢到宿舍，到报到当天领卡、买生活用品、看懂第一张课表——按时间顺序帮你梳理完整流程。",
-    date: "2026-06-23",
-    author: "coolin",
-    tags: ["新生", "实用"],
-    readingTime: 10,
-    load: () => import("@/content/letters/first-week.mdx"),
-  },
-  {
     slug: "college-truths",
     title: "大学四年，这些事你越早知道越好",
     excerpt:
-      "从 200 多人群聊里整理出来的学业真相：综测怎么算、保研考研就业三条路怎么选、哪些证书有用哪些是坑。",
-    date: "2026-06-18",
+      "面向计算机新生的四年路线：稳住成绩与基础、做出可验证的作品，再在保研、考研、就业等方向中逐步收敛。",
+    date: "2026-08-11",
     author: "coolin",
-    tags: ["学业", "保研", "考研", "就业", "竞赛"],
-    readingTime: 9,
+    tags: ["学业", "计算机专业", "保研", "考研", "就业"],
+    readingTime: 17,
     load: () => import("@/content/letters/college-truths.mdx"),
   },
   {
@@ -133,12 +122,12 @@ export const LETTERS: LetterEntry[] = [
   },
   {
     slug: "ai-as-tutor",
-    title: "把 AI 当家教用：写给不会用 ChatGPT 的同学",
-    excerpt: "如何让 AI 帮你预习、答疑、改报告——以及它绝对不能替你做的事。",
-    date: "2026-06-07",
+    title: "从大模型到 Agent：2026 计算机新生 AI 入门课",
+    excerpt: "从大模型、Agent 到 Harness 循序入门，学会用国产 AI 做家教，并安全上手 Claude Code 与 Codex。",
+    date: "2026-08-11",
     author: "coolin",
-    tags: ["AI", "学习方法"],
-    readingTime: 6,
+    tags: ["AI", "大模型", "Agent", "Harness", "学习方法"],
+    readingTime: 20,
     load: () => import("@/content/letters/ai-as-tutor.mdx"),
   },
 ];

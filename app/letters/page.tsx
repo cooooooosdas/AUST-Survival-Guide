@@ -16,7 +16,7 @@ export default function LettersIndexPage() {
   );
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
+    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14 md:py-16">
       <header>
         <p className="text-sm uppercase tracking-[0.2em] text-accent font-medium">letters</p>
         <h1 className="mt-3 text-3xl md:text-4xl font-serif font-bold text-text tracking-tight">
@@ -28,22 +28,22 @@ export default function LettersIndexPage() {
         </p>
       </header>
 
-      <ul className="mt-12 space-y-4">
+      <ul className="mt-9 space-y-3 sm:mt-12 sm:space-y-4">
         {letters.map((letter, i) => (
           <ScrollReveal key={letter.slug} delay={60 + i * 80}>
             <li>
               <Link
                 href={`/letters/${letter.slug}`}
-                className="group card card-hover p-6 flex flex-col gap-3"
+                className="group card card-hover flex flex-col gap-3 p-5 sm:p-6"
               >
-                <div className="flex items-center gap-3 text-xs text-muted">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                   <time dateTime={letter.date}>{formatDate(letter.date)}</time>
                   <span className="text-border">·</span>
                   <span>约 {letter.readingTime ?? 5} 分钟</span>
                   <span className="text-border">·</span>
                   <span>{letter.author}</span>
                 </div>
-                <h2 className="text-xl font-serif font-semibold text-text group-hover:text-primary transition-colors">
+                <h2 className="text-balance text-xl font-serif font-semibold leading-snug text-text transition-colors group-hover:text-primary">
                   {letter.title}
                 </h2>
                 <p className="text-sm text-text-secondary leading-relaxed">
@@ -61,7 +61,7 @@ export default function LettersIndexPage() {
                     ))}
                   </div>
                 )}
-                <span className="mt-2 inline-flex items-center gap-1 text-sm text-primary opacity-0 transition-opacity group-hover:opacity-100">
+                <span className="mt-1 inline-flex min-h-11 items-center gap-1 text-sm font-medium text-primary opacity-100 transition-opacity sm:mt-2 sm:min-h-0 sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-visible:opacity-100">
                   读这封
                   <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
                 </span>
@@ -75,7 +75,7 @@ export default function LettersIndexPage() {
       <div className="mt-16 flex items-center justify-center gap-2 text-[11px] text-muted">
         <span className="font-mono uppercase tracking-[0.2em]">by coolin</span>
         <span className="h-1 w-1 rounded-full bg-border" />
-        <span className="font-mono">第 7 期 · 长期更新</span>
+        <span className="font-mono">共 {letters.length} 封 · 长期更新</span>
       </div>
     </div>
   );
