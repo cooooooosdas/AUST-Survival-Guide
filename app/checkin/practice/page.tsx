@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -63,24 +63,22 @@ const DIFFICULTY_ICON: Record<Difficulty, typeof Sprout> = {
 export default function PracticePage() {
   const [difficulty, setDifficulty] = useState<Difficulty | "">("");
   const [dailyDiff, setDailyDiff] = useState<Difficulty | "">("");
-  const [history, setHistory] = useState<HistoryEntry[]>([]);
-  const [dailyResult, setDailyResult] = useState<
-    HistoryEntry["result"] | null
-  >(null);
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
+    try {
+      const raw = localStorage.getItem(HISTORY_KEY);
+      return raw ? (JSON.parse(raw) as HistoryEntry[]) : [];
+    } catch {
+      return [];
+    }
+  });
+  const [dailyResult, setDailyResult] = useState<HistoryEntry["result"] | null>(null);
+  const dailyResultLocked = useRef(false);
   const [weeklyStats, setWeeklyStats] = useState<number[]>([]);
   const [weeklyTotal, setWeeklyTotal] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // 加载历史 + 服务端周统计
+  // 拉取服务端最近 7 天统计
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(HISTORY_KEY);
-      if (raw) setHistory(JSON.parse(raw) as HistoryEntry[]);
-    } catch {
-      /* ignore */
-    }
-
-    // 拉取服务端最近 7 天统计（API 已补齐 7 元素，client 只 display）
     fetch("/api/practice")
       .then((r) => r.json())
       .then((json) => {
@@ -175,15 +173,15 @@ export default function PracticePage() {
     return pool[Math.abs(hash) % pool.length];
   }, [dailyDiff]);
 
-  // 同步每日一题的标记结果（依赖 dailyQuestion，放它后面）
+  // 同步每日一题的标记结果（dailyQuestion 变化时重置并同步）
   useEffect(() => {
-    if (!dailyQuestion) {
-      setDailyResult(null);
-      return;
-    }
+    if (!dailyQuestion) return;
+    dailyResultLocked.current = false;
     const today = history.find((h) => h.questionId === dailyQuestion.id);
-    setDailyResult(today ? today.result : null);
-  }, [history, dailyQuestion]);
+    if (!dailyResultLocked.current) {
+      setDailyResult(today ? today.result : null);
+    }
+  }, [dailyQuestion]);
 
   function handleDailyStart(diff: Difficulty) {
     setDailyDiff(diff);
@@ -306,7 +304,7 @@ export default function PracticePage() {
                 href={dailyQuestion.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => recordResult(dailyQuestion, "attempted")}
+                onClick={() => { dailyResultLocked.current = true; recordResult(dailyQuestion, "attempted"); }}
                 className="motion-press inline-flex items-center gap-1.5 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-primary-hover"
               >
                 <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />

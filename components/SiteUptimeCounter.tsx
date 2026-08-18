@@ -7,14 +7,11 @@ const SITE_LAUNCH_DATE = new Date("2025-06-01T00:00:00+08:00").getTime();
 
 // 秒数计数器
 function SiteUptime() {
-  const [seconds, setSeconds] = useState(0);
+  const [seconds, setSeconds] = useState(() =>
+    Math.floor((Date.now() - SITE_LAUNCH_DATE) / 1000)
+  );
 
   useEffect(() => {
-    // 计算初始秒数
-    const initialSeconds = Math.floor((Date.now() - SITE_LAUNCH_DATE) / 1000);
-    setSeconds(initialSeconds);
-
-    // 每秒更新一次
     const interval = setInterval(() => {
       setSeconds(Math.floor((Date.now() - SITE_LAUNCH_DATE) / 1000));
     }, 1000);
@@ -34,13 +31,11 @@ function SiteUptime() {
 
 // 建站天数计数器
 function SiteDays() {
-  const [days, setDays] = useState(0);
+  const [days, setDays] = useState(() =>
+    Math.floor((Date.now() - SITE_LAUNCH_DATE) / (1000 * 60 * 60 * 24))
+  );
 
   useEffect(() => {
-    const initialDays = Math.floor((Date.now() - SITE_LAUNCH_DATE) / (1000 * 60 * 60 * 24));
-    setDays(initialDays);
-
-    // 每分钟更新一次（天数变化较慢）
     const interval = setInterval(() => {
       setDays(Math.floor((Date.now() - SITE_LAUNCH_DATE) / (1000 * 60 * 60 * 24)));
     }, 60000);
