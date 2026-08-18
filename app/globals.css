@@ -203,6 +203,14 @@ select:focus-visible {
   background: rgba(120, 113, 108, 0.4);
 }
 
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* ============================================================
    玻璃拟态（Glassmorphism）卡片系统
    ============================================================ */

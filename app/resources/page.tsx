@@ -33,21 +33,26 @@ export default function ResourceCenterPage() {
         </p>
       </div>
 
-      {/* 分类筛选：常用网址 active，其他板块 disabled 显示"即将上线" */}
-      <div className="mt-6 flex flex-nowrap items-center gap-2 overflow-x-auto pb-1 -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible">
-        <span className="shrink-0 rounded-full border border-primary bg-primary-light px-3 py-1.5 text-xs font-medium text-primary">
-          常用网址
-        </span>
-        {COMING_SOON.map((c) => (
-          <span
-            key={c.value}
-            className="shrink-0 rounded-full border border-border bg-bg-alt px-3 py-1.5 text-xs text-muted"
-            title="即将上线"
-          >
-            {c.label}
-            <span className="hidden sm:inline ml-1.5 text-[10px] opacity-60">即将上线</span>
+      {/* 分类筛选 */}
+      <div className="relative mt-6">
+        {/* 左右渐变提示可滚动 */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-6 bg-gradient-to-r from-bg to-transparent sm:hidden" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-6 bg-gradient-to-l from-bg to-transparent sm:hidden" />
+        <div className="flex flex-nowrap items-center gap-3 overflow-x-auto scroll-smooth snap-x snap-mandatory scrollbar-hide -mx-6 px-6 sm:mx-0 sm:px-0 sm:overflow-visible">
+          <span className="snap-start shrink-0 rounded-full border border-primary bg-primary-light px-3 py-1.5 text-xs font-medium text-primary">
+            常用网址
           </span>
-        ))}
+          {COMING_SOON.map((c) => (
+            <span
+              key={c.value}
+              className="snap-start shrink-0 rounded-full border border-border bg-bg-alt px-3 py-1.5 text-xs text-muted"
+              title="即将上线"
+            >
+              {c.label}
+              <span className="hidden sm:inline ml-1.5 text-[10px] opacity-60">即将上线</span>
+            </span>
+          ))}
+        </div>
       </div>
 
       {/* 常用网址列表 */}
