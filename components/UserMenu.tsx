@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Bookmark, UserRound, PenLine, History, LogOut } from "lucide-react";
 import { signOut } from "@/app/auth/actions";
 import Avatar from "@/components/Avatar";
@@ -15,6 +16,8 @@ type Props = {
 };
 
 export default function UserMenu({ user }: Props) {
+  const pathname = usePathname();
+  const loginHref = pathname === "/login" || pathname === "/signup" ? "/login" : `/login?next=${encodeURIComponent(pathname)}`;
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,7 +35,7 @@ export default function UserMenu({ user }: Props) {
     return (
       <div className="flex shrink-0 items-center gap-2 text-sm">
         <Link
-          href="/login"
+          href={loginHref}
           className="motion-press whitespace-nowrap text-muted transition-colors hover:text-primary"
         >
           登录
@@ -63,7 +66,7 @@ export default function UserMenu({ user }: Props) {
           email={user.email ?? undefined}
           size={28}
         />
-        <span className="hidden sm:inline">{name}</span>
+        <span className="hidden max-w-28 truncate sm:inline">{name}</span>
         <ChevronDown
           className="h-3.5 w-3.5 shrink-0 transition-transform duration-200"
           style={{ transform: open ? "rotate(180deg)" : "rotate(0deg)" }}

@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { login, loginWithGitHub } from "@/app/auth/actions";
+import AuthShell from "@/components/auth/AuthShell";
+import AuthForm from "@/components/auth/AuthForm";
+import AuthNotice from "@/components/auth/AuthNotice";
 
 export const metadata = { title: "登录" };
 
@@ -9,69 +11,23 @@ export default async function LoginPage({
   searchParams: Promise<{ error?: string; next?: string }>;
 }) {
   const { error, next } = await searchParams;
-  const returnTo = next?.startsWith("/") && !next.startsWith("//") ? next : "/";
-
+  const returnTo =
+    next?.startsWith("/") && !next.startsWith("//") && !next.includes("\\")
+      ? next
+      : "/";
   return (
-    <div className="mx-auto max-w-md px-6 py-16">
-      <h1 className="text-2xl font-serif font-semibold text-text">登录</h1>
-      <p className="mt-2 text-sm text-muted">还没有账号？<Link href="/signup" className="text-primary underline-offset-4 hover:underline">去注册</Link></p>
-
-      {error && (
-        <div role="alert" className="mt-6 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {decodeURIComponent(error)}
-        </div>
-      )}
-
-      <form action={login} className="mt-8 space-y-4">
-        <input type="hidden" name="next" value={returnTo} />
-        <div>
-          <label htmlFor="login-email" className="block text-sm text-muted mb-1">邮箱</label>
-          <input
-            id="login-email"
-            name="email"
-            type="email"
-            required
-            autoComplete="email"
-            className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
-          />
-        </div>
-        <div>
-          <label htmlFor="login-password" className="block text-sm text-muted mb-1">密码</label>
-          <input
-            id="login-password"
-            name="password"
-            type="password"
-            required
-            autoComplete="current-password"
-            className="w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-sm text-text placeholder:text-muted/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-colors"
-          />
-        </div>
-        <button
-          type="submit"
-          className="motion-press w-full rounded-xl bg-primary px-5 py-3 text-sm font-medium text-white transition-[background-color,transform] duration-200 hover:bg-primary-hover"
-        >
-          登录
-        </button>
-      </form>
-
-      <div className="my-6 flex items-center gap-3 text-xs text-muted">
-        <span className="h-px flex-1 bg-border" />
-        <span>或</span>
-        <span className="h-px flex-1 bg-border" />
+    <AuthShell>
+      <span className="eyebrow">欢迎回来</span>
+      <h1>继续你的安理生活</h1>
+      <p className="auth-description">登录后，收藏好内容，留下你的经验。</p>
+      <div className="auth-switch">
+        <span>还没有账号？</span>
+        <Link href="/signup">
+          创建账号 <span aria-hidden>↗</span>
+        </Link>
       </div>
-
-      <form action={loginWithGitHub}>
-        <input type="hidden" name="next" value={returnTo} />
-        <button
-          type="submit"
-          className="motion-press flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-text transition-[color,border-color,transform] duration-200 hover:border-primary hover:text-primary"
-        >
-          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden>
-            <path d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.9 1.2 1.9 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.2-3.2 0-.4-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.8.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 6 .4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3" />
-          </svg>
-          用 GitHub 登录
-        </button>
-      </form>
-    </div>
+      <AuthNotice error={error} />
+      <AuthForm mode="login" returnTo={returnTo} />
+    </AuthShell>
   );
 }

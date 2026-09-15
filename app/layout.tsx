@@ -5,6 +5,7 @@ import { Inter } from "next/font/google";
 import { Noto_Serif_SC } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
+import "./campus-ui.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/ThemeProvider";

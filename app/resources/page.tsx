@@ -42,10 +42,11 @@ export default function ResourceCenterPage() {
           <span
             key={c.value}
             className="rounded-lg border border-border bg-bg-alt px-3 py-2 text-xs text-muted sm:rounded-full sm:py-1.5"
+            aria-disabled="true"
             title="即将上线"
           >
             {c.label}
-            <span className="hidden sm:inline ml-1.5 text-[10px] opacity-60">即将上线</span>
+            <span className="ml-2 text-[10px]">即将上线</span>
           </span>
         ))}
       </div>
@@ -110,8 +111,7 @@ export default function ResourceCenterPage() {
       <section className="mt-12 rounded-xl border border-dashed border-border bg-bg-alt/50 p-5 text-sm text-text-secondary">
         <p className="font-medium text-text">后续会加上</p>
         <p className="mt-2 leading-relaxed">
-          高数笔记、课件、软件安装包、期末复习、LaTeX 模板等资料——会陆续通过 Supabase
-          Storage 上传。如果你有想分享的资料，<Link
+          高数笔记、课件、期末复习与 LaTeX 模板等资料会陆续整理上线。如果你有想分享的资料，<Link
             href="/board"
             className="text-primary underline-offset-2 hover:underline"
           >

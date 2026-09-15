@@ -14,7 +14,7 @@ export default function AustLogo({ className = "" }: { className?: string }) {
 
   return (
     <svg
-      viewBox="0 0 238 42"
+      viewBox="0 0 158 42"
       className={`h-9 w-auto shrink-0 ${className}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

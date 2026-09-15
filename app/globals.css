@@ -13,8 +13,8 @@
   /* ---------- 文字层级 ---------- */
   --color-text: #13231F;
   --color-text-secondary: #52665F;
-  --color-muted: #82958E;
-  --color-text-muted: #82958E;
+  --color-muted: #647B71;
+  --color-text-muted: #647B71;
   --color-border: #D8E5DF;
   --color-border-hover: #AFC9BE;
 
@@ -687,9 +687,6 @@ select:focus-visible {
   code {
     font-size: 0.85em;
   }
-  h1 { font-size: 1.5rem; }
-  h2 { font-size: 1.25rem; }
-  h3 { font-size: 1.1rem; }
 }
 
 @media (hover: hover) {

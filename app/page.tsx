@@ -1,46 +1,60 @@
-import Sparkline from "@/components/Sparkline";
-import HeroIllustration from "@/components/HeroIllustration";
 import Image from "next/image";
 import Link from "next/link";
-import campusImage from "@/public/images/editorial/aust-campus.webp";
-import { SECTIONS, type Section } from "@/lib/sections";
 import {
-  Wrench,
-  Server,
+  ArrowRight,
+  ArrowUpRight,
+  Search,
+  Compass,
   BookOpen,
   AppWindow,
   Sparkles,
+  Wrench,
+  Server,
   FolderDown,
   CalendarCheck,
   Mail,
-  ArrowRight,
-  ArrowUpRight,
-  Compass,
-  Quote,
-  Eye,
-  Users,
 } from "lucide-react";
-import ScrollReveal from "@/components/ScrollReveal";
-import CommentBoard from "@/components/CommentBoard";
+import campus from "@/public/images/editorial/aust-real/opening-ceremony-2024.webp";
+import { MAIN_SECTIONS } from "@/lib/sections";
+import StartGuide from "@/components/StartGuide";
 import EditorialShelf from "@/components/EditorialShelf";
-import SiteUptimeCounter from "@/components/SiteUptimeCounter";
+import CommentBoard from "@/components/CommentBoard";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeComments } from "@/lib/comments";
 import type { Comment } from "@/lib/types";
 
 async function loadHomeComments() {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
-    return { comments: [] as Comment[], userId: null as string | null, ready: false };
+    return {
+      comments: [] as Comment[],
+      userId: null as string | null,
+      ready: false,
+    };
   }
   try {
     const supabase = await createClient();
-    const [{ data: comments, error: commentsError }, { data: { user } }] = await Promise.all([
-      supabase.from("comments_with_author").select("*").eq("target_type", "global").eq("target_id", "main").order("created_at", { ascending: false }).limit(200),
+    const [
+      { data: comments, error: commentsError },
+      {
+        data: { user },
+      },
+    ] = await Promise.all([
+      supabase
+        .from("comments_with_author")
+        .select("*")
+        .eq("target_type", "global")
+        .eq("target_id", "main")
+        .order("created_at", { ascending: false })
+        .limit(200),
       supabase.auth.getUser(),
     ]);
     if (commentsError) {
       console.error("Failed to load home comments:", commentsError);
-      return { comments: [] as Comment[], userId: null as string | null, ready: false };
+      return {
+        comments: [] as Comment[],
+        userId: null as string | null,
+        ready: false,
+      };
     }
     return {
       comments: normalizeComments(comments as Partial<Comment>[]),
@@ -49,7 +63,11 @@ async function loadHomeComments() {
     };
   } catch (e) {
     console.error("Failed to load home comments:", e);
-    return { comments: [] as Comment[], userId: null as string | null, ready: false };
+    return {
+      comments: [] as Comment[],
+      userId: null as string | null,
+      ready: false,
+    };
   }
 }
 
@@ -58,22 +76,14 @@ type HomeStat = {
   value: string;
 };
 
-// 示例：近14天每日访问数据
-const DEMO_SPARKLINE = [120, 135, 98, 156, 178, 142, 165, 189, 210, 178, 195, 220, 245, 198];
-
-const FALLBACK_HOME_STATS: HomeStat[] = [
-  { label: "访问人次", value: "12,847" },
-  { label: "访问人数", value: "3,621" },
-  { label: "维护状态", value: "长期" },
-];
-
-const DEMO_WEEKLY_CHANGE = 23; // 模拟周环比增长 23%
-
-// 更新的 fallback 对象
 const FALLBACK_DATA = {
-  stats: FALLBACK_HOME_STATS,
-  sparklineData: DEMO_SPARKLINE,
-  weeklyChange: DEMO_WEEKLY_CHANGE,
+  stats: [
+    { label: "访问人次", value: "统计中" },
+    { label: "访问人数", value: "统计中" },
+    { label: "维护状态", value: "长期" },
+  ] as HomeStat[],
+  sparklineData: [] as number[],
+  weeklyChange: null as number | null,
 };
 
 function formatStatCount(value: number): string {
@@ -89,7 +99,10 @@ async function loadHomeStats(): Promise<{
 }> {
   const fallback = FALLBACK_DATA;
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
     return fallback;
   }
 
@@ -97,17 +110,19 @@ async function loadHomeStats(): Promise<{
     const supabase = await createClient();
     const since = new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString();
 
-    const [{ data: viewRow, error }, { data: recentViews }] = await Promise.all([
-      supabase
-        .from("site_visit_stats")
-        .select("total_views, unique_visitors")
-        .maybeSingle(),
-      supabase
-        .from("content_views")
-        .select("created_at")
-        .gte("created_at", since)
-        .limit(2000),
-    ]);
+    const [{ data: viewRow, error }, { data: recentViews }] = await Promise.all(
+      [
+        supabase
+          .from("site_visit_stats")
+          .select("total_views, unique_visitors")
+          .maybeSingle(),
+        supabase
+          .from("content_views")
+          .select("created_at")
+          .gte("created_at", since)
+          .limit(2000),
+      ],
+    );
 
     if (error) {
       console.error("Failed to load home stats:", error);
@@ -118,9 +133,7 @@ async function loadHomeStats(): Promise<{
     const series = Array(14).fill(0) as number[];
     for (const v of recentViews ?? []) {
       const d = new Date(v.created_at);
-      const daysAgo = Math.floor(
-        (Date.now() - d.getTime()) / 86400000
-      );
+      const daysAgo = Math.floor((Date.now() - d.getTime()) / 86400000);
       if (daysAgo >= 0 && daysAgo < 14) {
         series[13 - daysAgo] = (series[13 - daysAgo] ?? 0) + 1;
       }
@@ -130,7 +143,9 @@ async function loadHomeStats(): Promise<{
     const thisWeek = series.slice(7).reduce((a, b) => a + b, 0);
     const lastWeek = series.slice(0, 7).reduce((a, b) => a + b, 0);
     const weeklyChange =
-      lastWeek > 0 ? Math.round(((thisWeek - lastWeek) / lastWeek) * 100) : null;
+      lastWeek > 0
+        ? Math.round(((thisWeek - lastWeek) / lastWeek) * 100)
+        : null;
 
     return {
       stats: [
@@ -153,7 +168,7 @@ async function loadHomeStats(): Promise<{
   }
 }
 
-const SECTION_ICONS: Record<string, typeof Wrench> = {
+const icons: Record<string, typeof Compass> = {
   tools: Wrench,
   microservices: Server,
   learn: BookOpen,
@@ -164,315 +179,198 @@ const SECTION_ICONS: Record<string, typeof Wrench> = {
   letters: Mail,
 };
 
-const ACCENT_BAR_CLASS: Record<Section["accent"], string> = {
-  primary: "bg-primary",
-  secondary: "bg-secondary",
-  tertiary: "bg-accent",
-};
-
-const ACCENT_TEXT_CLASS: Record<Section["accent"], string> = {
-  primary: "text-primary",
-  secondary: "text-secondary",
-  tertiary: "text-accent",
-};
-
-const ACCENT_BG_CLASS: Record<Section["accent"], string> = {
-  primary: "bg-primary-light",
-  secondary: "bg-secondary-light",
-  tertiary: "bg-accent-light",
-};
-
-const SECTION_Y = "py-14 md:py-20";
-
-const QUICK_LINKS: {
-  href: string;
-  label: string;
-  Icon: typeof Wrench;
-}[] = [
-  { href: "/tools", label: "找常用工具", Icon: Wrench },
-  { href: "/microservices", label: "进学校系统", Icon: Server },
-  { href: "/letters", label: "读学长来信", Icon: Mail },
-];
-
 export default async function HomePage() {
-  const [{ comments, userId, ready }, homeResult] = await Promise.all([
+  const [{ comments, userId, ready }, homeStats] = await Promise.all([
     loadHomeComments(),
     loadHomeStats(),
   ]);
-  const { stats: homeStats, sparklineData, weeklyChange } = homeResult;
-
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6">
-      <section className="guide-hero relative -mx-4 border-b border-border px-4 py-14 sm:-mx-6 sm:px-6 md:py-20 lg:py-24">
-        <div className="relative z-10 grid items-center gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <div className="hero-copy-enter">
-            {/* 桌面版：手绘 Hero 装饰 —— 信纸 / 钢笔 / 邮戳 / 树叶 */}
-            <div className="mb-6 hidden sm:block">
-              <HeroIllustration className="h-28 w-auto text-text-secondary" />
-            </div>
-
-            {/* 顶部一行小标识 —— 印刷感印章 */}
-            <div className="mb-7 inline-flex items-center gap-3 rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-text-secondary shadow-xs">
-              <span className="h-2 w-2 rounded-full bg-primary" />
-              <span className="font-medium">AUST Survival Guide</span>
-              <span className="hidden h-3 w-px bg-border sm:block" />
-              <span className="hidden text-muted sm:inline">
-                给即将到来的你
-              </span>
-            </div>
-
-            <h1 className="max-w-3xl font-serif text-4xl font-bold leading-[1.14] text-text md:text-6xl lg:text-7xl">
-              安理大新生的第一本桌面指南
-            </h1>
-
-            {/* 单色分隔线，替代原三色渐变 */}
-            <div className="mt-6 mb-7 h-[2px] w-24 bg-text" />
-
-            <div className="max-w-2xl space-y-4 text-base leading-[1.9] text-text-secondary md:text-lg">
-              <p>
-                去年九月我也对学校、专业和大学生活都没什么把握。这里把常用系统、学习资料、软件工具和踩坑经验整理成一张清楚的索引。
-              </p>
-              <p>
-                不保证替你解决所有问题，但希望你打开它时，能少走几步弯路。
-              </p>
-            </div>
-
-            <div className="mt-9 flex flex-wrap gap-3">
-              {QUICK_LINKS.map((link, index) => {
-                const Icon = link.Icon;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={[
-                      "motion-press inline-flex h-11 items-center gap-2 rounded-full border px-4 text-sm font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30",
-                      index === 0
-                        ? "border-primary bg-primary text-white shadow-sm hover:bg-primary-hover"
-                        : "border-border bg-surface text-text-secondary hover:border-primary hover:text-primary",
-                    ].join(" ")}
-                  >
-                    <Icon className="h-4 w-4" strokeWidth={2} />
-                    {link.label}
-                    <ArrowUpRight className="h-3.5 w-3.5 opacity-70" strokeWidth={2} />
-                  </Link>
-                );
-              })}
-            </div>
+    <div className="campus-home">
+      <section className="campus-hero" aria-labelledby="home-title">
+        <div className="campus-hero-copy">
+          <span className="eyebrow">
+            <span className="status-dot" />
+            写给每一个刚到安理的你
+          </span>
+          <h1 id="home-title">
+            你好，新同学。
+            <br />
+            <span>大学生活，</span>
+            <br />
+            我们一起摸索。
+          </h1>
+          <p className="hero-description">
+            从第一次走进校园，到找到自己的热爱。
+            <br className="hidden sm:block" />
+            这里有学长的经验、实用的资源，也有与你同行的人。
+          </p>
+          <div className="hero-actions">
+            <Link href="#start-guide" className="ui-button ui-button-primary">
+              找到我的起点
+              <ArrowRight size={18} aria-hidden />
+            </Link>
+            <Link
+              href="/letters/freshman-handbook"
+              className="ui-button ui-button-secondary"
+            >
+              读新生手册
+              <BookOpen size={18} aria-hidden />
+            </Link>
           </div>
-
-          {/* Desk note 卡片 —— 重塑视觉 */}
-          <div className="hero-note-enter relative hidden lg:block">
-            <div className="index-card relative z-10 overflow-hidden rounded-2xl">
-              <div className="relative h-28 overflow-hidden border-b border-border">
-                <Image
-                  src={campusImage}
-                  alt="秋日校园道路上的教学楼、自行车与学生"
-                  fill
-                  sizes="360px"
-                  className="object-cover transition-transform duration-700 hover:scale-[1.03]"
-                  priority
-                />
-                <span className="absolute bottom-2 right-2 rounded-md bg-black/65 px-2 py-1 text-[10px] text-white">
-                  校园场景示意
-                </span>
-              </div>
-              <div className="flex items-center gap-3 border-b border-border bg-primary-light/60 px-5 py-3.5">
-                <Compass className="h-4 w-4 text-primary" strokeWidth={2} />
-                <p className="text-xs font-medium uppercase tracking-[0.18em] text-primary">
-                  Desk note
-                </p>
-                <span className="ml-auto rounded-md bg-surface px-2 py-0.5 text-[11px] font-mono text-muted">
-                  2026
-                </span>
-              </div>
-
-              <div className="px-5 py-5">
-                <p className="font-serif text-xl font-semibold text-text">
-                  开学前先看这张
-                </p>
-
-                <div className="mt-4 space-y-2.5">
-                  {homeStats.map((item, idx) => (
-                    <div
-                      key={item.label}
-                      className="flex items-center justify-between border-b border-dashed border-border pb-2 last:border-b-0 last:pb-0"
-                    >
-                      <span className="flex items-center gap-2 text-sm text-text-secondary">
-                        {idx === 0 ? (
-                          <Eye className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
-                        ) : idx === 1 ? (
-                          <Users className="h-3.5 w-3.5 text-muted" strokeWidth={2} />
-                        ) : (
-                          <Sparkles className="h-3.5 w-3.5 text-accent" strokeWidth={2} />
-                        )}
-                        {item.label}
-                      </span>
-                      <span className="font-serif text-base font-semibold tabular-nums text-text">
-                        {item.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* 网站运行时间计数器 */}
-                <div className="mt-4 pt-3 border-t border-dashed border-border">
-                  <SiteUptimeCounter />
-                </div>
-
-                {/* 14 天访问趋势 */}
-                <div className="mt-5 rounded-lg border border-border bg-bg/60 px-3 py-2.5">
-                  <div className="flex items-center justify-between text-[11px] text-muted">
-                    <span className="font-mono">近 14 天</span>
-                    {weeklyChange === null ? (
-                      <span className="font-mono text-muted">暂无数据</span>
-                    ) : (
-                      <span
-                        className={
-                          weeklyChange >= 0
-                            ? "font-mono text-primary"
-                            : "font-mono text-secondary"
-                        }
-                      >
-                        {weeklyChange >= 0 ? "↑" : "↓"} {Math.abs(weeklyChange)}%
-                      </span>
-                    )}
-                  </div>
-                  {sparklineData.length > 0 && sparklineData.some((v) => v > 0) ? (
-                    <Sparkline
-                      className="mt-1 w-full"
-                      width={228}
-                      height={36}
-                      data={sparklineData}
-                    />
-                  ) : (
-                    <p className="mt-1 font-mono text-[11px] text-muted">
-                      暂无访问数据
-                    </p>
-                  )}
-                </div>
-
-                <div className="mt-5 flex items-start gap-2 rounded-lg border border-border bg-bg-alt px-3 py-2.5 text-sm leading-relaxed text-text-secondary">
-                  <Quote className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2} />
-                  <span>
-                    从「学校微服务」和「工具箱」开始，通常最快能找到你现在需要的入口。
-                  </span>
-                </div>
-              </div>
+          <form
+            action="/search"
+            method="get"
+            className="home-search"
+            role="search"
+          >
+            <Search size={19} aria-hidden />
+            <label className="sr-only" htmlFor="home-search">
+              搜索指南、课程和工具
+            </label>
+            <input
+              id="home-search"
+              name="q"
+              type="search"
+              placeholder="搜一搜：选课、宿舍、编程工具…"
+              required
+            />
+            <button type="submit" aria-label="搜索">
+              <ArrowRight size={19} aria-hidden />
+            </button>
+          </form>
+          <p className="hero-note">
+            公开内容无需登录 · 同学自发整理 · 持续更新
+          </p>
+        </div>
+        <div className="campus-hero-visual">
+          <figure className="campus-cover">
+            <Image
+              src={campus}
+              alt="安徽理工大学 2024 级新生齐聚开学典礼"
+              fill
+              sizes="(max-width: 767px) 100vw, (max-width: 1200px) 45vw, 530px"
+              preload
+              className="object-cover"
+            />
+            <div className="campus-cover-caption">
+              <span>我们的大学，从这里开始</span>
+              <strong>相遇，在安理。</strong>
             </div>
+          </figure>
+          <div className="campus-caption">
+            2024 开学典礼 ·{" "}
+            <a
+              href="https://news.aust.edu.cn/info/1011/41807.htm"
+              target="_blank"
+              rel="noreferrer"
+            >
+              图源：安徽理工大学新闻网 / 新媒体中心
+            </a>
           </div>
+          <Link href="/letters/aust-complete-guide" className="campus-feature">
+            <span className="campus-feature-icon">
+              <Compass size={24} aria-hidden />
+            </span>
+            <span>
+              <small>校园生活指南</small>
+              <strong>把陌生的校园，过成熟悉的日常。</strong>
+            </span>
+            <ArrowUpRight size={22} aria-hidden />
+          </Link>
         </div>
       </section>
 
-      <EditorialShelf />
+      <StartGuide />
 
-      <section className={SECTION_Y}>
-        <ScrollReveal>
-          <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted">
-                Index
-              </p>
-              <h2 className="mt-2 font-serif text-2xl font-semibold text-text md:text-3xl">
-                按你要做的事进入
-              </h2>
-            </div>
-            <span className="text-sm text-muted">内容会继续补齐和校正</span>
+      <section className="home-directory" aria-labelledby="directory-title">
+        <div className="home-section-heading">
+          <div>
+            <span className="eyebrow">随用随查</span>
+            <h2 id="directory-title">大学生活的常用入口</h2>
           </div>
-        </ScrollReveal>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {SECTIONS.map((s, i) => {
-            const Icon = SECTION_ICONS[s.slug] ?? Compass;
-            const barClass = ACCENT_BAR_CLASS[s.accent];
-            const textClass = ACCENT_TEXT_CLASS[s.accent];
-            const bgClass = ACCENT_BG_CLASS[s.accent];
+          <Link href="/search">
+            搜索全部内容
+            <ArrowRight size={16} aria-hidden />
+          </Link>
+        </div>
+        <div className="home-directory-grid">
+          {MAIN_SECTIONS.map((section) => {
+            const Icon = icons[section.slug] ?? Compass;
             return (
-              <ScrollReveal key={s.slug} delay={60 + i * 50} className="h-full">
-                <Link
-                  href={s.href}
-                  className="card-interactive group relative flex h-full min-h-40 flex-col gap-3 overflow-hidden rounded-2xl border border-border bg-surface p-5"
-                >
-                  {/* 顶部色条 */}
-                  <span
-                    className={`absolute inset-x-0 top-0 h-0.5 ${barClass} transition-all duration-200 group-hover:h-1`}
-                  />
-
-                  <div className="flex items-start justify-between">
-                    <span
-                      className={`flex h-9 w-9 items-center justify-center rounded-lg ${bgClass} ${textClass}`}
-                    >
-                      <Icon className="h-4.5 w-4.5" strokeWidth={2} />
-                    </span>
-                    <span className="font-mono text-[11px] text-muted">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-
-                  <div className="text-base font-semibold text-text transition-colors group-hover:text-primary">
-                    {s.title}
-                  </div>
-
-                  <div className="text-sm leading-relaxed text-text-secondary">
-                    {s.description}
-                  </div>
-
-                  <span className="mt-auto flex items-center gap-1 pt-3 text-xs font-medium text-muted transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-primary">
-                    进入
-                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={2} />
-                  </span>
-                </Link>
-              </ScrollReveal>
+              <Link
+                key={section.slug}
+                href={section.href}
+                className="home-directory-card"
+              >
+                <span className="directory-card-icon">
+                  <Icon size={22} aria-hidden />
+                </span>
+                <ArrowUpRight
+                  className="directory-card-arrow"
+                  size={18}
+                  aria-hidden
+                />
+                <h3>{section.title}</h3>
+                <p>{section.description}</p>
+              </Link>
             );
           })}
         </div>
       </section>
 
-      <section className={SECTION_Y}>
-        <ScrollReveal>
-          <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="font-serif text-2xl font-semibold text-text md:text-3xl">
-              留言区
-            </h2>
-            <span className="text-sm text-muted">想说点什么都可以</span>
-          </div>
-          <p className="mb-8 text-sm text-muted">
-            吐槽、提问、分享经验。请保持基本礼貌，过激内容会被删掉。
-          </p>
-        </ScrollReveal>
+      <EditorialShelf />
 
-        <ScrollReveal>
-          {ready ? (
-            <CommentBoard
-              initial={comments}
-              targetType="global"
-              targetId="main"
-              currentUserId={userId}
-            />
-          ) : (
-            <CommentBoard
-              initial={[]}
-              targetType="global"
-              targetId="main"
-              currentUserId={null}
-              readOnlyMessage="等 Supabase 恢复后即可登录留言；下方内容为明确标注的版式与气氛示例。"
-            />
-          )}
-        </ScrollReveal>
+      <section className="community-invite">
+        <div>
+          <span className="eyebrow">经验，在同学之间流动</span>
+          <h2>你走过的路，也能成为别人的指南。</h2>
+          <p>收藏一篇来信，记下一次学习，或分享一个你发现的好工具。</p>
+        </div>
+        <Link
+          href={userId ? "/contribute" : "/signup"}
+          className="ui-button ui-button-primary"
+        >
+          {userId ? "分享我的经验" : "加入同学之间"}
+          <ArrowRight size={18} aria-hidden />
+        </Link>
       </section>
 
-      <section className="pb-12">
-        <div className="rounded-2xl border border-border bg-surface px-5 py-4 text-xs leading-relaxed text-muted">
-          <span className="mr-2 font-mono text-accent">—</span>
-          本站为站长个人项目，与安徽理工大学（AUST）及任何学院、部门无隶属或合作关系。
-          所有内容仅代表个人观点，不代表学校官方立场，仅供参考。
-          <Link
-            href="/disclaimer"
-            className="ml-1 text-primary underline-offset-4 hover:underline"
-          >
-            查看完整免责声明
+      <section className="home-comments">
+        <div className="home-section-heading">
+          <div>
+            <span className="eyebrow">听听大家怎么说</span>
+            <h2>留个言，打声招呼</h2>
+          </div>
+          <Link href="/board">
+            进入留言区
+            <ArrowRight size={16} aria-hidden />
           </Link>
         </div>
+        <CommentBoard
+          initial={ready ? comments : []}
+          targetType="global"
+          targetId="main"
+          currentUserId={userId}
+          readOnlyMessage={
+            ready
+              ? undefined
+              : "留言服务暂时不可用，请稍后再试。你仍可以浏览指南和资源。"
+          }
+        />
       </section>
+      <div className="home-site-note">
+        <p>
+          本站由同学自发维护，与安徽理工大学及其院系无隶属关系。
+          <Link href="/disclaimer">查看使用声明</Link>
+        </p>
+        <div>
+          {homeStats.stats.map((stat) => (
+            <span key={stat.label}>
+              {stat.label} <strong>{stat.value}</strong>
+            </span>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
