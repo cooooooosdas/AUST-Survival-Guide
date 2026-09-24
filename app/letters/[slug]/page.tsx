@@ -93,7 +93,7 @@ async function loadCommentsAndUser(slug: string) {
   }
   try {
     const supabase = await createClient();
-    const [{ data: comments, error: commentsError }, { data: { user } }] = await Promise.all([
+    const [commentsResult, userResult] = await Promise.allSettled([
       supabase
         .from("comments_with_author")
         .select("*")
@@ -103,12 +103,13 @@ async function loadCommentsAndUser(slug: string) {
         .limit(200),
       supabase.auth.getUser(),
     ]);
-    if (commentsError) {
-      return { comments: [] as Comment[], userId: null as string | null, ready: false };
+    const userId = userResult.status === "fulfilled" ? userResult.value.data.user?.id ?? null : null;
+    if (commentsResult.status === "rejected" || commentsResult.value.error) {
+      return { comments: [] as Comment[], userId, ready: false };
     }
     return {
-      comments: normalizeComments(comments as Partial<Comment>[]),
-      userId: user?.id ?? null,
+      comments: normalizeComments(commentsResult.value.data as Partial<Comment>[]),
+      userId,
       ready: true,
     };
   } catch {
