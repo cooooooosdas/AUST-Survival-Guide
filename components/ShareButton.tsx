@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Share2, MessageCircleMore, Circle, Link2, Check } from "lucide-react";
+import { useState } from "react";
+import { Check, Share2 } from "lucide-react";
 
 type Props = {
   targetType: string;
@@ -11,18 +11,6 @@ type Props = {
   url?: string;
 };
 
-type Channel = "wechat" | "wechat_moments" | "copy_link";
-
-const CHANNELS: {
-  key: Channel;
-  label: string;
-  Icon: typeof MessageCircleMore;
-}[] = [
-  { key: "wechat", label: "微信好友", Icon: MessageCircleMore },
-  { key: "wechat_moments", label: "朋友圈", Icon: Circle },
-  { key: "copy_link", label: "复制链接", Icon: Link2 },
-];
-
 export default function ShareButton({
   targetType,
   targetId,
@@ -30,115 +18,79 @@ export default function ShareButton({
   excerpt,
   url,
 }: Props) {
+  const [busy, setBusy] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [feedbackIsError, setFeedbackIsError] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-  const shareUrl =
-    url || (typeof window !== "undefined" ? window.location.href : "");
 
-  // Escape 关闭下拉菜单
-  useEffect(() => {
-    if (!showMenu) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setShowMenu(false);
-    }
-    document.addEventListener("keydown", onKey);
-    return () => document.removeEventListener("keydown", onKey);
-  }, [showMenu]);
-
-  async function trackShare(channel: Channel) {
+  async function copyLink(shareUrl: string): Promise<void> {
     try {
-      await fetch("/api/shares", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ target_type: targetType, target_id: targetId, channel }),
-      });
-    } catch {
-      // ignore
-    }
-  }
-
-  async function copyLink() {
-    try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
       await navigator.clipboard.writeText(shareUrl);
-      setCopied(true);
-      await trackShare("copy_link");
-      setTimeout(() => setCopied(false), 2000);
     } catch {
-      // fallback
-      const ta = document.createElement("textarea");
-      ta.value = shareUrl;
-      ta.style.position = "fixed";
-      ta.style.opacity = "0";
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      setCopied(true);
-      await trackShare("copy_link");
-      setTimeout(() => setCopied(false), 2000);
+      const input = document.createElement("textarea");
+      input.value = shareUrl;
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      try {
+        if (!document.execCommand("copy")) throw new Error("Copy failed");
+      } finally {
+        input.remove();
+      }
+    }
+    setCopied(true);
+    setFeedback("链接已复制，可以粘贴分享");
+    setFeedbackIsError(false);
+    void fetch("/api/shares", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ target_type: targetType, target_id: targetId, channel: "copy_link" }),
+    }).catch(() => {});
+  }
+
+  async function share() {
+    if (busy) return;
+    setBusy(true);
+    setFeedback("");
+    setFeedbackIsError(false);
+    setCopied(false);
+    const shareUrl = url || window.location.href;
+    try {
+      if (navigator.share) {
+        try {
+          await navigator.share({ title, text: excerpt, url: shareUrl });
+          setFeedback("已交给系统分享");
+          return;
+        } catch (error) {
+          if (error instanceof DOMException && error.name === "AbortError") return;
+        }
+      }
+      await copyLink(shareUrl);
+    } catch {
+      setFeedback("复制失败，请从地址栏复制链接");
+      setFeedbackIsError(true);
+    } finally {
+      setBusy(false);
     }
   }
-
-  function handleWechatShare(channel: Channel) {
-    trackShare(channel);
-    alert(
-      "微信分享需要在微信内置浏览器中打开。\n\n请点击右上角「···」→「分享到朋友圈」或「发送给朋友」。\n\n分享文案：\n" +
-        `${title}\n${excerpt || ""}\n${shareUrl}`
-    );
-  }
-
-  const shareText = `${title}\n${excerpt || ""}\n${shareUrl}`;
 
   return (
-    <div className="relative inline-flex">
+    <div className="relative inline-flex flex-col items-start gap-1">
       <button
         type="button"
-        onClick={() => setShowMenu((v) => !v)}
-        aria-haspopup="true"
-        aria-expanded={showMenu}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-2 text-sm text-muted transition-all duration-200 hover:border-primary hover:text-primary"
+        onClick={share}
+        disabled={busy}
+        className="inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border px-3 py-2 text-sm text-muted transition-colors hover:border-primary hover:text-primary disabled:opacity-60"
       >
-        <Share2 className="h-4 w-4" strokeWidth={2} />
-        <span>分享</span>
+        {copied ? <Check className="h-4 w-4" aria-hidden /> : <Share2 className="h-4 w-4" aria-hidden />}
+        <span>{busy ? "处理中…" : copied ? "已复制" : "分享"}</span>
       </button>
-
-      {showMenu && (
-        <>
-          <div
-            className="fixed inset-0 z-40"
-            onClick={() => setShowMenu(false)}
-          />
-          <div className="absolute bottom-full right-0 z-50 mb-2 w-48 card overflow-hidden shadow-lg">
-            {CHANNELS.map((ch) => {
-              const Icon = ch.Icon;
-              return (
-                <button
-                  key={ch.key}
-                  type="button"
-                  onClick={() => {
-                    setShowMenu(false);
-                    if (ch.key === "copy_link") copyLink();
-                    else handleWechatShare(ch.key);
-                  }}
-                  className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-text transition-colors hover:bg-bg-alt"
-                >
-                  <Icon className="h-4 w-4 text-muted" strokeWidth={2} />
-                  <span>
-                    {copied && ch.key === "copy_link"
-                      ? "已复制"
-                      : ch.label}
-                  </span>
-                  {copied && ch.key === "copy_link" && (
-                    <Check className="ml-auto h-3.5 w-3.5 text-primary" />
-                  )}
-                </button>
-              );
-            })}
-            <div className="border-t border-border px-4 py-2">
-              <p className="text-[10px] text-muted break-all">{shareText}</p>
-            </div>
-          </div>
-        </>
+      {feedback && (
+        <span role={feedbackIsError ? "alert" : "status"} className="max-w-48 text-xs text-muted">
+          {feedback}
+        </span>
       )}
     </div>
   );

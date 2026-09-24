@@ -31,19 +31,20 @@ export async function POST(request: NextRequest) {
     return bad(400, "缺少 target_id");
   }
 
-  const allowed = ["letter", "comment", "link_group", "resource"];
+  const allowed = ["letter", "comment"];
   if (!allowed.includes(target_type)) {
     return bad(400, `target_type 必须是 ${allowed.join("/")} 之一`);
   }
 
   // 检查是否已点赞
-  const { data: existing } = await supabase
+  const { data: existing, error: selectError } = await supabase
     .from("likes")
     .select("id")
     .eq("user_id", user.id)
     .eq("target_type", target_type)
     .eq("target_id", target_id)
     .maybeSingle();
+  if (selectError) return bad(500, "暂时无法读取点赞状态");
 
   if (existing) {
     // 取消点赞
@@ -52,7 +53,12 @@ export async function POST(request: NextRequest) {
       .delete()
       .eq("id", existing.id);
     if (error) return bad(500, error.message);
-    return NextResponse.json({ liked: false, count: null });
+    const { count } = await supabase
+      .from("likes")
+      .select("*", { count: "exact", head: true })
+      .eq("target_type", target_type)
+      .eq("target_id", target_id);
+    return NextResponse.json({ liked: false, count });
   }
 
   // 点赞

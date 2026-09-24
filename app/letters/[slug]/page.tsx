@@ -254,6 +254,7 @@ export default async function LetterPage({
           <FavoriteButton
             targetType="letter"
             targetId={slug}
+            currentUserId={userId}
             initialFavorited={userFavorited}
           />
           <ShareButton

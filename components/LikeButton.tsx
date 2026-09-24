@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Heart, LogIn } from "lucide-react";
 
 type Props = {
@@ -24,6 +25,7 @@ export default function LikeButton({
   const [loading, setLoading] = useState(false);
   const [pulse, setPulse] = useState(false);
   const [error, setError] = useState("");
+  const pathname = usePathname();
 
   async function toggle() {
     if (loading) return;
@@ -62,7 +64,7 @@ export default function LikeButton({
     return (
       <div className="inline-flex flex-col items-start gap-1">
         <Link
-          href="/login"
+          href={`/login?next=${encodeURIComponent(pathname)}`}
           className="motion-press inline-flex items-center gap-1.5 rounded-md border border-border bg-bg px-3 py-2 text-sm text-muted transition-colors hover:border-primary hover:text-primary"
         >
           <Heart className="h-4 w-4" strokeWidth={2} />

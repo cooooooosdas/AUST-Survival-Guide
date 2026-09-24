@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Bookmark } from "lucide-react";
+import Link from "next/link";
+import { Bookmark, LogIn } from "lucide-react";
 
 type Props = {
   targetType: string;
   targetId: string;
+  currentUserId?: string | null;
   initialFavorited?: boolean;
   refreshOnChange?: boolean;
 };
@@ -14,6 +16,7 @@ type Props = {
 export default function FavoriteButton({
   targetType,
   targetId,
+  currentUserId,
   initialFavorited = false,
   refreshOnChange = false,
 }: Props) {
@@ -22,6 +25,7 @@ export default function FavoriteButton({
   const [favorited, setFavorited] = useState(() => initialFavorited);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const loginHref = `/login?next=${encodeURIComponent(pathname)}`;
 
   async function toggle() {
     if (loading) return;
@@ -36,7 +40,7 @@ export default function FavoriteButton({
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
         if (res.status === 401) {
-          router.push(`/login?next=${encodeURIComponent(pathname)}`);
+          router.push(loginHref);
         } else {
           setError(json.error ?? "保存失败，请稍后重试");
         }
@@ -50,6 +54,23 @@ export default function FavoriteButton({
     } finally {
       setLoading(false);
     }
+  }
+
+  if (!currentUserId) {
+    return (
+      <Link
+        href={loginHref}
+        className="motion-press inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm text-muted hover:border-secondary hover:text-secondary"
+        aria-label="登录后加入稍后读"
+      >
+        <Bookmark className="h-4 w-4" strokeWidth={1.8} />
+        <span>稍后读</span>
+        <span className="ml-1 inline-flex items-center gap-1 text-xs">
+          <LogIn className="h-3 w-3" strokeWidth={2} />
+          先登录
+        </span>
+      </Link>
+    );
   }
 
   return (

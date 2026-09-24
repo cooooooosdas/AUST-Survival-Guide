@@ -109,6 +109,7 @@ function LazyFavicon({ host, title }: { host: string; title: string }) {
 /* ---------- 主组件 ---------- */
 export default function LinkCard({ item, sectionSlug }: Props) {
   const [copied, setCopied] = useState(false);
+  const [copyError, setCopyError] = useState("");
   const [reportOpen, setReportOpen] = useState(false);
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -136,13 +137,32 @@ export default function LinkCard({ item, sectionSlug }: Props) {
     e.preventDefault();
     e.stopPropagation();
     if (!item.url) return;
+    setCopyError("");
     try {
+      if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
       await navigator.clipboard.writeText(item.url);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
     } catch {
-      setError("复制失败，请手动复制");
+      const input = document.createElement("textarea");
+      input.value = item.url;
+      input.style.position = "fixed";
+      input.style.opacity = "0";
+      document.body.appendChild(input);
+      input.select();
+      let copiedByFallback = false;
+      try {
+        copiedByFallback = document.execCommand("copy");
+      } catch {
+        copiedByFallback = false;
+      } finally {
+        input.remove();
+      }
+      if (!copiedByFallback) {
+        setCopyError("复制失败，请手动复制链接");
+        return;
+      }
     }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
   }
 
   function openReport(e: React.MouseEvent) {
@@ -282,7 +302,12 @@ export default function LinkCard({ item, sectionSlug }: Props) {
             </button>
           </div>
         </div>
-        <span className="sr-only" aria-live="polite">
+        {copyError && (
+          <p role="alert" className="px-4 pb-2 text-xs text-red-600">
+            {copyError}
+          </p>
+        )}
+        <span className="sr-only" role="status">
           {copied ? `${item.title}链接已复制` : ""}
         </span>
       </article>

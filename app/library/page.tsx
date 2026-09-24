@@ -220,6 +220,7 @@ export default async function LibraryPage() {
                 <FavoriteButton
                   targetType={item.targetType}
                   targetId={item.targetId}
+                  currentUserId={user.id}
                   initialFavorited
                   refreshOnChange
                 />

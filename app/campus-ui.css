@@ -1082,3 +1082,52 @@ fieldset:disabled .ui-button {
     animation: none;
   }
 }
+
+/* 统一标识可点击区域：链接、操作按钮与可展开项使用蓝色底色。 */
+a[href],
+button:not(:disabled),
+summary,
+[role="button"]:not([aria-disabled="true"]) {
+  background-color: var(--color-clickable-bg);
+  cursor: pointer;
+}
+
+label.cursor-pointer {
+  background-color: var(--color-clickable-bg);
+}
+
+a[href]:hover,
+button:not(:disabled):hover,
+summary:hover,
+[role="button"]:not([aria-disabled="true"]):hover {
+  background-color: var(--color-clickable-hover);
+}
+
+label.cursor-pointer:hover {
+  background-color: var(--color-clickable-hover);
+}
+
+/* 主操作保留更强的蓝色层级；危险操作保留警示色。 */
+a[href].ui-button-primary,
+button.ui-button-primary,
+a[class~="bg-primary"],
+button[class~="bg-primary"] {
+  background-color: var(--color-primary);
+}
+
+a[href].ui-button-primary:hover,
+button.ui-button-primary:hover,
+a[class~="bg-primary"]:hover,
+button[class~="bg-primary"]:hover {
+  background-color: var(--color-primary-hover);
+}
+
+a[class~="bg-secondary"],
+button[class~="bg-secondary"] {
+  background-color: var(--color-secondary);
+}
+
+a[class~="bg-red-600"],
+button[class~="bg-red-600"] {
+  background-color: #dc2626;
+}

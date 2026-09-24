@@ -19,11 +19,13 @@
   --color-border-hover: #AFC9BE;
 
   /* ---------- 主色（校园绿，用于主要交互） ---------- */
-  --color-primary: #147A64;
-  --color-primary-hover: #0F6754;
-  --color-primary-light: #E3F5EF;
-  --color-primary-ghost: rgba(20, 122, 100, 0.09);
-  --color-primary-ring: rgba(20, 122, 100, 0.32);
+  --color-primary: #1D63C6;
+  --color-primary-hover: #1552A9;
+  --color-primary-light: #E7F0FF;
+  --color-primary-ghost: rgba(29, 99, 198, 0.09);
+  --color-primary-ring: rgba(29, 99, 198, 0.35);
+  --color-clickable-bg: #EDF4FF;
+  --color-clickable-hover: #DCEAFF;
 
   /* ---------- 辅色（蓝图蓝，用于资料与导航） ---------- */
   --color-secondary: #2F6FED;
@@ -722,11 +724,13 @@ select:focus-visible {
   --color-accent-ghost: rgba(245, 183, 80, 0.12);
   --color-accent-ring: rgba(245, 183, 80, 0.3);
 
-  --color-primary: #5BD8BC;
-  --color-primary-hover: #41BFA4;
-  --color-primary-light: #123C34;
-  --color-primary-ghost: rgba(91, 216, 188, 0.12);
-  --color-primary-ring: rgba(91, 216, 188, 0.35);
+  --color-primary: #93BBFF;
+  --color-primary-hover: #B5D2FF;
+  --color-primary-light: #1B3458;
+  --color-primary-ghost: rgba(147, 187, 255, 0.12);
+  --color-primary-ring: rgba(147, 187, 255, 0.4);
+  --color-clickable-bg: #192D4A;
+  --color-clickable-hover: #25436C;
 
   --color-secondary: #74A6FF;
   --color-secondary-hover: #5C8FE9;

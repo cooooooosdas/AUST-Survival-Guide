@@ -125,6 +125,7 @@ export default async function ResourceDetailPage({ params }: { params: Promise<{
           <FavoriteButton
             targetType="resource"
             targetId={String(resource.id)}
+            currentUserId={readerState.viewerId}
             initialFavorited={readerState.favorited}
           />
         </div>
