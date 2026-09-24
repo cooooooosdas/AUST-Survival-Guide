@@ -27,7 +27,7 @@ const paths = [
     title: "把想学的，变成今天可以开始的事。",
     description: "找一门课程、安排一次练习，用适合自己的步调坚持下去。",
     links: [
-      { href: "/learn", label: "寻找学习资料" },
+      { href: "/letters/cs-first-semester", label: "读计算机入学指南" },
       { href: "/checkin", label: "开始学习打卡" },
     ],
   },

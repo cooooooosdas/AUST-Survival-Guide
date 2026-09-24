@@ -198,16 +198,16 @@ fieldset:disabled .ui-button {
   display: none;
 }
 .campus-home {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 40px;
 }
 .campus-hero {
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: 56px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(40px, 5vw, 88px);
   align-items: center;
-  padding: 64px 0 56px;
+  padding: 88px 0 84px;
 }
 .status-dot {
   width: 7px;
@@ -216,10 +216,10 @@ fieldset:disabled .ui-button {
   background: var(--color-primary);
 }
 .campus-hero h1 {
-  margin-top: 24px;
+  margin-top: 30px;
   font-family: var(--font-noto-serif), "Songti SC", serif;
-  font-size: clamp(36px, 4.2vw, 58px);
-  line-height: 1.35;
+  font-size: clamp(52px, 5.3vw, 80px);
+  line-height: 1.22;
   font-weight: 600;
   letter-spacing: -0.04em;
 }
@@ -227,22 +227,22 @@ fieldset:disabled .ui-button {
   color: var(--color-primary);
 }
 .hero-description {
-  margin-top: 24px;
+  margin-top: 32px;
   color: var(--color-text-secondary);
-  font-size: 15px;
-  line-height: 1.95;
+  font-size: 18px;
+  line-height: 1.85;
 }
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 36px;
 }
 .home-search {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 26px;
+  margin-top: 38px;
   border: 1px solid var(--color-border);
   border-radius: 12px;
   background: var(--color-surface);
@@ -261,7 +261,7 @@ fieldset:disabled .ui-button {
   min-width: 0;
   min-height: 44px;
   color: var(--color-text);
-  font-size: 14px;
+  font-size: 16px;
   outline: none;
   background: transparent;
 }
@@ -278,8 +278,8 @@ fieldset:disabled .ui-button {
   background: var(--color-primary-light);
 }
 .hero-note {
-  margin-top: 12px;
-  font-size: 12px;
+  margin-top: 16px;
+  font-size: 14px;
   color: var(--color-muted);
 }
 .campus-hero-visual {
@@ -287,8 +287,8 @@ fieldset:disabled .ui-button {
 }
 .campus-cover {
   position: relative;
-  height: 410px;
-  border-radius: 100px 20px 20px 20px;
+  height: 520px;
+  border-radius: 128px 22px 22px 22px;
   overflow: hidden;
   background: var(--color-bg-alt);
 }
@@ -304,26 +304,26 @@ fieldset:disabled .ui-button {
 }
 .campus-cover-caption {
   position: absolute;
-  bottom: 28px;
-  left: 28px;
+  bottom: 36px;
+  left: 36px;
   z-index: 1;
   color: white;
 }
 .campus-cover-caption span {
-  font-size: 12px;
+  font-size: 14px;
   letter-spacing: 0.08em;
 }
 .campus-cover-caption strong {
   display: block;
   margin-top: 10px;
   font-family: var(--font-noto-serif), serif;
-  font-size: 32px;
+  font-size: 38px;
   font-weight: 500;
 }
 .campus-caption {
   margin-top: 10px;
   color: var(--color-muted);
-  font-size: 10px;
+  font-size: 12px;
   text-align: right;
   line-height: 1.8;
 }
@@ -334,8 +334,8 @@ fieldset:disabled .ui-button {
   display: flex;
   align-items: center;
   gap: 16px;
-  padding: 20px 0;
-  margin-top: 4px;
+  padding: 24px 0;
+  margin-top: 10px;
   border-bottom: 1px solid var(--color-border);
 }
 .campus-feature-icon {
@@ -351,12 +351,12 @@ fieldset:disabled .ui-button {
 .campus-feature small {
   display: block;
   color: var(--color-muted);
-  font-size: 11px;
+  font-size: 13px;
   margin-bottom: 5px;
 }
 .campus-feature strong {
   font-weight: 500;
-  font-size: 15px;
+  font-size: 18px;
 }
 .campus-feature > svg {
   margin-left: auto;
@@ -366,8 +366,8 @@ fieldset:disabled .ui-button {
 .start-guide {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  padding: 32px;
+  gap: 64px;
+  padding: 48px;
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   border-radius: 20px;
@@ -378,20 +378,20 @@ fieldset:disabled .ui-button {
 .community-invite h2 {
   font-family: var(--font-noto-serif), serif;
   font-weight: 600;
-  font-size: 26px;
-  margin-top: 12px;
-  line-height: 1.5;
+  font-size: clamp(30px, 3vw, 42px);
+  margin-top: 14px;
+  line-height: 1.35;
 }
 .start-guide-intro > p {
-  margin-top: 8px;
+  margin-top: 14px;
   color: var(--color-muted);
-  font-size: 14px;
+  font-size: 16px;
 }
 .guide-choices {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 24px;
+  gap: 10px;
+  margin-top: 32px;
 }
 .guide-choices button {
   display: inline-flex;
@@ -399,9 +399,9 @@ fieldset:disabled .ui-button {
   align-items: center;
   gap: 7px;
   border: 1px solid var(--color-border);
-  padding: 8px 12px;
+  padding: 10px 16px;
   border-radius: 10px;
-  font-size: 13px;
+  font-size: 15px;
 }
 .guide-choices button[aria-pressed="true"] {
   background: var(--color-primary-light);
@@ -409,65 +409,72 @@ fieldset:disabled .ui-button {
   color: var(--color-primary);
 }
 .guide-result {
-  padding: 24px;
+  padding: 34px;
   border-radius: 14px;
   background: var(--color-bg);
 }
 .guide-result h3 {
-  margin-top: 12px;
-  font-size: 17px;
+  margin-top: 18px;
+  font-size: 22px;
   line-height: 1.6;
   font-weight: 600;
 }
 .guide-result p {
-  font-size: 13px;
+  font-size: 16px;
   color: var(--color-text-secondary);
   line-height: 1.9;
-  margin-top: 8px;
+  margin-top: 12px;
 }
 .guide-result-links {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 20px;
-  margin-top: 16px;
+  margin-top: 22px;
 }
 .guide-result-links a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   gap: 8px;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--color-primary);
   font-weight: 500;
 }
 .home-directory {
-  padding-top: 64px;
+  padding-top: 104px;
 }
 .home-section-heading {
   display: flex;
   justify-content: space-between;
   align-items: end;
   gap: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 36px;
+}
+.home-section-deck {
+  margin-top: 12px;
+  color: var(--color-text-secondary);
+  font-size: 17px;
+  line-height: 1.7;
 }
 .home-section-heading > a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 44px;
-  font-size: 13px;
+  font-size: 15px;
   color: var(--color-primary);
 }
 .home-directory-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
 }
 .home-directory-card {
   position: relative;
   border: 1px solid var(--color-border);
   border-radius: 16px;
-  padding: 24px;
+  min-height: 216px;
+  padding: 32px;
   background: var(--color-surface);
   transition:
     border-color 0.2s,
@@ -498,13 +505,13 @@ fieldset:disabled .ui-button {
   color: var(--color-muted);
 }
 .home-directory-card h3 {
-  margin-top: 22px;
-  font-size: 16px;
+  margin-top: 28px;
+  font-size: 21px;
   font-weight: 600;
 }
 .home-directory-card p {
-  margin-top: 8px;
-  font-size: 12px;
+  margin-top: 10px;
+  font-size: 15px;
   line-height: 1.8;
   color: var(--color-text-secondary);
 }
@@ -515,19 +522,19 @@ fieldset:disabled .ui-button {
   gap: 32px;
   border-radius: 20px;
   background: var(--color-primary-light);
-  padding: 32px;
+  padding: 48px;
 }
 .community-invite p {
-  margin-top: 10px;
+  margin-top: 16px;
   color: var(--color-text-secondary);
-  font-size: 14px;
+  font-size: 17px;
   line-height: 1.8;
 }
 .community-invite .ui-button {
   flex-shrink: 0;
 }
 .home-comments {
-  padding: 64px 0 40px;
+  padding: 96px 0 52px;
 }
 .home-site-note {
   border-top: 1px solid var(--color-border);
@@ -868,6 +875,18 @@ fieldset:disabled .ui-button {
   .campus-hero {
     gap: 32px;
   }
+  .campus-home {
+    padding: 0 28px;
+  }
+  .campus-hero h1 {
+    font-size: clamp(46px, 5.6vw, 64px);
+  }
+  .campus-cover {
+    height: 440px;
+  }
+  .home-directory-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
   .guide-choices {
     flex-direction: column;
     align-items: stretch;
@@ -923,20 +942,21 @@ fieldset:disabled .ui-button {
   }
   .campus-hero {
     grid-template-columns: 1fr;
-    padding: 36px 0;
-    gap: 30px;
+    padding: 48px 0 56px;
+    gap: 40px;
   }
   .campus-hero h1 {
-    margin-top: 18px;
-    font-size: clamp(32px, 8vw, 46px);
+    margin-top: 24px;
+    font-size: clamp(39px, 10vw, 56px);
+    line-height: 1.28;
   }
   .hero-description {
-    margin-top: 20px;
-    font-size: 14px;
+    margin-top: 24px;
+    font-size: 16px;
   }
   .hero-actions {
-    margin-top: 22px;
-    gap: 8px;
+    margin-top: 30px;
+    gap: 10px;
   }
   .hero-actions .ui-button {
     padding: 12px 14px;
@@ -946,30 +966,30 @@ fieldset:disabled .ui-button {
     font-size: 16px;
   }
   .home-search input::placeholder {
-    font-size: 12px;
+    font-size: 14px;
   }
   .campus-cover {
-    height: 260px;
-    border-radius: 48px 16px 16px 16px;
+    height: 320px;
+    border-radius: 64px 18px 18px 18px;
   }
   .campus-cover-caption strong {
-    font-size: 27px;
+    font-size: 30px;
   }
   .campus-feature strong {
-    font-size: 13px;
+    font-size: 16px;
   }
   .campus-feature {
     gap: 12px;
   }
   .start-guide {
     grid-template-columns: 1fr;
-    padding: 24px 20px;
-    gap: 24px;
+    padding: 32px 24px;
+    gap: 30px;
   }
   .start-guide h2,
   .home-section-heading h2,
   .community-invite h2 {
-    font-size: 23px;
+    font-size: 30px;
   }
   .guide-choices {
     flex-direction: row;
@@ -980,10 +1000,10 @@ fieldset:disabled .ui-button {
     justify-content: center;
   }
   .guide-result {
-    padding: 20px;
+    padding: 24px;
   }
   .home-directory {
-    padding-top: 44px;
+    padding-top: 72px;
   }
   .home-section-heading {
     flex-direction: column;
@@ -991,28 +1011,29 @@ fieldset:disabled .ui-button {
     gap: 6px;
   }
   .home-directory-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
   .home-directory-card {
-    padding: 18px 14px;
+    min-height: 0;
+    padding: 28px;
   }
   .directory-card-arrow {
     right: 12px;
     top: 18px;
   }
   .home-directory-card h3 {
-    margin-top: 18px;
-    font-size: 15px;
+    margin-top: 24px;
+    font-size: 20px;
   }
   .community-invite {
     flex-direction: column;
     align-items: flex-start;
-    padding: 24px;
+    padding: 32px 24px;
     gap: 22px;
   }
   .home-comments {
-    padding-top: 44px;
+    padding-top: 72px;
   }
   .auth-page {
     padding: 16px 16px 32px;

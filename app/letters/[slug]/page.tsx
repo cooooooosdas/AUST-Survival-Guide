@@ -209,7 +209,7 @@ export default async function LetterPage({
     <>
       <LetterToc headings={headings} />
       <ViewTracker targetType="letter" targetId={slug} viewerId={userId} />
-      <article className="mx-auto max-w-2xl px-4 py-10 sm:px-6 sm:py-14 md:max-w-3xl md:py-16 lg:max-w-4xl">
+      <article className="mx-auto max-w-2xl px-5 py-12 sm:px-8 sm:py-16 md:max-w-3xl md:py-20 lg:max-w-5xl">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -228,7 +228,7 @@ export default async function LetterPage({
           <span>{letter.author}</span>
           <span>· 约 {minutes} 分钟</span>
         </div>
-        <h1 className="mt-3 text-balance text-3xl font-serif font-bold leading-tight tracking-[-0.025em] text-text md:text-4xl">
+        <h1 className="mt-5 max-w-4xl text-balance text-4xl font-serif font-bold leading-tight tracking-[-0.025em] text-text md:text-5xl">
           {letter.title}
         </h1>
         {letter.tags && letter.tags.length > 0 && (
@@ -265,8 +265,8 @@ export default async function LetterPage({
         </div>
       </header>
 
-      <div className="mt-6 min-w-0 overflow-hidden rounded-xl border border-border bg-surface p-4 shadow-xs sm:mt-8 sm:p-6 md:p-10">
-        <div className="prose min-w-0 break-words">
+      <div className="mt-8 min-w-0 overflow-hidden rounded-2xl border border-border bg-surface p-5 shadow-xs sm:mt-10 sm:p-8 md:p-14">
+        <div className="prose mx-auto max-w-[74ch] min-w-0 break-words">
           <Letter />
         </div>
       </div>

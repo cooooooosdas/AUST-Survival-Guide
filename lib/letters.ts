@@ -19,8 +19,19 @@ type LetterEntry = LetterMeta & {
   load: () => Promise<LetterModule>;
 };
 
-// 按时间倒序排列；新增信件时直接在最上方加一项 + 在 content/letters/ 下放对应 mdx
+// 新信件在此注册；展示层按日期排序，同时在 content/letters/ 下放对应 MDX。
 export const LETTERS: LetterEntry[] = [
+  {
+    slug: "cs-first-semester",
+    title: "计算机新生：从这里开始",
+    excerpt:
+      "从课程地图、编程环境和调试方法，到数学英语、小项目与四周起步计划。给刚入学的你一条不必焦虑的学习路径。",
+    date: "2026-09-24",
+    author: "coolin",
+    tags: ["计算机新生", "大学学习", "编程入门", "学习方法"],
+    readingTime: 10,
+    load: () => import("@/content/letters/cs-first-semester.mdx"),
+  },
   {
     slug: "aust-complete-guide",
     title: "安徽理工大学完全指南",

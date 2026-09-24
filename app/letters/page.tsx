@@ -16,25 +16,25 @@ export default function LettersIndexPage() {
   );
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14 md:py-16">
+    <div className="mx-auto max-w-5xl px-5 py-14 sm:px-8 sm:py-20 md:py-24">
       <header>
-        <p className="text-sm uppercase tracking-[0.2em] text-accent font-medium">letters</p>
-        <h1 className="mt-3 text-3xl md:text-4xl font-serif font-bold text-text tracking-tight">
+        <p className="text-sm uppercase tracking-[0.2em] text-accent font-medium">写给还在摸索的你</p>
+        <h1 className="mt-4 text-5xl md:text-6xl font-serif font-bold text-text tracking-tight">
           学长来信
         </h1>
         <div className="mt-4 mb-6 h-[2px] w-12 bg-text" />
-        <p className="max-w-prose text-muted text-[15px] leading-relaxed">
+        <p className="max-w-2xl text-text-secondary text-lg leading-8">
           挑几个我和你这个时候真的想问明白的问题，慢慢写。不定期更新——你可以直接在每封信下面留言。
         </p>
       </header>
 
-      <ul className="mt-9 space-y-3 sm:mt-12 sm:space-y-4">
+      <ul className="mt-12 space-y-5 sm:mt-16 sm:space-y-6">
         {letters.map((letter, i) => (
           <ScrollReveal key={letter.slug} delay={60 + i * 80}>
             <li>
               <Link
                 href={`/letters/${letter.slug}`}
-                className="group card card-hover flex flex-col gap-3 p-5 sm:p-6"
+                className="group card card-hover flex flex-col gap-4 p-7 sm:p-9"
               >
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
                   <time dateTime={letter.date}>{formatDate(letter.date)}</time>
@@ -43,10 +43,10 @@ export default function LettersIndexPage() {
                   <span className="text-border">·</span>
                   <span>{letter.author}</span>
                 </div>
-                <h2 className="text-balance text-xl font-serif font-semibold leading-snug text-text transition-colors group-hover:text-primary">
+                <h2 className="text-balance text-2xl sm:text-3xl font-serif font-semibold leading-snug text-text transition-colors group-hover:text-primary">
                   {letter.title}
                 </h2>
-                <p className="text-sm text-text-secondary leading-relaxed">
+                <p className="text-base sm:text-lg text-text-secondary leading-relaxed">
                   {letter.excerpt}
                 </p>
                 {letter.tags && letter.tags.length > 0 && (

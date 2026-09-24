@@ -82,8 +82,6 @@ const FALLBACK_DATA = {
     { label: "访问人数", value: "统计中" },
     { label: "维护状态", value: "长期" },
   ] as HomeStat[],
-  sparklineData: [] as number[],
-  weeklyChange: null as number | null,
 };
 
 function formatStatCount(value: number): string {
@@ -92,11 +90,7 @@ function formatStatCount(value: number): string {
   return value.toLocaleString("zh-CN");
 }
 
-async function loadHomeStats(): Promise<{
-  stats: HomeStat[];
-  sparklineData: number[];
-  weeklyChange: number | null;
-}> {
+async function loadHomeStats(): Promise<{ stats: HomeStat[] }> {
   const fallback = FALLBACK_DATA;
 
   if (
@@ -108,44 +102,15 @@ async function loadHomeStats(): Promise<{
 
   try {
     const supabase = await createClient();
-    const since = new Date(Date.now() - 13 * 24 * 60 * 60 * 1000).toISOString();
-
-    const [{ data: viewRow, error }, { data: recentViews }] = await Promise.all(
-      [
-        supabase
-          .from("site_visit_stats")
-          .select("total_views, unique_visitors")
-          .maybeSingle(),
-        supabase
-          .from("content_views")
-          .select("created_at")
-          .gte("created_at", since)
-          .limit(2000),
-      ],
-    );
+    const { data: viewRow, error } = await supabase
+      .from("site_visit_stats")
+      .select("total_views, unique_visitors")
+      .maybeSingle();
 
     if (error) {
       console.error("Failed to load home stats:", error);
       return fallback;
     }
-
-    // 按天聚合近 14 天访问量（index 0 = 13 天前, index 13 = 今天）
-    const series = Array(14).fill(0) as number[];
-    for (const v of recentViews ?? []) {
-      const d = new Date(v.created_at);
-      const daysAgo = Math.floor((Date.now() - d.getTime()) / 86400000);
-      if (daysAgo >= 0 && daysAgo < 14) {
-        series[13 - daysAgo] = (series[13 - daysAgo] ?? 0) + 1;
-      }
-    }
-
-    // 本周 vs 上周变化率
-    const thisWeek = series.slice(7).reduce((a, b) => a + b, 0);
-    const lastWeek = series.slice(0, 7).reduce((a, b) => a + b, 0);
-    const weeklyChange =
-      lastWeek > 0
-        ? Math.round(((thisWeek - lastWeek) / lastWeek) * 100)
-        : null;
 
     return {
       stats: [
@@ -159,8 +124,6 @@ async function loadHomeStats(): Promise<{
         },
         { label: "维护状态", value: "长期" },
       ],
-      sparklineData: series,
-      weeklyChange,
     };
   } catch (e) {
     console.error("Failed to load home stats:", e);
@@ -210,10 +173,10 @@ export default async function HomePage() {
               <ArrowRight size={18} aria-hidden />
             </Link>
             <Link
-              href="/letters/freshman-handbook"
+              href="/letters/cs-first-semester"
               className="ui-button ui-button-secondary"
             >
-              读新生手册
+              读计算机入学指南
               <BookOpen size={18} aria-hidden />
             </Link>
           </div>
@@ -267,13 +230,13 @@ export default async function HomePage() {
               图源：安徽理工大学新闻网 / 新媒体中心
             </a>
           </div>
-          <Link href="/letters/aust-complete-guide" className="campus-feature">
+          <Link href="/letters/cs-first-semester" className="campus-feature">
             <span className="campus-feature-icon">
               <Compass size={24} aria-hidden />
             </span>
             <span>
-              <small>校园生活指南</small>
-              <strong>把陌生的校园，过成熟悉的日常。</strong>
+              <small>本期学长来信 · 约 10 分钟</small>
+              <strong>刚入学学计算机，先从哪里开始？</strong>
             </span>
             <ArrowUpRight size={22} aria-hidden />
           </Link>
@@ -287,6 +250,7 @@ export default async function HomePage() {
           <div>
             <span className="eyebrow">随用随查</span>
             <h2 id="directory-title">大学生活的常用入口</h2>
+            <p className="home-section-deck">少走几步弯路，把时间留给真正想做的事。</p>
           </div>
           <Link href="/search">
             搜索全部内容
