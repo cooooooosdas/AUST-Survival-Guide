@@ -25,14 +25,14 @@
     transform 0.2s;
 }
 .ui-button-primary {
-  background: var(--color-primary);
+  background: var(--color-primary-solid);
   color: #fff;
 }
 .ui-button-primary:hover {
-  background: var(--color-primary-hover);
+  background: var(--color-primary-solid-hover);
 }
 .dark .ui-button-primary {
-  color: #0c1916;
+  color: #fff;
 }
 .ui-button-secondary {
   background: var(--color-surface);
@@ -53,8 +53,8 @@ fieldset:disabled .ui-button {
   top: 0;
   z-index: 40;
   border-bottom: 1px solid var(--color-border);
-  background: color-mix(in srgb, var(--color-bg) 94%, transparent);
-  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--color-surface) 96%, transparent);
+  backdrop-filter: blur(10px);
 }
 .site-header-inner {
   max-width: 1200px;
@@ -207,7 +207,7 @@ fieldset:disabled .ui-button {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: clamp(40px, 5vw, 88px);
   align-items: center;
-  padding: 88px 0 84px;
+  padding: 92px 0 104px;
 }
 .status-dot {
   width: 7px;
@@ -221,7 +221,7 @@ fieldset:disabled .ui-button {
   font-size: clamp(52px, 5.3vw, 80px);
   line-height: 1.22;
   font-weight: 600;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.025em;
 }
 .campus-hero h1 span {
   color: var(--color-primary);
@@ -288,7 +288,7 @@ fieldset:disabled .ui-button {
 .campus-cover {
   position: relative;
   height: 520px;
-  border-radius: 128px 22px 22px 22px;
+  border-radius: 22px;
   overflow: hidden;
   background: var(--color-bg-alt);
 }
@@ -296,7 +296,7 @@ fieldset:disabled .ui-button {
   position: absolute;
   content: "";
   inset: 45% 0 0;
-  background: linear-gradient(transparent, rgba(9, 35, 30, 0.82));
+  background: linear-gradient(transparent, rgba(29, 20, 38, 0.82));
   pointer-events: none;
 }
 .campus-cover img {
@@ -481,8 +481,8 @@ fieldset:disabled .ui-button {
     transform 0.2s;
 }
 .home-directory-card:hover {
-  border-color: var(--color-primary);
-  transform: translateY(-3px);
+  border-color: var(--color-border-hover);
+  transform: translateY(-2px);
 }
 .directory-card-icon {
   display: inline-flex;
@@ -495,8 +495,8 @@ fieldset:disabled .ui-button {
   color: var(--color-primary);
 }
 .home-directory-card:nth-child(4n + 2) .directory-card-icon {
-  background: var(--color-secondary-light);
-  color: var(--color-secondary);
+  background: var(--color-bg-alt);
+  color: var(--color-primary);
 }
 .directory-card-arrow {
   position: absolute;
@@ -582,11 +582,12 @@ fieldset:disabled .ui-button {
   padding: 10px 12px;
   font-size: 14px;
   color: var(--color-text-secondary);
+  background: var(--color-clickable-bg);
 }
 .section-directory-links a[aria-current],
 .section-directory-links a:hover {
   color: var(--color-primary);
-  background: var(--color-primary-light);
+  background: var(--color-clickable-hover);
 }
 .section-directory-links a[aria-current] {
   font-weight: 600;
@@ -1083,43 +1084,47 @@ fieldset:disabled .ui-button {
   }
 }
 
-/* 统一标识可点击区域：链接、操作按钮与可展开项使用蓝色底色。 */
-a[href],
-button:not(:disabled),
-summary,
-[role="button"]:not([aria-disabled="true"]) {
-  background-color: var(--color-clickable-bg);
+/* 交互区域以自身轮廓、文字和焦点表明可点击，不再给所有链接铺色。 */
+:where(a[href], button:not(:disabled), summary, [role="button"]:not([aria-disabled="true"])) {
   cursor: pointer;
 }
 
-label.cursor-pointer {
-  background-color: var(--color-clickable-bg);
+:where(.prose, .editorial-content) :is(p, li, blockquote) a[href] {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-hover);
+  text-underline-offset: 0.18em;
 }
 
-a[href]:hover,
-button:not(:disabled):hover,
-summary:hover,
-[role="button"]:not([aria-disabled="true"]):hover {
-  background-color: var(--color-clickable-hover);
+:where(.prose, .editorial-content) :is(p, li, blockquote) a[href]:hover {
+  text-decoration-color: currentColor;
 }
 
 label.cursor-pointer:hover {
-  background-color: var(--color-clickable-hover);
+  border-color: var(--color-primary);
 }
 
-/* 主操作保留更强的蓝色层级；危险操作保留警示色。 */
+/* 主操作维持独立的实心色，深色模式也保持白字对比度。 */
 a[href].ui-button-primary,
 button.ui-button-primary,
 a[class~="bg-primary"],
 button[class~="bg-primary"] {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-solid);
 }
 
 a[href].ui-button-primary:hover,
 button.ui-button-primary:hover,
 a[class~="bg-primary"]:hover,
 button[class~="bg-primary"]:hover {
-  background-color: var(--color-primary-hover);
+  background-color: var(--color-primary-solid-hover);
+}
+
+.dark [class~="bg-primary"] {
+  background-color: var(--color-primary-solid);
+}
+
+.dark :is(a, button)[class~="bg-primary"] {
+  color: #fff;
 }
 
 a[class~="bg-secondary"],

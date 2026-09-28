@@ -355,9 +355,9 @@ export default function AIChat() {
                           <span
                             className={cn(
                               "shrink-0 rounded px-1.5 py-0.5 text-[10px] font-medium",
-                              link.type === "letter" && "bg-accent-light text-[#3A8B72]",
+                              link.type === "letter" && "bg-accent-light text-accent",
                               link.type === "link" && "bg-primary-light text-primary",
-                              link.type === "section" && "bg-secondary-light text-[#8B4560]"
+                              link.type === "section" && "bg-secondary-light text-secondary"
                             )}
                           >
                             {link.type === "letter" ? "来信" : link.type === "link" ? "链接" : "板块"}
@@ -398,9 +398,9 @@ export default function AIChat() {
               <div className="flex justify-start">
                 <div className="rounded-xl bg-bg-alt px-3 py-2">
                   <span className="inline-flex gap-1">
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted [animation-delay:-0.3s]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted [animation-delay:-0.15s]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted" />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted [animation-delay:-0.3s]" />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted [animation-delay:-0.15s]" />
+                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-muted" />
                   </span>
                 </div>
               </div>

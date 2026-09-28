@@ -14,14 +14,14 @@ type Props = {
 };
 
 const TAG_STYLE: Record<string, string> = {
-  免费: "bg-accent-light text-[#3A8B72]",
-  开源: "bg-secondary-light text-[#8B4560]",
+  免费: "bg-accent-light text-accent",
+  开源: "bg-secondary-light text-secondary",
   推荐: "bg-primary-light text-primary",
   必装: "bg-[#FFE4E4] text-[#9B2C2C]",
   在线: "bg-[#E0F2FE] text-[#075985]",
   本地: "bg-[#F3E8FF] text-[#4A1D96]",
   AI: "bg-primary-light text-primary",
-  教程: "bg-secondary-light/60 text-[#8B4560]",
+  教程: "bg-secondary-light/60 text-secondary",
 };
 
 function tagStyle(tag: string): string {

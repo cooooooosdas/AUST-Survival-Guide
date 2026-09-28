@@ -5,12 +5,12 @@ import { useTheme } from "@/components/ThemeProvider";
 export default function AustLogo({ className = "" }: { className?: string }) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const ink = isDark ? "#F2FBF7" : "#13231F";
-  const muted = isDark ? "#B4C8BF" : "#52665F";
-  const panel = isDark ? "#172B26" : "#FFFFFF";
-  const border = isDark ? "#31584E" : "#D8E5DF";
-  const primary = isDark ? "#5BD8BC" : "#147A64";
-  const accent = isDark ? "#F5B750" : "#D89122";
+  const ink = isDark ? "#F7F3F9" : "#241D2A";
+  const muted = isDark ? "#D9CEDF" : "#514959";
+  const panel = isDark ? "#2A2331" : "#FFFFFF";
+  const border = isDark ? "#685370" : "#E1DBE5";
+  const primary = isDark ? "#D5AEE9" : "#623B77";
+  const accent = isDark ? "#D8AE85" : "#91643F";
 
   return (
     <svg
@@ -24,7 +24,7 @@ export default function AustLogo({ className = "" }: { className?: string }) {
       <defs>
         <linearGradient id="aust-logo-mark" x1="4" y1="4" x2="38" y2="38" gradientUnits="userSpaceOnUse">
           <stop stopColor={panel} />
-          <stop offset="1" stopColor={isDark ? "#123C34" : "#E3F5EF"} />
+          <stop offset="1" stopColor={isDark ? "#3B2B47" : "#EFE8F3"} />
         </linearGradient>
         <linearGradient id="aust-logo-line" x1="11" y1="14" x2="31" y2="29" gradientUnits="userSpaceOnUse">
           <stop stopColor={primary} />
@@ -44,7 +44,7 @@ export default function AustLogo({ className = "" }: { className?: string }) {
       />
       <path
         d="M10.5 13.2C15.2 10.8 18.9 10.8 21 13.2C23.1 10.8 26.8 10.8 31.5 13.2V27.4C26.8 25.1 23.1 25.1 21 27.4C18.9 25.1 15.2 25.1 10.5 27.4V13.2Z"
-        fill={isDark ? "#0C1916" : "#F6FAF8"}
+        fill={isDark ? "#19151E" : "#F8F7F9"}
         stroke={ink}
         strokeWidth="1.25"
         strokeLinejoin="round"

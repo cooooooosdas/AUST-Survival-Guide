@@ -1,68 +1,68 @@
 @import "tailwindcss";
 
 /* ============================================================
-   校园索引风 + 可信工具站设计系统
-   Campus Index — calm, legible, useful
+   校园阅读索引：石墨紫、纸白与克制的交互层级
    ============================================================ */
 @theme {
   /* ---------- 背景层 ---------- */
-  --color-bg: #F6FAF8;
-  --color-bg-alt: #EEF5F1;
+  --color-bg: #F8F7F9;
+  --color-bg-alt: #F1EEF4;
   --color-surface: #FFFFFF;
 
   /* ---------- 文字层级 ---------- */
-  --color-text: #13231F;
-  --color-text-secondary: #52665F;
-  --color-muted: #647B71;
-  --color-text-muted: #647B71;
-  --color-border: #D8E5DF;
-  --color-border-hover: #AFC9BE;
+  --color-text: #241D2A;
+  --color-text-secondary: #514959;
+  --color-muted: #61586B;
+  --color-text-muted: #61586B;
+  --color-border: #E1DBE5;
+  --color-border-hover: #BFB1CA;
 
-  /* ---------- 主色（校园绿，用于主要交互） ---------- */
-  --color-primary: #1D63C6;
-  --color-primary-hover: #1552A9;
-  --color-primary-light: #E7F0FF;
-  --color-primary-ghost: rgba(29, 99, 198, 0.09);
-  --color-primary-ring: rgba(29, 99, 198, 0.35);
-  --color-clickable-bg: #EDF4FF;
-  --color-clickable-hover: #DCEAFF;
+  /* ---------- 主色：沉稳的学院紫，不沿用参考学校的标识色值 ---------- */
+  --color-primary: #623B77;
+  --color-primary-solid: #623B77;
+  --color-primary-solid-hover: #4D2D60;
+  --color-primary-hover: #4D2D60;
+  --color-primary-light: #EFE8F3;
+  --color-primary-ghost: rgba(98, 59, 119, 0.10);
+  --color-primary-ring: #73468B;
+  --color-clickable-bg: #F6F2F8;
+  --color-clickable-hover: #EDE5F2;
 
-  /* ---------- 辅色（蓝图蓝，用于资料与导航） ---------- */
-  --color-secondary: #2F6FED;
-  --color-secondary-hover: #245AC4;
-  --color-secondary-light: #E7F0FF;
-  --color-secondary-ghost: rgba(47, 111, 237, 0.09);
-  --color-secondary-ring: rgba(47, 111, 237, 0.26);
+  /* ---------- 辅色：同色系的层次，避免蓝紫混用 ---------- */
+  --color-secondary: #705580;
+  --color-secondary-hover: #5B426C;
+  --color-secondary-light: #F0EAF3;
+  --color-secondary-ghost: rgba(112, 85, 128, 0.09);
+  --color-secondary-ring: rgba(112, 85, 128, 0.34);
 
-  /* ---------- 三色（琥珀黄，用于提示与人情味） ---------- */
-  --color-tertiary: #D89122;
-  --color-tertiary-hover: #B97816;
-  --color-tertiary-light: #FFF4DC;
-  --color-tertiary-ghost: rgba(216, 145, 34, 0.11);
-  --color-tertiary-ring: rgba(216, 145, 34, 0.3);
-  --color-accent: #D89122;
-  --color-accent-hover: #B97816;
-  --color-accent-light: #FFF4DC;
-  --color-accent-ghost: rgba(216, 145, 34, 0.12);
-  --color-accent-ring: rgba(216, 145, 34, 0.3);
+  /* ---------- 暖金仅用于少量提示与阅读装饰 ---------- */
+  --color-tertiary: #91643F;
+  --color-tertiary-hover: #785134;
+  --color-tertiary-light: #F7EFE6;
+  --color-tertiary-ghost: rgba(145, 100, 63, 0.10);
+  --color-tertiary-ring: rgba(145, 100, 63, 0.32);
+  --color-accent: #91643F;
+  --color-accent-hover: #785134;
+  --color-accent-light: #F7EFE6;
+  --color-accent-ghost: rgba(145, 100, 63, 0.10);
+  --color-accent-ring: rgba(145, 100, 63, 0.32);
 
   /* ---------- 装饰 ---------- */
   --color-deco-envelope: #FFFFFF;
-  --color-deco-stroke: #13231F;
-  --color-deco-stroke-light: #CFE0D8;
-  --color-deco-plane: #E3F5EF;
-  --color-deco-plane-accent: #B8E3D5;
-  --color-deco-dash: #AFC9BE;
+  --color-deco-stroke: #241D2A;
+  --color-deco-stroke-light: #D9CFE0;
+  --color-deco-plane: #EFE8F3;
+  --color-deco-plane-accent: #D7C1E1;
+  --color-deco-dash: #BFB1CA;
 
   /* ---------- 阴影 ---------- */
-  --shadow-xs: 0 1px 2px rgba(19, 35, 31, 0.04);
-  --shadow-sm: 0 4px 12px rgba(19, 35, 31, 0.06);
-  --shadow-md: 0 12px 28px rgba(19, 35, 31, 0.08);
-  --shadow-lg: 0 24px 56px rgba(19, 35, 31, 0.12);
+  --shadow-xs: 0 1px 2px rgba(36, 29, 42, 0.04);
+  --shadow-sm: 0 4px 12px rgba(36, 29, 42, 0.06);
+  --shadow-md: 0 12px 28px rgba(36, 29, 42, 0.08);
+  --shadow-lg: 0 24px 56px rgba(36, 29, 42, 0.12);
 
   /* ---------- 动画曲线 ---------- */
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   /* ---------- 关键帧 ---------- */
   --animate-fade-up: fade-up 0.5s var(--ease-out-soft) forwards;
@@ -252,25 +252,25 @@ select:focus-visible {
 
 /* 暗色模式玻璃 */
 .dark .glass {
-  background: rgba(28, 25, 23, 0.65);
-  border-color: rgba(68, 64, 60, 0.5);
+  background: rgba(34, 28, 41, 0.7);
+  border-color: rgba(104, 83, 112, 0.5);
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
 }
 
 .dark .glass-card {
-  background: rgba(41, 37, 36, 0.75);
-  border-color: rgba(68, 64, 60, 0.6);
+  background: rgba(42, 35, 49, 0.78);
+  border-color: rgba(104, 83, 112, 0.6);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
 
 .dark .glass-card:hover {
-  border-color: rgba(87, 83, 78, 0.7);
+  border-color: rgba(137, 108, 150, 0.7);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
 }
 
 .dark .glass-strong {
-  background: rgba(41, 37, 36, 0.85);
-  border-color: rgba(87, 83, 78, 0.5);
+  background: rgba(42, 35, 49, 0.86);
+  border-color: rgba(137, 108, 150, 0.5);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -362,26 +362,17 @@ select:focus-visible {
   font-weight: 700;
 }
 
-/* 渐变文字 —— 仅作为少量装饰使用，保持整体克制 */
+/* 兼容旧类名：文字强调保持单色，避免与内容竞争。 */
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-primary);
 }
 
 .gradient-text-hero {
-  background: linear-gradient(160deg, #1C1917 0%, #44403C 50%, #78716C 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-text);
 }
 
 .dark .gradient-text-hero {
-  background: linear-gradient(160deg, #FAFAF9 0%, #D6D3D1 50%, #A8A29E 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: var(--color-text);
 }
 
 /* 顶部渐变条 —— 弱化为单色 + 副色，避免三色 AI 风 */
@@ -516,7 +507,7 @@ select:focus-visible {
 
 .aust-logo-link:hover {
   transform: translateY(-2px) rotate(-0.4deg);
-  filter: drop-shadow(0 6px 10px rgba(20, 122, 100, 0.14));
+  filter: drop-shadow(0 6px 10px var(--color-primary-ghost));
 }
 
 .aust-logo-link:active {
@@ -529,7 +520,7 @@ select:focus-visible {
 }
 
 .theme-icon-swap {
-  animation: theme-icon-enter 0.34s var(--ease-spring) both;
+  animation: theme-icon-enter 0.26s var(--ease-out-soft) both;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -576,8 +567,8 @@ select:focus-visible {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(20, 122, 100, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(20, 122, 100, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--color-primary-ghost) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-primary-ghost) 1px, transparent 1px);
   background-size: 32px 32px;
   pointer-events: none;
   z-index: 0;
@@ -601,8 +592,8 @@ select:focus-visible {
 /* 暗色模式下的 hero 网格图案 */
 .dark .guide-hero::before {
   background-image:
-    linear-gradient(rgba(91, 216, 188, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(91, 216, 188, 0.04) 1px, transparent 1px);
+    linear-gradient(var(--color-primary-ghost) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-primary-ghost) 1px, transparent 1px);
 }
 
 /* 保留 aurora-bg 类（向后兼容）但默认不再渲染 */
@@ -634,8 +625,8 @@ select:focus-visible {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(20, 122, 100, 0.06) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(20, 122, 100, 0.06) 1px, transparent 1px);
+    linear-gradient(90deg, var(--color-primary-ghost) 1px, transparent 1px),
+    linear-gradient(180deg, var(--color-primary-ghost) 1px, transparent 1px);
   background-size: 18px 18px;
   opacity: 0;
   transition: opacity 0.25s var(--ease-out-soft);
@@ -710,49 +701,51 @@ select:focus-visible {
    深色模式（夜读暖调）
    ============================================================ */
 .dark {
-  --color-bg: #0C1916;
-  --color-bg-alt: #11221E;
-  --color-surface: #172B26;
-  --color-text: #F2FBF7;
-  --color-text-secondary: #C8D8D0;
-  --color-muted: #8FA9A1;
-  --color-text-muted: #8FA9A1;
+  --color-bg: #19151E;
+  --color-bg-alt: #221C29;
+  --color-surface: #2A2331;
+  --color-text: #F7F3F9;
+  --color-text-secondary: #D9CEDF;
+  --color-muted: #B8A9C0;
+  --color-text-muted: #B8A9C0;
 
-  --color-accent: #F5B750;
-  --color-accent-hover: #D89A2A;
-  --color-accent-light: #392716;
-  --color-accent-ghost: rgba(245, 183, 80, 0.12);
-  --color-accent-ring: rgba(245, 183, 80, 0.3);
+  --color-accent: #D8AE85;
+  --color-accent-hover: #E6C39E;
+  --color-accent-light: #403025;
+  --color-accent-ghost: rgba(216, 174, 133, 0.12);
+  --color-accent-ring: rgba(216, 174, 133, 0.38);
 
-  --color-primary: #93BBFF;
-  --color-primary-hover: #B5D2FF;
-  --color-primary-light: #1B3458;
-  --color-primary-ghost: rgba(147, 187, 255, 0.12);
-  --color-primary-ring: rgba(147, 187, 255, 0.4);
-  --color-clickable-bg: #192D4A;
-  --color-clickable-hover: #25436C;
+  --color-primary: #D5AEE9;
+  --color-primary-solid: #724488;
+  --color-primary-solid-hover: #87539F;
+  --color-primary-hover: #E6C7F0;
+  --color-primary-light: #3B2B47;
+  --color-primary-ghost: rgba(213, 174, 233, 0.13);
+  --color-primary-ring: #D5AEE9;
+  --color-clickable-bg: #30263A;
+  --color-clickable-hover: #42314E;
 
-  --color-secondary: #74A6FF;
-  --color-secondary-hover: #5C8FE9;
-  --color-secondary-light: #172D52;
-  --color-secondary-ghost: rgba(116, 166, 255, 0.12);
-  --color-secondary-ring: rgba(116, 166, 255, 0.3);
+  --color-secondary: #C9AED7;
+  --color-secondary-hover: #DDC4E7;
+  --color-secondary-light: #382A43;
+  --color-secondary-ghost: rgba(201, 174, 215, 0.12);
+  --color-secondary-ring: rgba(201, 174, 215, 0.4);
 
-  --color-tertiary: #F5B750;
-  --color-tertiary-hover: #D89A2A;
-  --color-tertiary-light: #392716;
-  --color-tertiary-ghost: rgba(245, 183, 80, 0.12);
-  --color-tertiary-ring: rgba(245, 183, 80, 0.3);
+  --color-tertiary: #D8AE85;
+  --color-tertiary-hover: #E6C39E;
+  --color-tertiary-light: #403025;
+  --color-tertiary-ghost: rgba(216, 174, 133, 0.12);
+  --color-tertiary-ring: rgba(216, 174, 133, 0.38);
 
-  --color-border: #24463E;
-  --color-border-hover: #3E695E;
+  --color-border: #4A3B52;
+  --color-border-hover: #735C7D;
 
-  --color-deco-envelope: #172B26;
-  --color-deco-stroke: #F2FBF7;
-  --color-deco-stroke-light: #31584E;
-  --color-deco-plane: #123C34;
-  --color-deco-plane-accent: #5BD8BC;
-  --color-deco-dash: #3E695E;
+  --color-deco-envelope: #2A2331;
+  --color-deco-stroke: #F7F3F9;
+  --color-deco-stroke-light: #685370;
+  --color-deco-plane: #3B2B47;
+  --color-deco-plane-accent: #D5AEE9;
+  --color-deco-dash: #735C7D;
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -882,7 +875,7 @@ html.dark {
 }
 
 .hero-wayfinder-card {
-  box-shadow: 0 8px 24px -18px rgba(15, 66, 54, 0.5);
+  box-shadow: 0 8px 24px -18px color-mix(in srgb, var(--color-primary) 50%, transparent);
 }
 
 .hero-wayfinder-plane {
