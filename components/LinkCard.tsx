@@ -137,13 +137,16 @@ export default function LinkCard({ item, sectionSlug }: Props) {
     e.preventDefault();
     e.stopPropagation();
     if (!item.url) return;
+    const urlToCopy = item.url.startsWith("/")
+      ? new URL(item.url, window.location.origin).href
+      : item.url;
     setCopyError("");
     try {
       if (!navigator.clipboard?.writeText) throw new Error("Clipboard unavailable");
-      await navigator.clipboard.writeText(item.url);
+      await navigator.clipboard.writeText(urlToCopy);
     } catch {
       const input = document.createElement("textarea");
-      input.value = item.url;
+      input.value = urlToCopy;
       input.style.position = "fixed";
       input.style.opacity = "0";
       document.body.appendChild(input);

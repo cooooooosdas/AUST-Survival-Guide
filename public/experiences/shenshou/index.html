@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>神兽职场 · 传统神兽寓意的现代职场转化</title>
+<meta name="description" content="传统文化与现代职业的互动小剧场：认识四位神兽员工，参与六题趣味测试，生成并下载专属神兽工牌。">
+<meta name="theme-color" content="#0b0f13">
+<link rel="icon" type="image/webp" href="assets/qilin.webp">
+<style>
+:root{
+  --bg:#0b0f13; --bg2:#11171d; --panel:#161e26; --line:#27313c;
+  --ink:#ece7da; --dim:#97a1ab; --gold:#e2b25a; --red:#e8544a;
+  --qilin:#e2b25a; --xuanwu:#3ec98f; --zhuque:#e8544a; --suanni:#c98e5f;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"Noto Serif SC","STSong","SimSun",serif;
+  overflow-x:hidden; line-height:1.7;
+}
+::selection{background:var(--gold);color:#14100a}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:var(--gold)}
+/* ---------- 进度条 & 导航 ---------- */
+#progress{position:fixed;top:0;left:0;height:3px;width:0;z-index:1000;
+  background:linear-gradient(90deg,var(--gold),var(--red));box-shadow:0 0 12px rgba(226,178,90,.6)}
+nav{position:fixed;top:0;left:0;right:0;z-index:900;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 5vw;backdrop-filter:blur(14px);background:rgba(11,15,19,.72);border-bottom:1px solid transparent;transition:.4s}
+nav.scrolled{border-bottom-color:var(--line)}
+nav .logo{display:flex;align-items:center;gap:10px;font-size:17px;letter-spacing:.2em;font-weight:700}
+nav .logo em{width:30px;height:30px;border:1.5px solid var(--red);border-radius:6px;display:grid;place-items:center;
+  color:var(--red);font-style:normal;font-size:14px}
+nav .links{display:flex;gap:clamp(10px,2.4vw,30px)}
+nav .links a{color:var(--dim);text-decoration:none;font-size:13.5px;letter-spacing:.12em;transition:.3s;position:relative}
+nav .links a::after{content:"";position:absolute;left:0;bottom:-4px;width:0;height:1.5px;background:var(--gold);transition:.3s}
+nav .links a:hover{color:var(--ink)}
+nav .links a:hover::after{width:100%}
+.site-return{color:var(--gold);text-decoration:none;font-size:13px;white-space:nowrap;padding:8px 0}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--gold);outline-offset:5px}
+section{scroll-margin-top:110px}
+@media(max-width:760px){
+  nav{flex-wrap:wrap;gap:4px 12px;padding:8px 5vw}
+  nav .links{order:3;width:100%;overflow-x:auto;gap:20px;padding:6px 0;white-space:nowrap}
+  nav .links a{font-size:12px;min-height:30px;display:flex;align-items:center}
+}
+/* ---------- 通用 ---------- */
+section{position:relative;padding:120px 6vw;max-width:1240px;margin:0 auto}
+.kicker{font-size:13px;letter-spacing:.4em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:12px}
+.kicker::before{content:"";width:34px;height:1.5px;background:var(--gold)}
+h2{font-size:clamp(28px,4vw,44px);font-weight:700;margin-bottom:18px}
+h2 .zhu{color:var(--red)}
+.sub{color:var(--dim);max-width:640px;margin-bottom:48px}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .9s cubic-bezier(.2,.7,.3,1),transform .9s cubic-bezier(.2,.7,.3,1)}
+.reveal.on{opacity:1;transform:none}
+.clouds{position:absolute;inset:0;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cpath d='M10 40a12 12 0 0 1 22-6 10 10 0 0 1 18 2 9 9 0 0 1 14 6H10z' fill='none' stroke='%23e2b25a' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-size:120px 60px}
+/* ---------- Hero ---------- */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;max-width:none;overflow:hidden}
+#stars{position:absolute;inset:0;pointer-events:none}
+#hero .seal{
+  width:78px;height:78px;border:2px solid var(--red);border-radius:10px;
+  display:grid;place-items:center;color:var(--red);font-size:32px;font-weight:700;
+  margin-bottom:30px;box-shadow:0 0 40px rgba(232,84,74,.3);animation:sealFloat 4s ease-in-out infinite;position:relative;z-index:2}
+@keyframes sealFloat{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+#hero h1{font-size:clamp(44px,7.4vw,92px);letter-spacing:.12em;font-weight:800;position:relative;z-index:2;
+  background:linear-gradient(120deg,#f3e3bd 10%,var(--gold) 45%,#fdf0d5 60%,var(--gold) 80%);
+  background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:shine 6s linear infinite}
+@keyframes shine{to{background-position:200% center}}
+#hero h1 small{display:block;font-size:clamp(13px,1.6vw,19px);letter-spacing:.58em;color:var(--dim);
+  -webkit-text-fill-color:var(--dim);margin-top:16px;font-weight:400}
+#hero .beasts{display:flex;gap:clamp(12px,3vw,36px);margin-top:58px;flex-wrap:wrap;justify-content:center;position:relative;z-index:2}
+.chip{display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:transform .35s}
+.chip:hover{transform:translateY(-10px) scale(1.04)}
+.chip img{width:clamp(76px,10vw,112px);height:clamp(76px,10vw,112px);object-fit:cover;border-radius:50%;
+  border:2px solid var(--line);transition:box-shadow .35s}
+.chip span{font-size:14px;color:var(--dim);letter-spacing:.2em;transition:color .3s}
+.chip:hover span{color:var(--ink)}
+.chip[data-b="qilin"] img{border-color:var(--qilin)} .chip[data-b="qilin"]:hover img{box-shadow:0 0 30px rgba(226,178,90,.5)}
+.chip[data-b="xuanwu"] img{border-color:var(--xuanwu)} .chip[data-b="xuanwu"]:hover img{box-shadow:0 0 30px rgba(62,201,143,.5)}
+.chip[data-b="zhuque"] img{border-color:var(--zhuque)} .chip[data-b="zhuque"]:hover img{box-shadow:0 0 30px rgba(232,84,74,.5)}
+.chip[data-b="suanni"] img{border-color:var(--suanni)} .chip[data-b="suanni"]:hover img{box-shadow:0 0 30px rgba(201,142,95,.5)}
+.scrollhint{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);color:var(--dim);font-size:12px;letter-spacing:.4em;animation:hint 2s infinite}
+@keyframes hint{0%,100%{opacity:.4}50%{opacity:1}}
+/* ---------- 创意来源 ---------- */
+#origin .quote{border-left:3px solid var(--gold);padding:8px 0 8px 26px;font-size:clamp(17px,2vw,21px);color:#d9d2c0;max-width:820px;font-style:italic}
+.pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:56px}
+.pillar{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:28px 24px;transition:.4s;position:relative;overflow:hidden}
+.pillar::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);transform:scaleX(0);transform-origin:left;transition:.4s}
+.pillar:hover{transform:translateY(-8px);border-color:rgba(226,178,90,.5);box-shadow:0 18px 40px rgba(0,0,0,.4)}
+.pillar:hover::before{transform:scaleX(1)}
+.pillar b{display:block;font-size:19px;margin-bottom:8px}
+.pillar p{color:var(--dim);font-size:14px}
+.pillar .num{font-size:12px;color:var(--gold);letter-spacing:.3em;margin-bottom:10px;display:block}
+/* ---------- 档案卡 ---------- */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px}
+.card{perspective:1400px;height:440px;cursor:pointer}
+.card .inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.7,.3,1)}
+.card.flip .inner{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:18px;overflow:hidden;border:1px solid var(--line)}
+.face.front img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s}
+.card:hover .face.front img{transform:scale(1.05)}
+.face.front .tag{position:absolute;left:0;right:0;bottom:0;padding:44px 20px 16px;
+  background:linear-gradient(transparent,rgba(8,10,13,.94));display:flex;justify-content:space-between;align-items:baseline}
+.face.front .tag b{font-size:20px}
+.face.front .tag i{font-style:normal;font-size:11px;color:var(--dim);letter-spacing:.15em}
+.face.back{background:var(--panel);transform:rotateY(180deg);padding:26px 24px;display:flex;flex-direction:column}
+.face.back h3{font-size:22px;margin-bottom:2px}
+.face.back .en{font-size:11px;color:var(--dim);letter-spacing:.2em;margin-bottom:16px}
+.face.back dl{font-size:13.5px}
+.face.back dt{color:var(--gold);margin-top:12px;font-size:12px;letter-spacing:.25em}
+.face.back dd{color:#cfc9ba}
+.face.back .motto{margin-top:auto;font-size:13px;color:var(--dim);border-top:1px dashed var(--line);padding-top:12px}
+.card[data-b="qilin"] .face{border-color:rgba(226,178,90,.45)} .card[data-b="qilin"] .back h3{color:var(--qilin)}
+.card[data-b="xuanwu"] .face{border-color:rgba(62,201,143,.45)} .card[data-b="xuanwu"] .back h3{color:var(--xuanwu)}
+.card[data-b="zhuque"] .face{border-color:rgba(232,84,74,.45)} .card[data-b="zhuque"] .back h3{color:var(--zhuque)}
+.card[data-b="suanni"] .face{border-color:rgba(201,142,95,.45)} .card[data-b="suanni"] .back h3{color:var(--suanni)}
+.hintline{text-align:center;color:var(--dim);font-size:12px;letter-spacing:.3em;margin-bottom:34px}
+/* ---------- 转化链 ---------- */
+.chain-wrap{display:grid;grid-template-columns:200px 1fr;gap:40px;align-items:start}
+@media(max-width:760px){.chain-wrap{grid-template-columns:1fr}}
+.chain-nav{display:flex;flex-direction:column;gap:12px}
+@media(max-width:760px){.chain-nav{flex-direction:row;flex-wrap:wrap}}
+.chain-nav button{background:none;border:1px solid var(--line);color:var(--dim);border-radius:999px;
+  padding:10px 20px;font-family:inherit;font-size:15px;cursor:pointer;transition:.3s;letter-spacing:.15em}
+.chain-nav button.act{color:#14100a;font-weight:700}
+.chain-nav button[data-b="qilin"].act{background:var(--qilin);border-color:var(--qilin)}
+.chain-nav button[data-b="xuanwu"].act{background:var(--xuanwu);border-color:var(--xuanwu)}
+.chain-nav button[data-b="zhuque"].act{background:var(--zhuque);border-color:var(--zhuque)}
+.chain-nav button[data-b="suanni"].act{background:var(--suanni);border-color:var(--suanni)}
+.chain{display:flex;align-items:stretch;min-height:150px}
+.chain .node{flex:1;background:var(--panel);border:1px solid var(--line);padding:20px 18px;border-radius:12px;opacity:0;animation:fadeUp .5s forwards}
+.chain .node:nth-child(3){animation-delay:.12s}.chain .node:nth-child(5){animation-delay:.24s}
+.chain .arrow{align-self:center;padding:0 10px;color:var(--gold);font-size:20px;opacity:0;animation:fadeUp .5s .1s forwards}
+.chain .node b{display:block;font-size:16px;margin-bottom:6px}
+.chain .node span{font-size:13px;color:var(--dim)}
+@media(max-width:900px){.chain{flex-direction:column;gap:8px}.chain .arrow{transform:rotate(90deg);padding:4px 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.chain-desc{margin-top:22px;color:var(--dim);font-size:14px;max-width:640px}
+/* ---------- 动图展示 ---------- */
+.gifgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
+.gifgrid figure{border-radius:16px;overflow:hidden;border:1px solid var(--line);position:relative;transition:.4s}
+.gifgrid figure:hover{border-color:var(--gold);box-shadow:0 14px 36px rgba(0,0,0,.45)}
+.gifgrid img{width:100%;display:block;transition:transform .6s}
+.gifgrid figure:hover img{transform:scale(1.06)}
+.gifgrid figcaption{position:absolute;left:0;right:0;bottom:0;padding:26px 14px 10px;font-size:13px;
+  background:linear-gradient(transparent,rgba(8,10,13,.92));letter-spacing:.2em}
+/* ---------- 测试 ---------- */
+#quiz .box{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:clamp(26px,4vw,50px);max-width:760px;margin:0 auto;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.q-progress{height:4px;background:var(--line);border-radius:99px;margin-bottom:34px;overflow:hidden}
+.q-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--red));transition:width .4s}
+.q-title{font-size:clamp(18px,2.4vw,23px);margin-bottom:26px}
+.q-opts{display:grid;gap:12px}
+.q-opts button{text-align:left;background:var(--bg2);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:15px 18px;font-family:inherit;font-size:15px;cursor:pointer;transition:.25s}
+.q-opts button:hover{border-color:var(--gold);transform:translateX(6px)}
+.q-result{text-align:center;display:none}
+.q-result img{width:200px;height:200px;object-fit:cover;border-radius:50%;border:3px solid var(--gold);margin:10px auto 20px;display:block;box-shadow:0 0 44px rgba(226,178,90,.3)}
+.q-result h3{font-size:28px;margin-bottom:6px}
+.q-result .rkw{color:var(--gold);letter-spacing:.3em;font-size:13px;margin-bottom:16px}
+.q-result p{color:#cfc9ba;max-width:520px;margin:0 auto 26px;font-size:15px}
+.q-result .rbtns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.q-result .rbtns button{border-radius:999px;padding:11px 30px;font-family:inherit;cursor:pointer;font-size:14px;letter-spacing:.15em;transition:.3s}
+.q-result .again{background:none;border:1px solid var(--line);color:var(--dim)}
+.q-result .again:hover{border-color:var(--gold);color:var(--gold)}
+.q-result .tobadge{background:var(--gold);border:1px solid var(--gold);color:#14100a;font-weight:700}
+.q-result .tobadge:hover{box-shadow:0 0 26px rgba(226,178,90,.5)}
+/* ---------- 工牌生成器 ---------- */
+.badge-wrap{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,5vw,70px);align-items:center}
+@media(max-width:900px){.badge-wrap{grid-template-columns:1fr}}
+.badge-form label{display:block;font-size:12.5px;letter-spacing:.25em;color:var(--gold);margin:22px 0 8px}
+.badge-form input[type=text]{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:12px;
+  padding:14px 16px;color:var(--ink);font-family:inherit;font-size:16px;transition:.3s;outline:none}
+.badge-form input[type=text]:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,178,90,.15)}
+.beast-pick{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.beast-pick button{background:var(--bg2);border:1.5px solid var(--line);border-radius:12px;padding:10px 6px;cursor:pointer;
+  font-family:inherit;color:var(--dim);font-size:13px;transition:.3s;display:flex;flex-direction:column;align-items:center;gap:6px}
+.beast-pick button img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+.beast-pick button.sel[data-b="qilin"]{border-color:var(--qilin);color:var(--qilin)}
+.beast-pick button.sel[data-b="xuanwu"]{border-color:var(--xuanwu);color:var(--xuanwu)}
+.beast-pick button.sel[data-b="zhuque"]{border-color:var(--zhuque);color:var(--zhuque)}
+.beast-pick button.sel[data-b="suanni"]{border-color:var(--suanni);color:var(--suanni)}
+.badge-actions{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+.badge-actions button{border-radius:999px;padding:12px 30px;font-family:inherit;font-size:14.5px;cursor:pointer;letter-spacing:.15em;transition:.3s}
+#btnDraw{background:var(--gold);border:1px solid var(--gold);color:#14100a;font-weight:700}
+#btnDraw:hover{box-shadow:0 0 26px rgba(226,178,90,.5)}
+#btnDl{background:none;border:1px solid var(--line);color:var(--dim)}
+#btnDl:hover{border-color:var(--gold);color:var(--gold)}
+.badge-canvas-box{text-align:center}
+#badgeCanvas{width:min(340px,86vw);border-radius:22px;box-shadow:0 30px 70px rgba(0,0,0,.55);transition:transform .4s}
+#badgeCanvas:hover{transform:rotate(-1.5deg) scale(1.02)}
+.badge-note{margin-top:14px;color:var(--dim);font-size:12.5px;letter-spacing:.1em}
+/* ---------- 示例工牌 & 海报 ---------- */
+.sample-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:20px}
+.sample-row figure{border-radius:16px;overflow:hidden;border:1px solid var(--line);transition:.4s;position:relative}
+.sample-row figure:hover{transform:translateY(-8px);border-color:var(--gold);box-shadow:0 18px 44px rgba(0,0,0,.5)}
+.sample-row img{width:100%;display:block}
+.sample-row figcaption{padding:10px 14px;font-size:13px;color:var(--dim);letter-spacing:.15em;background:var(--panel)}
+.poster-box{display:grid;grid-template-columns:minmax(260px,420px) 1fr;gap:clamp(28px,4vw,56px);align-items:center}
+@media(max-width:860px){.poster-box{grid-template-columns:1fr}}
+.poster-box img{width:100%;border-radius:18px;border:1px solid var(--line);box-shadow:0 26px 60px rgba(0,0,0,.5)}
+.poster-box ul{list-style:none;display:grid;gap:14px}
+.poster-box li{color:var(--dim);font-size:14.5px;padding-left:26px;position:relative}
+.poster-box li::before{content:"◆";position:absolute;left:0;color:var(--gold);font-size:11px;top:4px}
+.poster-box li b{color:var(--ink)}
+/* ---------- 设计思路 ---------- */
+.prompts{display:grid;gap:14px}
+.acc{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);transition:border-color .3s}
+.acc:hover{border-color:rgba(226,178,90,.4)}
+.acc header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;cursor:pointer;user-select:none}
+.acc header b{font-size:17px;letter-spacing:.1em}
+.acc header i{font-style:normal;color:var(--gold);transition:transform .3s;font-size:20px}
+.acc.open header i{transform:rotate(45deg)}
+.acc .body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.acc.open .body{max-height:400px}
+.acc .body p{padding:0 24px 22px;color:var(--dim);font-size:13px;font-family:"Consolas","Courier New",monospace;line-height:1.8;word-break:break-all}
+/* ---------- 结语 ---------- */
+#fin{text-align:center}
+#fin blockquote{font-size:clamp(18px,2.6vw,26px);max-width:900px;margin:0 auto 40px;color:#d9d2c0;line-height:2}
+#fin .team{color:var(--dim);font-size:14px;letter-spacing:.2em}
+#fin .team b{color:var(--gold)}
+footer{border-top:1px solid var(--line);padding:26px 6vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;color:var(--dim);font-size:12px;letter-spacing:.15em}
+#toTop{position:fixed;right:26px;bottom:26px;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);
+  background:rgba(22,30,38,.9);color:var(--gold);font-size:18px;cursor:pointer;opacity:0;pointer-events:none;transition:.4s;z-index:800}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop:hover{border-color:var(--gold);box-shadow:0 0 20px rgba(226,178,90,.4)}
+@media(max-width:600px){
+  section{padding:88px 6vw}
+  #hero{padding-top:150px;padding-bottom:90px;min-height:100svh}
+  #hero h1 small{letter-spacing:.18em;line-height:1.9}
+  #hero .beasts{margin-top:34px}
+  .badge-wrap>*{min-width:0}
+  #badgeCanvas{max-width:100%;height:auto}
+  .acc header{padding:18px}
+}
+.acc.open .body{max-height:none}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .reveal,.chain .node,.chain .arrow{opacity:1;transform:none}
+  #stars{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<nav id="nav">
+  <div class="logo"><em>神</em>神兽职场</div>
+  <div class="links">
+    <a href="#origin">创意来源</a><a href="#archive">神兽档案</a><a href="#chain-sec">寓意转化</a>
+    <a href="#quiz">互动测试</a><a href="#badge">工牌生成</a><a href="#design">设计思路</a>
+  </div>
+  <a class="site-return" href="/projects/shenshou">← 返回主站</a>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <canvas id="stars"></canvas>
+  <div class="clouds"></div>
+  <div class="seal">神</div>
+  <h1>神兽职场<small>SHENSHOU WORKPLACE · 传统神兽寓意的现代职场转化</small></h1>
+  <div class="beasts">
+    <div class="chip" data-b="qilin" onclick="jump('qilin')"><img src="assets/qilin.webp" alt="麒麟快递员"><span>麒麟 · 快递员</span></div>
+    <div class="chip" data-b="xuanwu" onclick="jump('xuanwu')"><img src="assets/xuanwu.webp" alt="玄武安全员"><span>玄武 · 安全员</span></div>
+    <div class="chip" data-b="zhuque" onclick="jump('zhuque')"><img src="assets/zhuque.webp" alt="朱雀消防员"><span>朱雀 · 消防员</span></div>
+    <div class="chip" data-b="suanni" onclick="jump('suanni')"><img src="assets/suanni.webp" alt="狻猊咖啡师"><span>狻猊 · 咖啡师</span></div>
+  </div>
+  <div class="scrollhint">向下滚动 ▼</div>
+</section>
+
+<!-- ============ 创意来源 ============ -->
+<section id="origin">
+  <div class="clouds"></div>
+  <p class="kicker reveal">PART 01 · 创意来源</p>
+  <h2 class="reveal">让古籍里的神兽，<br>走进今天的<span class="zhu">写字楼与街头</span></h2>
+  <p class="sub reveal">选取麒麟、玄武、朱雀、狻猊四种中国古代神兽，将其形象与能力和现代职业相结合，拆解神兽积极向上的寓意，在具体职场场景中提炼为具有现实相关性的行为准则。</p>
+  <blockquote class="quote reveal">传统文化并非尘封的古董，而是可以不断汲取灵感的活水源头；技术也并非冰冷的工具，而是让经典重新焕发光彩的桥梁。</blockquote>
+  <div class="pillars">
+    <div class="pillar reveal"><span class="num">STEP 01</span><b>取形</b><p>保留神兽最具辨识度的形象符号：麒麟之角、玄武之甲、朱雀之羽、狻猊之鬃。</p></div>
+    <div class="pillar reveal"><span class="num">STEP 02</span><b>取意</b><p>拆解其核心寓意：仁德善、稳定安全、勇气祥瑞、耐心安逸。</p></div>
+    <div class="pillar reveal"><span class="num">STEP 03</span><b>取职</b><p>匹配精神内核相通的现代职业：快递员、网络安全员、消防员、咖啡师。</p></div>
+    <div class="pillar reveal"><span class="num">STEP 04</span><b>取则</b><p>转化为可践行的职场态度与行为指引，让古老寓意照亮日常劳动。</p></div>
+  </div>
+</section>
+
+<!-- ============ 神兽档案 ============ -->
+<section id="archive">
+  <p class="kicker reveal">PART 02 · 神兽职业档案</p>
+  <h2 class="reveal">四位神兽员工，<br>持证上岗</h2>
+  <p class="hintline reveal">点 击 卡 片 · 翻 转 查 看 档 案</p>
+  <div class="cards">
+    <div class="card reveal" data-b="qilin" id="card-qilin" onclick="this.classList.toggle('flip')">
+      <div class="inner">
+        <div class="face front"><img loading="lazy" src="assets/qilin.webp" alt="麒麟快递员"><div class="tag"><b>麒麟快递员</b><i>QI LIN COURIER</i></div></div>
+        <div class="face back"><h3>麒麟 · 快递员</h3><div class="en">QI LIN COURIER</div>
+          <dl><dt>原典寓意</dt><dd>仁、德、善——祥瑞之兽，行止有度，不伤生灵</dd>
+          <dt>职场转化</dt><dd>蹄踏小电驴，身披祥云纹工服，配送包裹，使命必达</dd>
+          <dt>行为准则</dt><dd>温和而可靠，承诺必达；对每一份托付保持敬畏之心</dd></dl>
+          <div class="motto">“仁善不是慢，而是每一步都值得托付。”</div></div>
+      </div>
+    </div>
+    <div class="card reveal" data-b="xuanwu" id="card-xuanwu" onclick="this.classList.toggle('flip')">
+      <div class="inner">
+        <div class="face front"><img loading="lazy" src="assets/xuanwu.webp" alt="玄武安全员"><div class="tag"><b>玄武安全员</b><i>XUAN WU SECURITY MASTER</i></div></div>
+        <div class="face back"><h3>玄武 · 网络安全员</h3><div class="en">XUAN WU SECURITY MASTER</div>
+          <dl><dt>原典寓意</dt><dd>稳定、安全——龟蛇相缠，镇守北方，厚重不动</dd>
+          <dt>职场转化</dt><dd>厚重龟甲化为坚不可摧的防火墙矩阵，镇守于服务器之间</dd>
+          <dt>行为准则</dt><dd>沉稳细致，防患未然；以静制动，守住系统与团队的底线</dd></dl>
+          <div class="motto">“真正的安全感，来自日复一日的坚守。”</div></div>
+      </div>
+    </div>
+    <div class="card reveal" data-b="zhuque" id="card-zhuque" onclick="this.classList.toggle('flip')">
+      <div class="inner">
+        <div class="face front"><img loading="lazy" src="assets/zhuque.webp" alt="朱雀消防员"><div class="tag"><b>朱雀消防员</b><i>VERMILION BIRD FIREFIGHTER</i></div></div>
+        <div class="face back"><h3>朱雀 · 消防员</h3><div class="en">VERMILION BIRD FIREFIGHTER</div>
+          <dl><dt>原典寓意</dt><dd>勇气、祥瑞——浴火之鸟，南方之神，光明所至</dd>
+          <dt>职场转化</dt><dd>烈焰羽翼在浓烟中成为指引方向的灯塔，逆火而行</dd>
+          <dt>行为准则</dt><dd>危急时刻挺身而出；越是困难的任务，越要主动迎上去</dd></dl>
+          <div class="motto">“勇气不是不怕火，而是明知有火仍向前。”</div></div>
+      </div>
+    </div>
+    <div class="card reveal" data-b="suanni" id="card-suanni" onclick="this.classList.toggle('flip')">
+      <div class="inner">
+        <div class="face front"><img loading="lazy" src="assets/suanni.webp" alt="狻猊咖啡师"><div class="tag"><b>狻猊咖啡师</b><i>BARISTA SUAN NI</i></div></div>
+        <div class="face back"><h3>狻猊 · 咖啡师</h3><div class="en">BARISTA SUAN NI</div>
+          <dl><dt>原典寓意</dt><dd>耐心、安逸——好坐喜静，常伴香炉烟火</dd>
+          <dt>职场转化</dt><dd>享受咖啡机蒸腾的“现代烟火气”，将古老禅意融入拉花拿铁</dd>
+          <dt>行为准则</dt><dd>专注当下，打磨细节；在快节奏里为他人留一处安心角落</dd></dl>
+          <div class="motto">“慢慢来，才能把一件事做好。”</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 寓意转化链 ============ -->
+<section id="chain-sec">
+  <div class="clouds"></div>
+  <p class="kicker reveal">PART 03 · 寓意转化</p>
+  <h2 class="reveal">从古籍到工位，<br>一条清晰的转化链</h2>
+  <p class="sub reveal">选择一只神兽，查看它的寓意如何一步步转化为现代职场行为。</p>
+  <div class="chain-wrap reveal">
+    <div class="chain-nav">
+      <button data-b="qilin" class="act" onclick="showChain('qilin',this)">麒麟</button>
+      <button data-b="xuanwu" onclick="showChain('xuanwu',this)">玄武</button>
+      <button data-b="zhuque" onclick="showChain('zhuque',this)">朱雀</button>
+      <button data-b="suanni" onclick="showChain('suanni',this)">狻猊</button>
+    </div>
+    <div>
+      <div class="chain" id="chain"></div>
+      <p class="chain-desc" id="chainDesc"></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 动图展示 ============ -->
+<section id="motion">
+  <p class="kicker reveal">PART 04 · 动态形象</p>
+  <h2 class="reveal">会动的神兽员工</h2>
+  <p class="sub reveal">原作 AIGC 动态素材，记录四位神兽员工的职场日常瞬间。</p>
+  <div class="gifgrid reveal">
+    <figure><img loading="lazy" src="assets/qilin.gif" alt="麒麟动态"><figcaption>麒麟 · 配送途中</figcaption></figure>
+    <figure><img loading="lazy" src="assets/xuanwu.gif" alt="玄武动态"><figcaption>玄武 · 防火墙值守</figcaption></figure>
+    <figure><img loading="lazy" src="assets/zhuque.gif" alt="朱雀动态"><figcaption>朱雀 · 逆火而行</figcaption></figure>
+    <figure><img loading="lazy" src="assets/suanni.gif" alt="狻猊动态"><figcaption>狻猊 · 咖啡时光</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ 职场神兽测试 ============ -->
+<section id="quiz">
+  <div class="clouds"></div>
+  <p class="kicker reveal">PART 05 · 互动测试</p>
+  <h2 class="reveal">测测你是哪种<span class="zhu">职场神兽</span></h2>
+  <p class="sub reveal">六道情境题，找到与你职场气质相通的神兽，看看它给你的行为指引——测完还能一键生成专属工牌。仅供趣味体验，不是科学人格测评或职业建议。</p>
+  <div class="box reveal">
+    <div id="qBody">
+      <div class="q-progress"><i id="qBar"></i></div>
+      <div class="q-title" id="qTitle"></div>
+      <div class="q-opts" id="qOpts"></div>
+    </div>
+    <div class="q-result" id="qResult">
+      <p class="kicker" style="justify-content:center">你的职场神兽是</p>
+      <img id="rImg" src="" alt="测试结果">
+      <h3 id="rName"></h3>
+      <div class="rkw" id="rKw"></div>
+      <p id="rDesc"></p>
+      <div class="rbtns">
+        <button class="tobadge" onclick="quizToBadge()">生成我的工牌 →</button>
+        <button class="again" onclick="restartQuiz()">再测一次</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 工牌生成器 ============ -->
+<section id="badge">
+  <p class="kicker reveal">PART 06 · 工牌生成器</p>
+  <h2 class="reveal">领取你的<span class="zhu">神兽工牌</span></h2>
+  <p class="sub reveal">输入姓名、选择神兽，即可生成一张专属「神兽职场」员工工牌，支持下载 PNG 分享。每张工牌配有专属工号、部门与座右铭。</p>
+  <div class="badge-wrap reveal">
+    <div class="badge-form">
+      <label for="inName">你的昵称（不必使用真实姓名）</label>
+      <input type="text" id="inName" maxlength="8" placeholder="例如：胡希" value="">
+      <label>选择你的守护神兽</label>
+      <div class="beast-pick">
+        <button data-b="qilin" class="sel" onclick="pickBeast('qilin')"><img src="assets/qilin.webp" alt="麒麟">麒麟</button>
+        <button data-b="xuanwu" onclick="pickBeast('xuanwu')"><img src="assets/xuanwu.webp" alt="玄武">玄武</button>
+        <button data-b="zhuque" onclick="pickBeast('zhuque')"><img src="assets/zhuque.webp" alt="朱雀">朱雀</button>
+        <button data-b="suanni" onclick="pickBeast('suanni')"><img src="assets/suanni.webp" alt="狻猊">狻猊</button>
+      </div>
+      <div class="badge-actions">
+        <button id="btnDraw" onclick="drawBadge()">生成工牌</button>
+        <button id="btnDl" onclick="downloadBadge()">下载 PNG</button>
+      </div>
+    </div>
+    <div class="badge-canvas-box">
+      <canvas id="badgeCanvas" width="750" height="1100"></canvas>
+      <p class="badge-note">实时预览 · 生成后点击「下载 PNG」保存<br>昵称只用于本页生成，不上传、不保存</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 示例工牌 & 宣传海报 ============ -->
+<section id="gallery">
+  <div class="clouds"></div>
+  <p class="kicker reveal">PART 07 · 示例工牌与宣传物料</p>
+  <h2 class="reveal">四位创始员工的工牌，<br>已经发放完毕</h2>
+  <p class="sub reveal">以下为批量生成的示例工牌与招新宣传海报，构成完整的 IP 视觉物料体系。</p>
+  <div class="sample-row reveal">
+    <figure><img loading="lazy" src="assets/badge-qilin.png" alt="麒麟示例工牌"><figcaption>No.001 · 麒麟 · 配送部</figcaption></figure>
+    <figure><img loading="lazy" src="assets/badge-xuanwu.png" alt="玄武示例工牌"><figcaption>No.002 · 玄武 · 信息安全部</figcaption></figure>
+    <figure><img loading="lazy" src="assets/badge-zhuque.png" alt="朱雀示例工牌"><figcaption>No.003 · 朱雀 · 应急保障部</figcaption></figure>
+    <figure><img loading="lazy" src="assets/badge-suanni.png" alt="狻猊示例工牌"><figcaption>No.004 · 狻猊 · 餐饮部</figcaption></figure>
+  </div>
+  <div style="height:70px"></div>
+  <div class="poster-box reveal">
+    <img loading="lazy" src="assets/poster.png" alt="神兽职场宣传海报">
+    <div>
+      <h2 style="font-size:clamp(24px,3vw,34px)">招新海报 · 视觉物料</h2>
+      <ul>
+        <li><b>统一视觉系统</b>——玄色底 + 金朱主色 + 祥云纹样，贯穿全站与全部物料</li>
+        <li><b>IP 全员亮相</b>——四神兽立绘同框，强化系列感与记忆点</li>
+        <li><b>双语言排版</b>——中文书法感标题搭配英文小字，兼顾传统与现代</li>
+        <li><b>传播导向</b>——海报内置行动号召，引导观众回到网站参与测试与工牌生成</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 设计思路 ============ -->
+<section id="design">
+  <p class="kicker reveal">PART 08 · 设计思路</p>
+  <h2 class="reveal">AIGC 生成式工作流</h2>
+  <p class="sub reveal">四位神兽形象均由 AI 绘图生成：统一采用 Q 版粘土质感 3D 渲染风格，通过提示词精确控制职业道具、场景与情绪。点击展开原始提示词。</p>
+  <div class="prompts reveal">
+    <div class="acc"><header onclick="toggleAcc(this)"><b>麒麟 · 快递员</b><i>＋</i></header>
+      <div class="body"><p>(masterpiece, best quality, 8k, detailed:1.4), (chibi Qilin Chinese unicorn as a cute delivery guy:1.6), big round eyes, smiling, furry body, hooves, (wearing a modern uniform with cloud patterns:1.3), (antlers with small packages:1.2), (holding a smartphone and a package:1.3), (standing next to a futuristic electric bike:1.2), speed lines, on a sunny city street, bright daylight, cheerful, ultra cute, clay material feeling, 3D render, clean background, warm lighting.</p></div></div>
+    <div class="acc"><header onclick="toggleAcc(this)"><b>玄武 · 网络安全员</b><i>＋</i></header>
+      <div class="body"><p>(masterpiece, best quality, 8k, detailed:1.4), (chibi Xuanwu Black Tortoise as a cute cybersecurity guard:1.6), (turtle shell with hexagonal firewall patterns:1.5), (small snake head looking alert:1.3), wearing a headset, big eyes, determined expression, (sitting in front of a computer server with glowing green data streams:1.4), (digital shield icon floating nearby:1.2), calm, reliable, heavy and sturdy, studio lighting, ultra cute, clay material feeling, 3D render, clean background.</p></div></div>
+    <div class="acc"><header onclick="toggleAcc(this)"><b>朱雀 · 消防员</b><i>＋</i></header>
+      <div class="body"><p>(masterpiece, best quality, 8k, detailed:1.4), (chibi Zhuque Vermilion Bird as a brave firefighter:1.6), beautiful colorful fiery feathers, big determined eyes, (wearing a tiny firefighter helmet:1.3), (using wings to control a powerful water hose:1.5), (water and steam contrasting with fiery wings:1.4), heroic pose, at night, emergency lighting, dynamic action, intense, ultra detailed, clay material feeling, 3D render, clean background.</p></div></div>
+    <div class="acc"><header onclick="toggleAcc(this)"><b>狻猊 · 咖啡师</b><i>＋</i></header>
+      <div class="body"><p>(masterpiece, best quality, 8k, detailed:1.4), (chibi Suanni mythical lion beast:1.6), (fluffy mane, sitting down peacefully:1.5), big calm eyes, as a cozy cafe owner, (wearing a tiny apron:1.2), (steam from coffee machine looks like clouds:1.4), (holding a cup of latte with dragon art:1.3), surrounded by coffee beans and pastries, in a warm wooden cafe, soft lighting, peaceful, happy, ultra cute, clay material feeling, 3D render, clean background.</p></div></div>
+  </div>
+</section>
+
+<!-- ============ 结语 ============ -->
+<section id="fin">
+  <div class="clouds"></div>
+  <p class="kicker reveal" style="justify-content:center">PART 09 · 结语</p>
+  <blockquote class="reveal">当麒麟的仁善化为快递员的使命必达，当玄武的沉稳成为网络安全的坚实护盾，当朱雀的烈焰转为逆火而行的勇气，当狻猊的静坐凝萃为咖啡馆里的片刻安宁——<br>我们看见：传统从未远去，它只是换了一种方式陪伴我们工作。</blockquote>
+  <p class="team reveal">创作团队 · <b>胡希 / 周正宇 / 杨衍天霖</b> &nbsp;指导老师 · <b>马梦 / 王晖</b></p>
+</section>
+
+<footer>
+  <span>神兽职场 SHENSHOU WORKPLACE</span>
+  <span>全国大学生数字媒体科技作品及创意竞赛 · 参赛作品</span>
+</footer>
+<button id="toTop" aria-label="返回顶部" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+/* ---------- 进度条 / 导航 / 回顶 ---------- */
+const nav=document.getElementById('nav'),toTop=document.getElementById('toTop');
+addEventListener('scroll',()=>{
+ const h=document.documentElement,p=h.scrollTop/(h.scrollHeight-h.clientHeight)*100;
+ document.getElementById('progress').style.width=p+'%';
+ nav.classList.toggle('scrolled',h.scrollTop>40);
+ toTop.classList.toggle('show',h.scrollTop>600);
+});
+
+/* ---------- Hero 粒子 ---------- */
+const cv=document.getElementById('stars'),cx=cv.getContext('2d');let pts=[];
+function resize(){cv.width=cv.offsetWidth;cv.height=cv.offsetHeight;
+ pts=Array.from({length:60},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:Math.random()*1.8+.4,s:Math.random()*.35+.08,o:Math.random()*.5+.2}));}
+resize();addEventListener('resize',resize);
+(function tick(){cx.clearRect(0,0,cv.width,cv.height);
+ pts.forEach(p=>{p.y-=p.s;if(p.y<-4){p.y=cv.height+4;p.x=Math.random()*cv.width}
+  cx.globalAlpha=p.o;cx.fillStyle='#e2b25a';cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()});
+ cx.globalAlpha=1;requestAnimationFrame(tick)})();
+
+/* ---------- 滚动显现 ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- Hero 跳转 ---------- */
+function jump(b){const c=document.getElementById('card-'+b);c.scrollIntoView({behavior:'smooth',block:'center'});setTimeout(()=>c.classList.add('flip'),700)}
+
+/* ---------- 转化链 ---------- */
+const CHAINS={
+ qilin:{nodes:[["原典形象","麒麟：祥瑞之兽，独角、祥云、行止温和"],["核心寓意","仁 · 德 · 善"],["现代职业","快递员：穿梭街巷，连接千家万户"],["行为准则","使命必达，对每一份托付保持敬畏"]],
+  desc:"麒麟「不伤生、不践草」的仁厚，与快递员「每件必达、每单尽责」的职业精神天然相通。"},
+ xuanwu:{nodes:[["原典形象","玄武：龟蛇合体，镇守北方，厚重沉稳"],["核心寓意","稳定 · 安全"],["现代职业","网络安全员：龟甲化作防火墙矩阵"],["行为准则","防患未然，守住系统与团队的底线"]],
+  desc:"玄武「不动如山」的守护姿态，正是网络安全岗位「以静制动、常备不懈」的写照。"},
+ zhuque:{nodes:[["原典形象","朱雀：浴火神鸟，南方之神，光明所至"],["核心寓意","勇气 · 祥瑞"],["现代职业","消防员：烈焰羽翼成为浓烟中的灯塔"],["行为准则","危急时刻挺身而出，逆火而行"]],
+  desc:"朱雀生于火而不惧火，恰如消防员「越是危险越向前」的逆行勇气。"},
+ suanni:{nodes:[["原典形象","狻猊：龙子好坐，喜静，常伴香炉烟火"],["核心寓意","耐心 · 安逸"],["现代职业","咖啡师：蒸汽如祥云，拉花见禅意"],["行为准则","专注当下，在快节奏里留一处安心角落"]],
+  desc:"狻猊「静坐观烟」的禅意，与咖啡师「慢工细作、安定人心」的气质不谋而合。"}
+};
+function showChain(b,btn){
+ document.querySelectorAll('.chain-nav button').forEach(x=>x.classList.remove('act'));btn.classList.add('act');
+ const d=CHAINS[b],el=document.getElementById('chain');
+ el.innerHTML=d.nodes.map((n,i)=>`<div class="node"><b>${n[0]}</b><span>${n[1]}</span></div>${i<d.nodes.length-1?'<div class="arrow">➤</div>':''}`).join('');
+ document.getElementById('chainDesc').textContent=d.desc;
+}
+showChain('qilin',document.querySelector('.chain-nav button'));
+
+/* ---------- 职场神兽测试 ---------- */
+const QUIZ=[
+ {q:"周一早上接到一个临时加急的艰巨任务，你的第一反应是？",o:[["立刻接下来，答应了就一定做到","qilin"],["先评估风险，列出预案再动手","xuanwu"],["越难越兴奋，马上冲上去","zhuque"],["泡杯咖啡，想清楚节奏再开始","suanni"]]},
+ {q:"团队项目里，你通常扮演的角色是？",o:[["靠谱的交付者，答应的绝不掉链子","qilin"],["兜底的人，专门发现和堵上漏洞","xuanwu"],["冲在前面的攻坚手","zhuque"],["气氛调节者，让大家舒服地协作","suanni"]]},
+ {q:"你的工作桌面通常是？",o:[["贴着待办清单，按承诺逐条划掉","qilin"],["分区明确，重要文件都有备份","xuanwu"],["有点乱但热血，贴着目标海报","zhuque"],["有绿植和手冲壶，讲究氛围","suanni"]]},
+ {q:"同事遇到困难向你求助，你会？",o:[["放下手头事先帮他送到终点","qilin"],["帮他排查根源，顺便建立防护","xuanwu"],["直接替他把最难的部分扛了","zhuque"],["请他喝杯咖啡，陪他慢慢理顺","suanni"]]},
+ {q:"你最不能忍受的工作状态是？",o:[["失信于人，答应了没做到","qilin"],["明知有隐患却没人管","xuanwu"],["遇事退缩，没人敢站出来","zhuque"],["浮躁敷衍，做事不走心","suanni"]]},
+ {q:"理想中的工作成就感来自？",o:[["每一单都被稳稳交付","qilin"],["系统一年零事故","xuanwu"],["打赢一场别人不敢打的硬仗","zhuque"],["做出一杯让人微笑的咖啡","suanni"]]}
+];
+const BEASTS={
+ qilin:{name:"麒麟 · 快递员",kw:"仁 · 德 · 善",img:"assets/qilin.webp",desc:"你是团队里最值得信赖的人。温和不代表慢，而是每一步都稳、每一份托付都有回音。请继续保持你的「使命必达」。"},
+ xuanwu:{name:"玄武 · 网络安全员",kw:"稳定 · 安全",img:"assets/xuanwu.webp",desc:"你是团队的定海神针。别人看见风暴，你看见隐患；真正的安全感，来自你日复一日的沉稳坚守。"},
+ zhuque:{name:"朱雀 · 消防员",kw:"勇气 · 祥瑞",img:"assets/zhuque.webp",desc:"你是逆火而行的那个人。勇气不是不怕困难，而是明知困难仍迎上去——团队因为有你而敢打硬仗。"},
+ suanni:{name:"狻猊 · 咖啡师",kw:"耐心 · 安逸",img:"assets/suanni.webp",desc:"你是快环境里的「慢大师」。专注与耐心是你的超能力，你总能为身边人留一处安心的角落。"}
+};
+let qi=0,score={qilin:0,xuanwu:0,zhuque:0,suanni:0},quizWin='qilin';
+function renderQ(){
+ const q=QUIZ[qi];
+ document.getElementById('qBar').style.width=(qi/QUIZ.length*100)+'%';
+ document.getElementById('qTitle').textContent=(qi+1)+'. '+q.q;
+ document.getElementById('qOpts').innerHTML=q.o.map(o=>`<button onclick="answer('${o[1]}')">${o[0]}</button>`).join('');
+}
+function answer(b){
+ score[b]++;qi++;
+ if(qi<QUIZ.length){renderQ();return}
+ document.getElementById('qBar').style.width='100%';
+ quizWin=Object.keys(score).sort((a,b)=>score[b]-score[a])[0];
+ const r=BEASTS[quizWin];
+ document.getElementById('qBody').style.display='none';
+ document.getElementById('qResult').style.display='block';
+ document.getElementById('rImg').src=r.img;
+ document.getElementById('rName').textContent=r.name;
+ document.getElementById('rKw').textContent=r.kw;
+ document.getElementById('rDesc').textContent=r.desc;
+}
+function restartQuiz(){
+ qi=0;score={qilin:0,xuanwu:0,zhuque:0,suanni:0};
+ document.getElementById('qResult').style.display='none';
+ document.getElementById('qBody').style.display='block';renderQ();
+}
+renderQ();
+function quizToBadge(){pickBeast(quizWin);drawBadge();document.getElementById('badge').scrollIntoView({behavior:'smooth'})}
+
+/* ---------- 手风琴 ---------- */
+function toggleAcc(h){h.parentElement.classList.toggle('open')}
+
+/* ================= 工牌生成器 ================= */
+const BADGE_META={
+ qilin:{c:'#e2b25a',name:'麒麟',job:'快递员',dept:'配送部',motto:'使命必达 · 每件皆托付',en:'QI LIN · COURIER'},
+ xuanwu:{c:'#3ec98f',name:'玄武',job:'网络安全员',dept:'信息安全部',motto:'沉稳如山 · 防患未然',en:'XUAN WU · SECURITY'},
+ zhuque:{c:'#e8544a',name:'朱雀',job:'消防员',dept:'应急保障部',motto:'逆火而行 · 勇气为灯',en:'ZHU QUE · FIREFIGHTER'},
+ suanni:{c:'#c98e5f',name:'狻猊',job:'咖啡师',dept:'餐饮部',motto:'静观烟火 · 慢工细作',en:'SUAN NI · BARISTA'}
+};
+let badgeBeast='qilin';const bImgs={};
+['qilin','xuanwu','zhuque','suanni'].forEach(b=>{const im=new Image();im.src='assets/'+b+'.webp';im.onload=()=>drawBadge();bImgs[b]=im});
+function pickBeast(b){badgeBeast=b;
+ document.querySelectorAll('.beast-pick button').forEach(x=>x.classList.toggle('sel',x.dataset.b===b));drawBadge()}
+document.getElementById('inName').addEventListener('input',drawBadge);
+
+function roundRect(g,x,y,w,h,r){g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath()}
+function drawBadge(){
+ const c=document.getElementById('badgeCanvas'),g=c.getContext('2d'),W=750,H=1100;
+ const m=BADGE_META[badgeBeast];
+ const nm=document.getElementById('inName').value.trim()||'神兽员工';
+ // 背景
+ g.clearRect(0,0,W,H);
+ const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#161e26');bg.addColorStop(1,'#0b0f13');
+ roundRect(g,0,0,W,H,40);g.fillStyle=bg;g.fill();
+ // 顶部色带
+ g.save();roundRect(g,0,0,W,H,40);g.clip();
+ const band=g.createLinearGradient(0,0,W,0);band.addColorStop(0,m.c);band.addColorStop(1,m.c+'99');
+ g.fillStyle=band;g.fillRect(0,0,W,150);
+ // 祥云纹理
+ g.strokeStyle='rgba(255,255,255,.16)';g.lineWidth=2;
+ for(let i=0;i<8;i++){const x=40+i*95,y=60+(i%2)*30;g.beginPath();g.arc(x,y,16,Math.PI,0);g.arc(x+22,y,11,Math.PI,0);g.stroke();}
+ // 顶部文字
+ g.fillStyle='rgba(20,16,10,.85)';g.textAlign='left';
+ g.font='700 34px "STSong","SimSun",serif';g.fillText('神兽职场',36,64);
+ g.font='15px "Consolas",monospace';g.fillText('SHENSHOU WORKPLACE',36,94);
+ g.textAlign='right';g.font='700 26px "STSong","SimSun",serif';g.fillText('员 工 工 牌',W-36,64);
+ g.font='14px "Consolas",monospace';g.fillText('STAFF ID CARD',W-36,94);
+ // 头像
+ const img=bImgs[badgeBeast],R=130,cx2=W/2,cy=330;
+ g.save();g.beginPath();g.arc(cx2,cy,R+8,0,7);g.fillStyle=m.c;g.fill();
+ g.beginPath();g.arc(cx2,cy,R,0,7);g.clip();
+ if(img.complete&&img.naturalWidth){const s=Math.max(2*R/img.width,2*R/img.height);
+  g.drawImage(img,cx2-img.width*s/2,cy-img.height*s/2,img.width*s,img.height*s);}
+ g.restore();
+ // 姓名
+ g.textAlign='center';g.fillStyle='#ece7da';
+ g.font='700 58px "STSong","SimSun",serif';g.fillText(nm,cx2,545);
+ g.font='700 30px "STSong","SimSun",serif';g.fillStyle=m.c;g.fillText(m.name+' · '+m.job,cx2,600);
+ g.font='16px "Consolas",monospace';g.fillStyle='#97a1ab';g.fillText(m.en,cx2,632);
+ // 分隔线
+ g.strokeStyle='#27313c';g.lineWidth=1.5;g.beginPath();g.moveTo(70,672);g.lineTo(W-70,672);g.stroke();
+ // 信息行
+ const rows=[['工　号','SS-2026-'+String(Object.keys(BADGE_META).indexOf(badgeBeast)+1).padStart(3,'0')],
+  ['部　门',m.dept],['职　位',m.job],['寓　意',m.motto]];
+ g.textAlign='left';
+ rows.forEach((r,i)=>{const y=725+i*52;
+  g.font='20px "STSong","SimSun",serif';g.fillStyle='#97a1ab';g.fillText(r[0],80,y);
+  g.font='700 22px "STSong","SimSun",serif';g.fillStyle='#ece7da';g.fillText(r[1],200,y);});
+ // 印章
+ g.save();g.translate(W-150,H-170);g.rotate(-.12);
+ g.strokeStyle='#e8544a';g.lineWidth=4;
+ roundRect(g,-70,-70,140,140,16);g.stroke();
+ g.fillStyle='#e8544a';g.textAlign='center';
+ g.font='700 34px "STSong","SimSun",serif';
+ g.fillText('神兽',0,-12);g.fillText('职场',0,34);g.restore();
+ // 底部条码
+ g.fillStyle='#97a1ab';let bx=80;
+ for(let i=0;i<40;i++){const w=(i*7%3)+2;g.fillRect(bx,H-160,w,54);bx+=w+(i*5%4)+3;}
+ g.font='13px "Consolas",monospace';g.textAlign='left';g.fillText('SS WORKPLACE · EST.2025 · 传统神兽寓意的现代职场转化',80,H-78);
+ // 外边框
+ roundRect(g,0,0,W,H,40);g.strokeStyle=m.c;g.lineWidth=3;g.stroke();
+}
+function downloadBadge(){
+ const a=document.createElement('a');
+ a.download='神兽工牌-'+(document.getElementById('inName').value.trim()||'员工')+'-'+BADGE_META[badgeBeast].name+'.png';
+ a.href=document.getElementById('badgeCanvas').toDataURL('image/png');a.click();
+}
+drawBadge();
+</script>
+</body>
+</html>

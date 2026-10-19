@@ -127,4 +127,18 @@ export const groups: LinkGroup[] = [
       },
     ],
   },
+  {
+    id: "creative-interactive",
+    title: "趣味 / 互动",
+    items: [
+      {
+        title: "神兽职场",
+        url: "/projects/shenshou",
+        description: "传统神兽的现代职场小剧场：看角色档案、做六题趣味测试，还能生成并下载专属神兽工牌。",
+        icon: "/experiences/shenshou/assets/qilin.webp",
+        tag: "站内作品",
+        tags: ["传统文化", "互动体验", "神兽", "工牌", "AIGC"],
+      },
+    ],
+  },
 ];

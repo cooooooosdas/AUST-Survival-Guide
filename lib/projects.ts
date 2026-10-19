@@ -22,6 +22,16 @@ type ProjectEntry = ProjectMeta & {
 
 export const PROJECTS: ProjectEntry[] = [
   {
+    slug: "shenshou",
+    title: "神兽职场 · 传统文化互动体验",
+    description: "让麒麟送快递、玄武守网络、朱雀当消防员、狻猊做咖啡。翻阅神兽档案，完成六题趣味测试，领取一张自己的神兽工牌。",
+    techStack: ["HTML5", "CSS3", "JavaScript", "Canvas", "AIGC"],
+    demo: "/experiences/shenshou/index.html",
+    date: "2026-10-19",
+    featured: true,
+    load: () => import("@/content/projects/shenshou.mdx"),
+  },
+  {
     slug: "aust-plan",
     title: "安理大生存指南",
     description: "面向安理大新生的资源导航与经验分享站点。包含工具箱、学长来信、AI 助手等功能模块。",
