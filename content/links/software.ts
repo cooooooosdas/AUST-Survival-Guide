@@ -401,4 +401,22 @@ export const groups: LinkGroup[] = [
       },
     ],
   },
+  {
+    id: "personal-source",
+    title: "自制工具 / 源码",
+    items: [
+      {
+        title: "B站收藏夹分类器",
+        url: "/projects/bilibili-fav-classifier",
+        description: "规则分类、整理预览与可选 AI 辅助；下载 Python 源码，在自己的电脑运行",
+        tags: ["源码", "B站", "Python"],
+      },
+      {
+        title: "二课活动提醒助手",
+        url: "/projects/erke-helper",
+        description: "第二课堂活动筛选与提醒；电脑端和 Android 端源码，附运行说明",
+        tags: ["源码", "校园", "Android"],
+      },
+    ],
+  },
 ];

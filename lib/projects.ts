@@ -22,6 +22,24 @@ type ProjectEntry = ProjectMeta & {
 
 export const PROJECTS: ProjectEntry[] = [
   {
+    slug: "bilibili-fav-classifier",
+    title: "B站收藏夹分类器",
+    description: "给越攒越多的收藏夹理个头绪：规则分类、整理预览与可选 AI 辅助。提供 Python 源码及本地运行说明。",
+    techStack: ["Python", "Playwright", "CustomTkinter"],
+    date: "2026-10-20",
+    featured: true,
+    load: () => import("@/content/projects/bilibili-fav-classifier.mdx"),
+  },
+  {
+    slug: "erke-helper",
+    title: "二课活动提醒助手",
+    description: "聚合第二课堂活动，按画像和学时需求筛选、提醒。电脑端与 Android 端源码一起分享，各自附带运行说明。",
+    techStack: ["Python", "FastAPI", "Flutter", "Dart"],
+    date: "2026-10-20",
+    featured: true,
+    load: () => import("@/content/projects/erke-helper.mdx"),
+  },
+  {
     slug: "shenshou",
     title: "神兽职场 · 传统文化互动体验",
     description: "让麒麟送快递、玄武守网络、朱雀当消防员、狻猊做咖啡。翻阅神兽档案，完成六题趣味测试，领取一张自己的神兽工牌。",

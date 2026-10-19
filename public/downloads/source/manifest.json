@@ -1,0 +1,17 @@
+{
+  "snapshot": "2026-10-20",
+  "archives": [
+    {
+      "file": "bilibili-fav-classifier-source-2026-10-20.zip",
+      "bytes": 571511,
+      "files": 55,
+      "sha256": "acd8731f2d77284f68f1d52ec80c01f5fb1e75a61ffae4f46f14152bc37d71c4"
+    },
+    {
+      "file": "erke-source-2026-10-20.zip",
+      "bytes": 767652,
+      "files": 100,
+      "sha256": "2d389848cb7a349dd075e9bb1abfecacbeea1106656e6222dcdadf9c87a7a257"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+import SourceDownload from "@/components/SourceDownload";
+
+## 少翻几次列表，不错过合适的活动
+
+第二课堂活动多，但时间、学时类别、报名范围不一定合适。二课活动提醒助手把活动信息聚合起来，结合个人画像和筛选条件，帮助你先看值得关注的部分。
+
+项目归类：**校园工具 / 活动筛选 / 本地提醒**。面向趣拓第二课堂系统，非学校官方应用；活动信息与报名结果以官方平台为准。
+
+<SourceDownload project="erke" />
+
+## 一个包，两种使用方式
+
+- **电脑端**：Python + FastAPI，在本机浏览器打开活动看板，提供活动聚合、画像匹配、学时筛选和提醒。
+- **Android 端**：Flutter + Dart，包含列表、详情、设置、首次引导及本地提醒相关代码，适合自行开发和构建。
+
+两端是独立工程，各自保存数据，不能当作自动云同步的同一套服务。本次只分享源码，不提供在线演示，也不提供 EXE、APK 或账号托管。
+
+## 电脑端快速开始
+
+安装 Python 3.10 或更高版本，解压后进入 `erke-source/desktop`：
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m backend.main
+```
+
+保持终端运行，在浏览器打开 `http://127.0.0.1:8848/`。默认用演示数据；需要真实数据时，在设置中选择学校并登录自己的账号。不要直接双击前端 HTML，它需要本地 API。
+
+macOS/Linux 可把 Python 路径替换为 `.venv/bin/python`；详细启动、自检和配置说明见 `desktop/README.md`。
+
+## Android 端从哪里开始
+
+进入 `erke-source/android`，准备匹配的 Flutter、Android SDK 与 JDK。原工程使用 Flutter 3.27.4，Dart 要求为 `^3.6.2`；先运行 `flutter doctor`，再执行：
+
+```text
+flutter pub get
+flutter test
+flutter run
+```
+
+本次保留 Android 壳、必要资源、依赖锁定文件与 Gradle wrapper，不提供 iOS 工程。SDK 路径由你的电脑生成；未附带作者本机路径或签名私钥。当前 release 使用 debug 签名，仅供自测，正式分发前需要自行配置签名及授权信息。细节见 `android/README.md`。
+
+## 分享与使用边界
+
+源码包不包含真实账号、凭据密文、个人配置、数据库、通知目标、运行日志或第三方逆向下载目录。运行后生成的这些数据也不要转发；启用外部提醒渠道前，请确认发送的内容与接收方。
+
+这是一套个人本地工具，不建议公开部署服务或把端口转发到公网。学校接口、通知权限和手机省电策略都可能影响结果；没有自动代报名承诺，也不保证适配所有学校。
+
+这是 **2026-10-20 源码整理快照**。原项目未附开源许可证，本站不擅自新增 MIT 等许可；公开再分发、商用或修改后二次发布前，请确认权利人的授权范围，第三方依赖遵循各自许可证。离线自检与界面测试不代表真实账号、通知发送或所有设备构建都已经验证。
